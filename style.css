@@ -1,0 +1,110 @@
+/* Global Settings */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    line-height: 1.6;
+  }
+  
+  /* Navbar */
+  .navbar {
+    background-color: #0052cc;
+  }
+  .navbar-brand,
+  .nav-link,
+  .navbar-text {
+    color: #fff !important;
+  }
+  .navbar-brand {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Headings */
+  h1, h2, h3, h4, h5 {
+    font-weight: 600;
+    color: #0052cc;
+  }
+  
+  /* Cards */
+  .card {
+    border-radius: 12px;
+    border: none;
+  }
+  .card .card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .card .card-body p {
+    font-size: 1rem;
+  }
+  
+  /* KPI Progress Bar */
+  .progress {
+    height: 20px;
+    border-radius: 12px;
+    background-color: #e9ecef;
+  }
+  .progress-bar {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  /* Buttons */
+  .btn-primary {
+    background-color: #0052cc;
+    border-color: #0052cc;
+  }
+  .btn-outline-primary {
+    color: #0052cc;
+    border-color: #0052cc;
+  }
+  .btn-outline-primary:hover {
+    background-color: #0052cc;
+    color: #fff;
+  }
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  /* Tables */
+  .table th {
+    background-color: #f1f3f5;
+    font-weight: 600;
+  }
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  
+  /* Modals */
+  .modal-content {
+    border-radius: 16px;
+  }
+  .modal-header {
+    background-color: #0052cc;
+    color: #fff;
+  }
+  
+  /* Badges */
+  .badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+  
+  /* Spacing Utilities */
+  .section-title {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  /* Footer (if used) */
+  footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    background-color: #0052cc;
+    color: #fff;
+    text-align: center;
+  }
+  
