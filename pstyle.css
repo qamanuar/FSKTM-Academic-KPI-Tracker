@@ -1,0 +1,149 @@
+.profile-container {
+    display: flex; /* Arrange children side by side */
+    border: 1px solid #ddd; /* Optional: Add a border around the container */
+    padding: 20px;
+    margin-bottom: 20px; /* Add some space below the profile section */
+    border-radius: 5px; /* Optional: Rounded corners */
+    background-color: #f9f9f9; /* Optional: Light background */
+}
+
+.profile-info-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    margin-right: 20px; /* Add some space between the left and right sections */
+    padding: 15px; /*add padding inside the left box*/
+    border:1px solid #eee; /*add a border for the left box*/
+    border-radius: 5px;
+    background-color: white; /*bg color for the left box*/
+    text-align: center; /* Center text within the left section */
+}
+
+.profile-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* Make it circular */
+    background-color: #eee; /* Placeholder background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* If you are using an image, you might style it like this: */
+/*.profile-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover; /* Ensure the image covers the circle without distortion */
+}*/
+
+.profile-name h2 {
+    margin-bottom: 5px;
+    font-size:3em;
+    color: hsl(233, 100%, 35%);
+}
+
+.profile-name p {
+    color: #ed1616; 
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.edit-profile-button {
+    background-color: #0056b3; /* Example button color */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.edit-profile-button:hover {
+    background-color: #004494;
+}
+
+.user-details-right {
+    flex-grow:1 ; /* Allow the right section to take up remaining space */
+    border:1px solid #eee; /*add a border for the left box*/
+    border-radius: 5px;
+    background-color: white;
+    padding: 15px;
+}
+
+.user-details-right h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.detail-item {
+    margin-bottom: 10px;
+    display: flex; /* Align label and value horizontally */
+    align-items: baseline; /* Align text baselines */
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #555;
+    width: 150px; /* Adjust width as needed */
+    margin-right: 10px;
+    text-align: left;
+}
+
+.detail-value {
+    color: #852178;
+}
+
+.edit-profile-link {
+    display: block; /* Make it a block-level element to take full width */
+    color: #0056b3;
+    text-decoration: none;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+.edit-profile-link:hover {
+    text-decoration: underline;
+} 
+
+.edit-mode .view-element {
+    display: none !important;
+}
+
+.edit-mode .edit-element {
+    display: inline-block !important;
+    margin-left: 5px; /*add some space between label n input*/
+    vertical-align: middle; /*align input w label*/
+}
+
+.edit-mode .edit-buttons {
+    display: block !important; /*display buttons below input*/
+    margin-top: 10px;
+}
+
+.edit-buttons {
+    display: none;
+}
+
+.edit-element {
+    display:none;
+}
+
+/* make the label visibble in edit mode*/
+.edit-mode .detail-item .detail-label {
+    display: inline-block !important;
+    width: auto; /*adjust width as needed*/
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+/*ensure label are visible in normal view*/
+.detail-item .detail-label{
+    display: inline-block;
+    width: 150px;
+    margin-right: 10px;
+    text-align: left;
+}
+    
