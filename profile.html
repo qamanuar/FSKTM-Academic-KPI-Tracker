@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile</title>
+    <link rel="stylesheet" href="pstyle.css">
+</head>
+<body>
+<div class="profile-container">
+    <div class="profile-info-left">
+        <div class="profile-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 60px; height: 60px; color: #ccc;">
+                <path d="M12 4a4 4 0 100 8 4 4 0 000-8zm-2 14a6 6 0 01-4-2 6 6 0 016-2 6 6 0 014-2 6 6 0 01-6 2 6 6 0 014 2z" />
+            </svg>
+        </div>
+        <div class="profile-name">
+            <h2>STUDENT NAME</h2>
+        </div>
+        <button id="editProfileBtn" class="edit-profile-button">Edit profile</button>
+    </div>
+    <div class="user-details-right">
+        <h3>User details</h3>
+        
+        <div class="detail-item">
+            <span class="detail-label view-element">Email address</span>
+            <span class="detail-value view-element" id="viewEmail">22xxxxxx@siswa.um.edu.my <span style="font-size: 0.8em; color: #777;">(Visible to other course participants)</span></span>
+            <input type="email" id="editEmail" class="edit-element">
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label view-element">Country</span>
+            <span class="detail-value view-element" id="viewCountry">Malaysia</span>
+            <input type="text" id="editCountry" class="edit-element">
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label view-element">Timezone</span>
+            <span class="detail-value view-element" id="viewTimezone">Asia/Kuala_Lumpur</span>
+            <input type="text" id="editTimezone" class="edit-element">
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label view-element">Registeration Number</span>
+            <span class="detail-value view-element" id="viewRegisterationNum">22xxxxxx</span>
+            <input type="text" id="editRegisterationNum" class="edit-element">
+        </div>
+
+        <div class="edit-buttons">
+            <button id="saveProfileBtn">Save Changes</button>
+            <button id="cancelEditBtn">Cancel</button>
+        </div>
+        
+        <a href="#" class="edit-profile-link view-element">Edit profile</a>
+    </div>
+</div>
+<script src="pscript.js"></script>
+</body>
+</html>
