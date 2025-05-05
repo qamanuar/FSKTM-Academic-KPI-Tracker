@@ -6,13 +6,11 @@
 }
 
 body {
-    background-color: #f8f9fa;
-    color: #212529;
-    line-height: 1.6;
     position: relative;
     min-height: 100vh;
     width: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .sidebar{
@@ -166,12 +164,12 @@ body {
     height: 60px;
   }
 
-  .profile_content .profile .profile_details{
+  .profile_content .profile .profile_details a {
     display:flex;
     align-items: center;
   }
 
-  .sidebar.active .profile .profile_details img{
+  .sidebar.active .profile .profile_details a img{
     height: 45px;
     width: 45px;
     object-fit: cover;
@@ -180,36 +178,36 @@ body {
     visibility: visible;
   }
 
-  .sidebar .profile .profile_details img{
+  .sidebar .profile .profile_details a img{
     opacity: 0;
     visibility: hidden;
   }
 
-  .sidebar.active .profile .profile_details .name_title{
+  .sidebar.active .profile .profile_details a .name_title{
     margin-left: 10px;
     opacity: 1;
     visibility: visible;
   }
 
-  .sidebar.active .profile .profile_details .name{
+  .sidebar.active .profile .profile_details a .name{
     font-size: 15px;
     font-weight: 400;
     opacity: 1;
     visibility: visible;
   }
 
-  .sidebar .profile .profile_details .name{
+  .sidebar .profile .profile_details a .name{
     opacity: 0;
     visibility: hidden;
   }
 
-  .sidebar.active .profile .profile_details .title{
+  .sidebar.active .profile .profile_details a .title{
     font-size: 12px;
     opacity: 1;
     visibility: visible;
   }
 
-  .sidebar .profile .profile_details .title{
+  .sidebar .profile .profile_details a .title{
     opacity: 0;
     visibility: hidden;
   }
@@ -253,17 +251,16 @@ body {
   position: absolute;
   height: 100px;
   width: calc(100% - 78px);
-  left: 78px;
+  left: 50px;
   transition: left 0.3s ease;
-  margin-top: 50px;
+  margin: 50px 20px 20px 20px;
+  justify-content: center;
 }
 
 .mainclass .container-lg{
   font-size: 25px;
   font-weight: 600;
-  color: #2e067d;
-  margin: 12px;
-  width: 1096px;
+  width: 100%;
 }
 
 .sidebar.active ~.mainPage {
@@ -271,26 +268,23 @@ body {
   left: 250px;
 }
 
-.mainPage #button {
+.mainPage button {
   background: #f6eeff;
   padding: 10px;
   border-radius: 12px;
-  width: 350px;
   border: none;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
 }
 
-
-.mainPage #button:hover {
+.mainPage .dashboardBtn:hover,
+.mainPage .managementBtn:hover,
+.mainPage .verificationBtn:hover {
   background: #6944a0;
   color: #f6eeff;
-  padding: 10px;
-  border-radius: 12px;
-  width: 350px;
-  border: none;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
+}
+
+.mainPage #button.active {
+  background: #6944a0;
+  color: #f6eeff;
 }
 
 hr.new1 {
@@ -300,33 +294,29 @@ hr.new1 {
   font-weight: 900;
   border-radius: 5px;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   opacity: 0.8;
 }
 
 .mainPage #kpi-overview {
-  margin-top: 27px;
-  margin-left: 1px;
-  width: 1096px;
+  display: flex;
+  margin: auto;
+  gap: 20px;
 }
 
 .mainPage .PerformanceAchievementPerCourse {
-  background: #f6eeff;
+  background: #f4eeff;
   border-radius: 12px;
   padding: 10px;
-  max-width: 723px;
+  flex:3;
   border: none;
   font-weight: 600;
   font-size: 22px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  margin-right: 3px;
 }
 
 .mainPage .PerformanceAchievementPerCourse ul li {
-  background-color: #fff;
-  margin: 5px 0;
-  padding: 10px;
-  max-width: 650px;
+  border: none;
+  margin-top: 5px;
   border-radius: 5px;
   list-style: none;
   font-size: 18px;
@@ -337,97 +327,166 @@ hr.new1 {
   background: #f6eeff;
   border-radius: 12px;
   padding: 10px;
-  max-width: 350px;
   border: none;
+  flex:1.43;
   font-weight: 600;
   font-size: 22px;
-  margin-left: 23px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .mainPage .dashboardPendingVerification .verificationItems {
-  font-size: 19px;
-  margin-left:5px;
-  margin-top: 7px;
+  font-size: 17px;
+  margin:0px 5px 5px 5px;
+  font-weight: normal;
 }
 
-.mainPage #button.active {
-  background: #6944a0;
-  color: #f6eeff;
+.mainPage #kpi-management {
+  margin-top: 20px;
+  padding: 10px;
+  background: #f4eeff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border-radius: 12px;
+}
+
+#kpi-management .text{
+  font-size: 22px;
+  font-weight: 600;
+  left: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 0px 10px 0px 10px;
+}
+
+#kpi-management hr.new1 {
+  width: 98.5%;
+  align-self: flex-center;
+}
+
+#kpi-management .row{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
 }
 
 .mainPage .studentsOrCoursesDropdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   position: relative;
   display: inline-block;
-  margin-top: 30px;
 }
 
 select {
   appearance: none;
 }
 
+select:focus {
+  border-color: #2e067d;
+  outline: none;
+}
+
 .studentsOrCoursesDropdown .dropdown-toggle {
-  color: black;
-  padding: 10px 20px;
+  width: 98.5%;
+  padding: 10px;
+  border: 2px solid black;
   border-radius: 12px;
-  cursor: pointer;
-  width: 1096px;
-  margin-left: 10px;
-  text-align: start;
-  list-style:none;
-  border:none;
   background: none;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  border: 2px solid #f6eeff;
-  appearance: none;
+}
+
+#dropdown-icon {
+  position: absolute;
+  left: 94%;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 35px;
+  color: black;
 }
 
 .mainPage #kpi-management .filters {
-  margin-top: 20px;
-}
-
-.mainPage #kpi-management .filters .filter-button {
-  background: none;
-  border: 3px solid #f6eeff;
-  opacity: 1;
-  padding: 10px 20px;
+  margin: 15px;
+  width: 98.5%;
+  display: flex;
   border-radius: 12px;
-  width: 220px;
-  cursor: pointer;
-  margin-right: 10px;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
-.mainPage #kpi-management .filters .filter-button:hover {
+.mainPage #kpi-management .filters button {
+  flex: 1;
+  cursor: pointer;
+  background: none;
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 10px 20px;
+}
+
+.mainPage #kpi-management .filters button:hover {
   background: #6944a0;
   color: #fff;
+  border: 2px solid transparent;
 }
 
 .filters .search {
   border: none;
-  border:3px solid #f6eeff;
+  border:2px solid black;
   opacity: 1;
   background:none;
   padding: 10px 20px;
   border-radius: 12px;
-  width:620px;
+  flex: 2;
 }
 
 .mainPage #kpi-management .KPITable {
-  margin-top: 30px;
-  margin-bottom: 20px;
-  margin-right: 20px;
-  margin-left: 1px;
+  width: 98.5%;
+  border-radius: 12px;
+  margin-bottom: 5px;
+  border: 2px solid black;
+  overflow: hidden;
 }
 
-.KPITable table th, table td {
+.KPITable table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  
+}
+
+.KPITable table th{
+  background: #f3eeff;
+}
+
+.KPITable table th, 
+.KPITable table td {
   padding: 12px;
-  border: #f6eeff;
+  border: 1px solid #f6eeff;
   text-align: left;
-  vertical-align: middle;
 }
 
-.KPITable table th {
-  background-color: #f6eeff;
+.KPITable table td {
+  background: #fff;
+  border-top: 1.5px solid black;
+}
+
+.KPITable table tr:nth-child(odd) {
+  background-color: #2e067d;
+}
+
+.KPITable table tr:nth-child(even) {
+  background-color: #ffffff; /* White for even rows */
+}
+
+.KPITable table tr:hover {
+  background-color: #e0e0e0; /* Light grey on hover */
+}
+
+.KPITable table tr:first-child td {
+  border-top: none; /* removes top border on first row */
 }
 
 .mainPage #kpi-verification {
@@ -438,7 +497,6 @@ select {
   background: #f6eeff;
   border-radius: 12px;
   padding: 10px;
-
 }
 
 .mainPage #kpi-verification .text{
@@ -448,11 +506,14 @@ select {
   padding-left: 12px;
 }
 
-.mainPage #kpi-verification table th, table td{
-  padding-left: 12px;
-  border: #f6eeff;
+.mainPage .verificationTable table th, table td{
+  padding: 12px;
+  border: 1px solid #f6eeff; /* fixed */
   text-align: left;
-  vertical-align: middle;
+}
+
+.verificationTable table th {
+  background: #f6eeff;
 }
 
 
