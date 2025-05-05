@@ -20,24 +20,69 @@
 <body>
   
 
-  <!-- Sidebar -->
-  <div class="d-flex">
-    <nav class="sidebar bg-white shadow-sm">
-      <div class="sidebar-header p-4">
-        <h4 class="fw-bold text-primary">KPI Portal</h4>
+   <!-- Side Navigation Bar -->
+   <div class = "sidebar">
+    <div class = "logo_content">
+      <div class="logo">
+        <i class='bx bxs-bar-chart-alt-2'></i>
+        <div class="logo_name">FSKTM KPI Tracker</div>
       </div>
-      <ul class="nav flex-column p-3">
-        <li class="nav-item mb-2">
-          <a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+      <i class='bx bx-menu' id = "btn" >
+        <span class = "tooltip">Menu</span>
+      </i>
+      <ul class="nav_list">
+        <li>
+          <a href = "profile.html">
+            <i class='bx bx-user'></i>
+            <span class="links_name">My Account</span>
+          </a>
+          <span class="tooltip">My Account</span>
         </li>
-        <li class="nav-item mb-2">
-          <a class="nav-link" href="#"><i class="bi bi-person me-2"></i> Profile</a>
+        <li>
+          <a href = "LecterurDashboard.html">
+            <i class='bx bxs-dashboard' ></i>
+            <span class="links_name">KPI Dashboard</span>
+          </a>
+          <span class="tooltip">KPI Dashboard</span>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+        <li>
+          <a href = "Student_Dash.html">
+            <i class='bx bxs-dashboard' ></i>
+            <span class="links_name">Student Dashboard</span>
+          </a>
+          <span class="tooltip">KPI Dashboard</span>
+        </li>
+        <li>
+          <a href = "notification.html">
+            <i class='bx bxs-bell'></i>
+            <span class="links_name">Notifications</span>
+          </a>
+          <span class="tooltip">Notifications</span>
+        </li>
+        <li>
+          <a href = "help.html">
+            <i class='bx bx-question-mark'></i>
+            <span class="links_name">Help & Support</span>
+          </a>
+          <span class="tooltip">Help & Support</span>
         </li>
       </ul>
-    </nav>
+      <div class = "profile_content">
+        <div class = "profile">
+          <div class = "profile_details">
+            <img src = "\assets\icons\my_account.png" alt = "Profile Picture" >
+            <div class = "name_title">
+              <div class = "name">My Name</div>
+            <div class = "title">Lecterur</div>
+            </div>
+          </div>
+          <i class='bx bx-log-out' id = "log_out">
+            <span class = "tooltip">Log Out</span>
+          </i>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- Main Dashboard -->
     <main class="flex-grow-1 p-4 bg-light">
@@ -78,58 +123,55 @@
           </div>
         </div>
 
-        <!-- Team Online Card -->
-        <div class="col-md-3">
-          <div class="card kpi-card bg-danger text-white">
-            <div class="card-body">
-              <h6><i class="bi bi-people-fill me-2"></i>Team Online</h6>
-              <h4>4/6</h4>
-              <small>Live collaboration</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- KPI Table -->
-      <div class="card shadow-sm mt-4">
-        <div class="card-body">
-          <h5 class="card-title">Assigned KPIs</h5>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>KPI</th>
-                <th>Progress</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Community Engagement</td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-primary" style="width: 60%">60%</div>
-                  </div>
-                </td>
-                <td><span class="badge bg-warning">In Progress</span></td>
-                <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#submitModal">Upload</button></td>
-              </tr>
-              <tr>
-                <td>Leadership Project</td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-success" style="width: 100%">100%</div>
-                  </div>
-                </td>
-                <td><span class="badge bg-success">Completed</span></td>
-                <td><button class="btn btn-sm btn-outline-secondary" disabled>Uploaded</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
+        <!-- GPA Tracker Card -->
+<div class="col-md-3">
+  <div class="card kpi-card bg-warning text-white">
+    <div class="card-body">
+      <h6><i class="bi bi-graph-up-arrow me-2"></i>GPA Tracker</h6>
+      <h4>3.67</h4>
+      <small>Last semester</small>
+    </div>
   </div>
+</div>
+
+
+     <!-- KPI Table -->
+<div class="card shadow-sm mt-4">
+  <div class="card-body">
+    <h5 class="card-title">Assigned KPIs</h5>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>KPI</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Project Report Phase 1</td>
+          <td>2025-05-10</td>
+          <td><span class="badge bg-success">Accepted</span></td>
+          <td><button class="btn btn-sm btn-outline-secondary" disabled>Uploaded</button></td>
+        </tr>
+        <tr>
+          <td>Project Slide Phase 1</td>
+          <td>2025-05-14</td>
+          <td><span class="badge bg-danger">Rejected</span></td>
+          <td><button class="btn btn-sm btn-outline-secondary" disabled>Uploaded</button></td>
+        </tr>
+        <tr>
+          <td>Project Report Phase 2</td>
+          <td>2025-05-20</td>
+          <td><span class="badge bg-warning">Pending</span></td>
+          <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#submitModal">Upload</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
   <!-- Modal -->
   <div class="modal fade" id="submitModal" tabindex="-1" aria-hidden="true">
