@@ -563,6 +563,7 @@ select:focus {
   border: none;
   text-align: left;
 }
+
 .KPITable table tr:nth-child(odd) {
   background: #f8f4ff;
 }
