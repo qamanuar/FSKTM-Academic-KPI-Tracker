@@ -35,12 +35,21 @@
           <span class="tooltip">My Account</span>
         </li>
         <li>
-          <a href = "LecturerDashboard.html">
-            <i class='bx bxs-dashboard' ></i>
+          <a href="LecturerDashboard.html">
+            <i class='bx bxs-dashboard'></i>
             <span class="links_name">Lecturer Dashboard</span>
           </a>
-          <span class="tooltip">Lecturer Dashboard</span>
-        </li>
+          <span class="tooltip">KPI Dashboard</span>
+          
+          <!--Revisit-->
+          <!-- Submenu starts here -->
+          <!-- <ul class="submenu">
+            <li><a href="#">KPI Overview</a></li>
+            <li><a href="#">KPI Management</a></li>
+            <li><a href="#">KPI Verification</a></li>
+          </ul>
+        </li> -->
+
         <li>
           <a href = "Student_Dash.html">
             <i class='bx bxs-dashboard' ></i>
@@ -67,7 +76,7 @@
         <div class = "profile">
           <div class = "profile_details">
             <a href = "profile.html">
-            <img src = "\assets\icons\my_account.png" alt = "Profile Picture" >
+            <img src = "/assets/images/profile-pic.jpg" alt = "Profile Picture" >
             <div class = "name_title">
               <div class = "name">My Name</div>
             <div class = "title">Lecturer</div>
@@ -81,6 +90,7 @@
     </div>
   </div>
 
+  <!--Body-->
   <main class = "mainPage align-items-center">
     <div class="container-lg">
 
@@ -122,7 +132,6 @@
           <div class = "text">KPI Management</div> <hr class = "new1">
           <div class="row studentsOrCoursesDropdown w-100">
 
-              <!-- revisit for css -->
                 <select class = "dropdown-toggle align-items-center">
                   <option value = "students">KPI MANAGEMENT - Students</option>
                   <option value = "courses">KPI MANAGEMENT - Courses</option>
@@ -136,46 +145,69 @@
             <input class="search" type="text" placeholder="Search">
           </div>                  
           
-        <div class="row KPITable">
-          <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Course</th>
-                    <th>Due</th>
-                    <th>Verification Status</th>
-                    <th>Edit</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>John Wick</td>
-                    <td>Course A</td>
-                    <td>2025-10-23</td>
-                    <td>Not Verified</td>
-                    <td><button>Edit</button></td>
-                </tr>
-                <tr>
-                  <td>Jilly Jean</td>
-                  <td>Course C</td>
-                  <td>2025-10-23</td>
-                  <td>Not Verified</td>
-                  <td><button>Edit</button></td>
-              </tr>
-            </tbody>
-        </table>
-        </div>
-          
-        </section>
-
-        <section id = "kpi-verification">
-          <div class = "row verificationTable">
-            <div class = "text">Verification <hr class = "new1"> </div>
-            <table class="table table-striped table-bordered">
+          <div class="row KPITable">
+            <table>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Course</th>
+                  <th>Occurrence</th> <!-- NEW -->
+                  <th>Due</th>
+                  <th>Verification Status</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>John Wick</td>
+                  <td>Course A</td>
+                  <td>Occ 1</td> <!-- NEW -->
+                  <td>2025-10-23</td>
+                  <td>Not Verified</td>
+                  <td>
+                    <button><i class='bx bx-edit' alt = "Edit"></i></button>
+                    <button><i class='bx bx-trash' alt = "Delete"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jilly Jean</td>
+                  <td>Course C</td>
+                  <td>Occ 2</td> <!-- NEW -->
+                  <td>2025-10-23</td>
+                  <td>Not Verified</td>
+                  <td>
+                    <button><i class='bx bx-edit' alt = "Edit"></i></button>
+                    <button><i class='bx bx-trash' alt = "Delete"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Billy Bean</td>
+                  <td>Course B</td>
+                  <td>Occ 3</td> <!-- NEW -->
+                  <td>2025-10-23</td>
+                  <td>Not Verified</td>
+                  <td>
+                    <button><i class='bx bx-edit' alt = "Edit"></i></button>
+                    <button><i class='bx bx-trash' alt = "Delete"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          
+        </section>
+
+        <section id = "kpi-verification">
+          <div class = "text">Verification <hr class = "new1"> </div>
+
+           <div class = "row verificationTable">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Course</th>
+                  <th>Occurrence</th>
                   <th>Evidence</th>
                   <th>Verification</th>
                   <th>Comment</th>
@@ -186,7 +218,8 @@
                 <tr>
                   <td>Alice Tan</td>
                   <td>Course A</td>
-                  <td><a href="#">View Evidence</a></td>
+                  <td>Occ 1</td>
+                  <td><a href="#">Evidence</a></td>
                   <td>
                     <select>
                       <option value="accepted">Accepted</option>
@@ -194,12 +227,13 @@
                     </select>
                   </td>
                   <td><input type="text" placeholder="Add comment"></td>
-                  <td><button class="btn btn-primary">Submit</button></td>
+                  <td><button class="btn">Submit</button></td>
                 </tr>
                 <tr>
                   <td>John Lim</td>
                   <td>Course B</td>
-                  <td><a href="#">View Evidence</a></td>
+                  <td>Occ 2</td> 
+                  <td><a href="#">Evidence</a></td>
                   <td>
                     <select>
                       <option value="accepted">Accepted</option>
@@ -207,12 +241,13 @@
                     </select>
                   </td>
                   <td><input type="text" placeholder="Add comment"></td>
-                  <td><button class="btn btn-primary">Submit</button></td>
+                  <td><button class="btn">Submit</button></td>
                 </tr>
                 <tr>
                   <td>Maria Lee</td>
                   <td>Course C</td>
-                  <td><a href="#">View Evidence</a></td>
+                  <td>Occ 3</td>
+                  <td><a href="#">Evidence</a></td>
                   <td>
                     <select>
                       <option value="accepted">Accepted</option>
@@ -220,14 +255,13 @@
                     </select>
                   </td>
                   <td><input type="text" placeholder="Add comment"></td>
-                  <td><button class="btn btn-primary">Submit</button></td>
+                  <td><button class="btn">Submit</button></td>
                 </tr>
               </tbody>
             </table>
-                        
-
+                      
           </div>
-        </section>
+        </section><br>
 
     </div>
     </main>
@@ -249,21 +283,35 @@
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     });
 
+    document.addEventListener('click', (event) => {
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target)) {
+        sidebar.classList.remove('active');
+    }
+    });
+
     btn.onclick = function() {
       sidebar.classList.toggle("active");
     }
 
     // revisit
-    dashboardBtn.onclick = function() {
-      kpiOverview.classList.toggle('kpiOverview');
-    };
+  dashboardBtn.onclick = function() {
+  document.querySelector('#kpi-overview').scrollIntoView({ behavior: 'smooth' });
+  };
 
+  managementBtn.onclick = function() {
+  document.querySelector('#kpi-management').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  verificationBtn.onclick = function() {
+  document.querySelector('#kpi-verification').scrollIntoView({ behavior: 'smooth' });
+  };
 
   </script>
 
       <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
 </body>
+
+
 </html>
