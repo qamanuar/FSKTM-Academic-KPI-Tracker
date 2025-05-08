@@ -1,11 +1,12 @@
 body{
     padding-bottom: 20vh;
+    background-color: white;
 }
 
 main{
   margin-top:8vh;
-  background-color: #f0f0f0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4eeff;
+  font-family: 'Poppins,Inter,sans-serif';
   width: 100vh;
   margin-left: 40vh;
   padding: 5vh;
@@ -42,10 +43,10 @@ main{
 }
 
 .tab-box .tab-btn.active{
-  color: #7360ff;
+  color: hsl(0, 0%, 10%); 
 }
 .tab-box .tab-btn:hover{
-  color: #bdb5fa;
+  color: hsl(261, 100%, 85%);  
 }
 
 .notification-container{
@@ -53,7 +54,7 @@ main{
 }
 
 .notification {
-    background: #c0c0c0;
+    background-color: hsl(261, 100%, 80%);
     height: 60px;
     /* font-size: 50px; */
     display: flex;
@@ -65,12 +66,14 @@ main{
 }
 
 .notification:hover{
-  background: transparent;
+  /* background: transparent; */
+  background-color: hsl(261, 100%, 70%);
 }
 
 .notification.read {
-  background-color: #e0e0e0; /* slightly different gray */
+  background-color: hsl(261, 100%, 90%);
   opacity: 0.7;
+  cursor: pointer;
 }
 
 .line {
@@ -90,3 +93,4 @@ main{
   color: #000;
   margin-left: 6px;
 }
+

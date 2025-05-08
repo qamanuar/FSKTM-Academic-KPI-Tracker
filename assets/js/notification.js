@@ -163,3 +163,40 @@ window.onload = () => {
   line.style.left = activeTab.offsetLeft + "px";
 };
 
+
+let btn = document.querySelector("#btn");
+let sidebar = document.querySelector(".sidebar");
+let kpiOverview = document.querySelector("#kpi-overview")
+let dashboardBtn = document.querySelector(".dashboardBtn");
+let managementBtn = document.querySelector(".managementBtn");
+let verificationBtn = document.querySelector(".verificationBtn");
+
+const toggle = document.querySelector('.dropdown-toggle');
+const menu = document.querySelector('.dropdown-menu');
+
+toggle.addEventListener('click', () => {
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+});
+
+document.addEventListener('click', (event) => {
+  if (sidebar.classList.contains('active') && !sidebar.contains(event.target)) {
+      sidebar.classList.remove('active');
+  }
+});
+
+btn.onclick = function() {
+  sidebar.classList.toggle("active");
+}
+
+  // revisit
+dashboardBtn.onclick = function() {
+  document.querySelector('#kpi-overview').scrollIntoView({ behavior: 'smooth' });
+};
+
+managementBtn.onclick = function() {
+  document.querySelector('#kpi-management').scrollIntoView({ behavior: 'smooth' });
+};
+
+verificationBtn.onclick = function() {
+  document.querySelector('#kpi-verification').scrollIntoView({ behavior: 'smooth' });
+};
