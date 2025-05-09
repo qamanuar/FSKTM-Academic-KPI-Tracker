@@ -248,7 +248,7 @@
     color: #fff;
   }
 
-  .sidebar.active ~ .mainPage {
+  .sidebar.active ~ main {
     filter: blur(2px);
     pointer-events: none;  /* prevent clicking on blurred content */
 }

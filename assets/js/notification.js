@@ -1,3 +1,25 @@
+document.addEventListener('DOMContentLoaded', function () {
+  const btn = document.querySelector("#btn");
+  const sidebar = document.querySelector(".sidebar");
+
+  // Toggle sidebar visibility
+  if (btn && sidebar) {
+    btn.addEventListener('click', function () {
+      sidebar.classList.toggle("active");
+    });
+  }
+
+  // Close sidebar when clicking outside
+  document.addEventListener('click', function (event) {
+    if (sidebar && sidebar.classList.contains('active') && !sidebar.contains(event.target) && event.target !== btn) {
+      sidebar.classList.remove('active');
+    }
+  });
+});
+
+
+  console.log("read the functions in the sidebar");
+
 // 1. Fake database (hardcoded data)
 const fakeNotifications = [
   {
@@ -71,6 +93,8 @@ const fakeNotifications = [
   }
 ];
 
+console.log("read the hardcoded information");
+
 // 2. Helper function
 function timeAgo(timestamp) {
   const now = new Date();
@@ -137,6 +161,7 @@ function renderNotifications(notifications, filterType = 'all') {
   
 }
 
+console.log("read the render notification");
 
 // 5. Tab click
 tabs.forEach(tab => {
@@ -153,6 +178,8 @@ tabs.forEach(tab => {
   });
 });
 
+console.log("read the tab click");
+
 // 6. Initial load
 window.onload = () => {
   renderNotifications(fakeNotifications, 'all');
@@ -163,40 +190,4 @@ window.onload = () => {
   line.style.left = activeTab.offsetLeft + "px";
 };
 
-
-let btn = document.querySelector("#btn");
-let sidebar = document.querySelector(".sidebar");
-let kpiOverview = document.querySelector("#kpi-overview")
-let dashboardBtn = document.querySelector(".dashboardBtn");
-let managementBtn = document.querySelector(".managementBtn");
-let verificationBtn = document.querySelector(".verificationBtn");
-
-const toggle = document.querySelector('.dropdown-toggle');
-const menu = document.querySelector('.dropdown-menu');
-
-toggle.addEventListener('click', () => {
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-});
-
-document.addEventListener('click', (event) => {
-  if (sidebar.classList.contains('active') && !sidebar.contains(event.target)) {
-      sidebar.classList.remove('active');
-  }
-});
-
-btn.onclick = function() {
-  sidebar.classList.toggle("active");
-}
-
-  // revisit
-dashboardBtn.onclick = function() {
-  document.querySelector('#kpi-overview').scrollIntoView({ behavior: 'smooth' });
-};
-
-managementBtn.onclick = function() {
-  document.querySelector('#kpi-management').scrollIntoView({ behavior: 'smooth' });
-};
-
-verificationBtn.onclick = function() {
-  document.querySelector('#kpi-verification').scrollIntoView({ behavior: 'smooth' });
-};
+console.log("read the initial laod");
