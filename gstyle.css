@@ -1,0 +1,100 @@
+body {
+    background: #f7f9fc;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .form-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 350px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .toggle-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background-color: #e7efff;
+    border-radius: 25px;
+    overflow: hidden;
+  }
+  
+  .toggle-buttons button {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    background: none;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .toggle-buttons button.active {
+    background-color: #bea9df;
+    color: white;
+  }
+  
+  .form-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  label span {
+    color: red;
+  }
+  
+  input {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    margin-bottom: 5px;
+    box-shadow: 1px 1px 4px #e0e0e0;
+  }
+  
+  small {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  button[type="submit"] {
+    background-color: #bea9df;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #a27ae2;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  

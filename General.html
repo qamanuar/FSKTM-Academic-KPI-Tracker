@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>General</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="gstyle.css" />
 </head>
 <body>
   <div class="form-container">
@@ -17,11 +17,11 @@
 
     <!-- Register Form -->
     <form id="registerForm" class="form-content" onsubmit="handleRegister(event)">
-      <label for="username">Username <span>*</span></label>
-      <input type="text" id="username" placeholder="Enter your name" required />
+      <label for="name">Name <span>*</span></label>
+      <input type="text" id="name" placeholder="Enter your name" required />
 
-      <label for="email">Email <span>*</span></label>
-      <input type="email" id="email" placeholder="Enter your email" required />
+      <label for="id">Id <span>*</span></label>
+      <input type="id" id="id" placeholder="Enter your id" required />
 
       <label for="password">Password <span>*</span></label>
       <input type="password" id="password" placeholder="Create a password" required />
@@ -32,8 +32,8 @@
 
     <!-- Login Form -->
     <form id="loginForm" class="form-content hidden" onsubmit="handleLogin(event)">
-      <label for="loginEmail">Email <span>*</span></label>
-      <input type="email" id="loginEmail" placeholder="Enter your email" required />
+      <label for="loginId">Id <span>*</span></label>
+      <input type="id" id="loginId" placeholder="Enter your id" required />
 
       <label for="loginPassword">Password <span>*</span></label>
       <input type="password" id="loginPassword" placeholder="Enter your password" required />
@@ -42,6 +42,6 @@
     </form>
   </div>
 
-  <script src="script.js"></script>
+  <script src="gscript.js"></script>
 </body>
 </html>
