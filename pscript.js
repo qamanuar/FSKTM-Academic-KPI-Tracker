@@ -1,50 +1,101 @@
-const profileContainer = document.querySelector('.profile-container');
-const editButton = document.getElementById('editProfileBtn');
-const saveButton = document.getElementById('saveProfileBtn');
-const cancelButton = document.getElementById('cancelEditBtn');
-const editProfileLink = document.querySelector('.user-details-right .edit-profile-link'); // Get the link
+function showEdit() {
+  const viewName = document.querySelector("#viewProfile p:nth-of-type(1)").textContent;
+  const viewEmail = document.querySelector("#viewProfile p:nth-of-type(2)").textContent.split(": ")[1];
+  const viewCountry = document.querySelector("#viewProfile p:nth-of-type(3)").textContent.split(": ")[1];
+  const viewTimezone = document.querySelector("#viewProfile p:nth-of-type(4)").textContent.split(": ")[1];
+  const viewRegistrationNo = document.querySelector("#viewProfile p:nth-of-type(5)").textContent.split(": ")[1];
 
-const viewEmailSpan = document.getElementById('viewEmail');
-const editEmailInput = document.getElementById('editEmail');
-const viewCountrySpan = document.getElementById('viewCountry');
-const editCountryInput = document.getElementById('editCountry');
-const viewTimezoneSpan = document.getElementById('viewTimezone');
-const editTimezoneInput = document.getElementById('editTimezone');
-const viewRegisterationNumSpan = document.getElementById('viewRegisterationNum');
-const editRegisterationNumInput = document.getElementById('editRegisterationNum');
 
-const enabledEditMode = () => {
-    profileContainer.classList.add('edit-mode');
-    editEmailInput.value = viewEmailSpan.textContent.split(' ')[0]; // Extract email
-    editCountryInput.value = viewCountrySpan.textContent;
-    editTimezoneInput.value = viewTimezoneSpan.textContent;
-    editRegisterationNumInput.value = viewRegisterationNumSpan.textContent;
-};
+  // Populate the edit profile input fields
+  document.getElementById("editName").value = viewName;
+  document.getElementById("editEmail").value = viewEmail;
+  document.getElementById("editCountry").value = viewCountry;
+  document.getElementById("editTimezone").value = viewTimezone;
+  document.getElementById("editRegistrationNo").value = viewRegistrationNo;
 
-editButton.addEventListener('click', enabledEditMode);
+  // Show the edit profile section, hide others
+  document.getElementById("viewProfile").classList.add("hidden");
+  document.getElementById("editProfile").classList.remove("hidden");
+  document.getElementById("settingsPanel").classList.add("hidden");
+}
+  
+  function cancelEdit() {
+    document.getElementById("editProfile").classList.add("hidden");
+    document.getElementById("viewProfile").classList.remove("hidden");
+  }
+  
+  function saveProfile() {
+    alert("Profile saved!");
+    // Get the new values from the edit profile section
+    const newName = document.getElementById("editName").value;
+    const newEmail = document.getElementById("editEmail").value;
+    const newCountry = document.getElementById("editCountry").value;
+    const newTimezone = document.getElementById("editTimezone").value;
+    const newRegistrationNo = document.getElementById("editRegistrationNo").value;
 
-editProfileLink.addEventListener('click', (event) =>{
-    event.preventDefault(); //prevent the link from navigating
-    enabledEditMode(); //call
-})
+  // Update the view profile section with the new values
+    document.querySelector("#viewProfile p:nth-of-type(1)").textContent = newName;
+    document.querySelector("#viewProfile p:nth-of-type(2)").textContent = `Email: ${newEmail}`;
+    document.querySelector("#viewProfile p:nth-of-type(3)").textContent = `Country: ${newCountry}`;
+    document.querySelector("#viewProfile p:nth-of-type(4)").textContent = `Time Zone: ${newTimezone}`;
+    document.querySelector("#viewProfile p:nth-of-type(5)").textContent = `Registration No: ${newRegistrationNo}`;
 
-saveButton.addEventListener('click', () => {
-    const newEmail = editEmailInput.value;
-    const newCountry = editCountryInput.value;
-    const newTimezone = editTimezoneInput.value;
-    const newRegisterationNum = editRegisterationNumInput.value;
+    document.getElementById("editProfile").classList.add("hidden");
+    document.getElementById("viewProfile").classList.remove("hidden");
+  }
+  
+  function showSettings() {
+    document.getElementById("viewProfile").classList.add("hidden");
+    document.getElementById("editProfile").classList.add("hidden");
+    document.getElementById("settingsPanel").classList.remove("hidden");
+  }
+  
+  function closeSettings() {
+    document.getElementById("settingsPanel").classList.add("hidden");
+    document.getElementById("viewProfile").classList.remove("hidden");
+  }
+  
+  function changePassword() {
+    const current = document.getElementById("currentPass").value;
+    const newPass = document.getElementById("newPass").value;
+    const confirm = document.getElementById("confirmPass").value;
+  
+    if (newPass !== confirm) {
+      alert("New passwords do not match!");
+      return;
+    }
+  
+    alert("Password updated successfully!");
+    document.getElementById("currentPass").value = '';
+    document.getElementById("newPass").value = '';
+    document.getElementById("confirmPass").value = '';
 
-    // In a real application, you would send this data to a server
+      // Switch back to view mode
+    document.getElementById("editProfile").classList.add("hidden");
+    document.getElementById("viewProfile").classList.remove("hidden");
+  }
+  
+  function deactivateAccount() {
+    if (confirm("Are you sure you want to deactivate your account?")) {
+      alert("Account has been deactivated.");
 
-    // For this example, just update the displayed values
-    viewEmailSpan.textContent = `${newEmail} (Visible to other course participants)`;
-    viewCountrySpan.textContent = newCountry;
-    viewTimezoneSpan.textContent = newTimezone;
-    viewRegisterationNumSpan.textContent = newRegisterationNum;
+      // Optional: hide all sections or redirect//ni mcm tk function jek
+    document.getElementById("editProfile").classList.add("hidden");
+    document.getElementById("viewProfile").classList.add("hidden");
 
-    profileContainer.classList.remove('edit-mode');
-});
-
-cancelButton.addEventListener('click', () => {
-    profileContainer.classList.remove('edit-mode');
-});
+        // You can also simulate logout or show a message
+    document.body.innerHTML = "<h2>Account deactivated. Goodbye!</h2>";
+    //or can back to login page or homepage :))
+    }
+  }
+  function changeProfilePic(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.querySelector('.profile-pic').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+    
