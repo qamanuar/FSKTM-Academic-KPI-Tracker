@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Help & Support</title>
+
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --bs-primary: #6f42c1;
+      --bs-primary-dark: #5a32a3;
+      --bs-light-bg: #f4f0fa;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bs-light-bg);
+      margin: 0;
+    }
+
+    .main-content {
+      margin-left: 90px;
+      padding: 2rem;
+      flex-grow: 1;
+    }
+
+     .sidebar .nav-link.active {
+      background-color: var(--bs-primary);
+      color: white !important;
+    }
+
+    .nav-link:hover {
+      color: var(--bs-primary) !important;
+    }
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 78px;
+    z-index: 1000; 
+    background-color: #f8f4ff;
+    padding: 6px 14px;
+    
+  }
+
+  .sidebar.active {
+    width: 250px;
+  }
+
+  .sidebar .logo_content .logo{
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar.active .logo_content .logo{
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .logo_content .logo i{
+    font-size: 28px;
+    margin-right: 10px;
+    color: #2e067d;
+  }
+
+  .sidebar .logo_content .logo .logo_name{
+    font-size: 16px;
+    font-weight: 00;
+    color: #2e067d;
+  }
+
+  .sidebar #btn {
+    position: absolute;
+    left: 47.5%;
+    top: 6px;
+    color: #2e067d;
+    font-size: 25px;
+    height: 50px;
+    width: 50px;
+    margin-left:5px ;
+    text-align: center;
+    line-height: 50px;
+    transform: translateX(-55%);
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active #btn {
+    left: 87%;
+  }
+
+  .sidebar #btn:hover {
+    color:#fff;
+    background: #2e067d;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  
+  .sidebar .tooltip{
+    position: absolute;
+    height: 35px;
+    width: 122px;
+    top: 0;
+    left: 122px;
+    transform: translate(-50%, -110%);
+    border-radius: 12px;
+    line-height: 35px;
+    text-align: center;
+    background: #2e067d;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    color:#fff;
+    pointer-events:none;
+    display: block;
+  }
+
+  .sidebar ul {
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar ul li{
+    list-style: none;
+    position: relative;
+    height: 50px;
+    width: 100%;
+    line-height: 50px;
+  }
+
+  .sidebar a {
+    text-decoration: none;
+    color: #2e067d;
+    position: relative;
+    align-items: center;
+  }
+
+  .sidebar .links_name{
+    display: flex;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar.active .links_name{
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar ul li a{
+    display: flex;
+    border-radius: 12px;
+    white-space: nowrap;
+    text-align: center;
+    padding-left: 8px;
+  }
+
+  .sidebar ul li a:hover{
+    color:#fff;
+    background: #2e067d;
+  }
+
+  .sidebar ul li a i{
+    height: 50px;
+    min-width: 35px;
+    line-height: 50px;
+    padding-right:3px;
+    font-size: 20px;
+  }
+
+  .sidebar .profile_content {
+    position: absolute;
+    background: none;
+    color: #2e067d;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .sidebar .profile_content .profile{
+    position: relative;
+    padding: 10px 6px;
+    height: 60px;
+  }
+
+  .profile_content .profile .profile_details a {
+    display:flex;
+    align-items: center;
+  }
+
+  .sidebar.active .profile .profile_details a img{
+    height: 45px;
+    width: 45px;
+    object-fit: cover;
+    border-radius: 12px;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar .profile .profile_details a img{
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .sidebar.active .profile .profile_details a .name_title{
+    margin-left: 10px;
+    opacity: 1;
+    visibility: visible;
+    color: #2e067d;
+  }
+
+  .sidebar.active .profile .profile_details a .name{
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar .profile .profile_details a .name{
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .sidebar.active .profile .profile_details a .title{
+    font-size: 12px;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar .profile .profile_details a .title{
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .sidebar.active .profile #log_out {
+    position: absolute;
+    left:87%;
+    bottom: 5px;
+    transform: translateX(-50%);
+    min-width: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    border-radius: 12px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar .profile #log_out {
+    position: absolute;
+    left:47.5%;
+    bottom: 5px;
+    transform: translateX(-50%);
+    min-width: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    border-radius: 12px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile #log_out:hover {
+    background: #2e067d;
+    color: #fff;
+  }
+
+  .sidebar.active ~ main {
+    filter: blur(2px);
+    pointer-events: none;  /* prevent clicking on blurred content */
+}
+
+.sidebar #btn:hover .tooltip{
+  color:#fff;
+  background: #2e067d;
+  border-radius: 12px;
+  opacity: 1;
+  top: 90%;
+}
+
+.profile #log_out:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: 90%;
+}
+
+.sidebar ul li:hover .tooltip{
+  color:#fff;
+  background: #2e067d;
+  border-radius: 12px;
+  opacity: 1;
+  top: 90%;
+}
+
+.sidebar.active .tooltip{
+  opacity: 0;
+  visibility: hidden;
+}
+  </style>
+</head>
+<body>
+
+<body>
+  <div class="d-flex">
+    
+     <!-- Side Navigation Bar -->
+  <div class = "sidebar">
+    <div class = "logo_content">
+      <div class="logo">
+        <i class='bx bxs-bar-chart-alt-2'></i>
+        <div class="logo_name">FSKTM KPI Tracker</div>
+      </div>
+      <i class='bx bx-menu' id = "btn" >
+        <span class = "tooltip">Menu</span>
+      </i>
+      <ul class="nav_list">
+        <li>
+          <a href = "profile.html">
+            <i class='bx bx-user'></i>
+            <span class="links_name">My Account</span>
+          </a>
+          <span class="tooltip">My Account</span>
+        </li>
+        <li>
+          <a href="LecturerDashboard.html">
+            <i class='bx bxs-dashboard'></i>
+            <span class="links_name">Lecturer Dashboard</span>
+          </a>
+          <span class="tooltip">KPI Dashboard</span>
+        <li>
+          <a href = "Student_Dash.html">
+            <i class='bx bxs-dashboard' ></i>
+            <span class="links_name">Student Dashboard</span>
+          </a>
+          <span class="tooltip">KPI Dashboard</span>
+        </li>
+        <li>
+          <a href = "notification.html">
+            <i class='bx bxs-bell'></i>
+            <span class="links_name">Notifications</span>
+          </a>
+          <span class="tooltip">Notifications</span>
+        </li>
+        <li>
+          <a href = "help.html">
+            <i class='bx bx-question-mark'></i>
+            <span class="links_name">Help & Support</span>
+          </a>
+          <span class="tooltip">Help & Support</span>
+        </li>
+      </ul>
+      <div class = "profile_content">
+        <div class = "profile">
+          <div class = "profile_details">
+            <a href = "profile.html">
+            <img src = "assets/images/my_account.jpeg" alt = "Profile Picture" >
+            <div class = "name_title">
+              <div class = "name">My Name</div>
+            <div class = "title">Lecturer</div>
+            </div></a>
+          </div>
+          <i class='bx bx-log-out' id = "log_out">
+            <span class = "tooltip">Log Out</span>
+          </i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h2 class="mb-4">Help & Support</h2>
+
+      <!-- FAQ Section -->
+      <div class="mb-5">
+        <h4>Frequently Asked Questions</h4>
+        <div class="accordion" id="faqAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq1-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                How do I reset my password?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse">
+              <div class="accordion-body">Go to Account Settings &gt; Reset Password.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq2-heading">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                How can I track my ticket status?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse">
+              <div class="accordion-body">After submitting, go to Help &gt; My Tickets to view status updates.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticket Support Form -->
+      <h4>Submit a Help or Support Ticket</h4>
+      <form id="ticketForm" class="card p-4 mb-4">
+        <div class="mb-3">
+          <label for="issueTitle" class="form-label">Issue Title</label>
+          <input type="text" id="issueTitle" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="issueDescription" class="form-label">Description</label>
+          <textarea id="issueDescription" rows="4" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Ticket</button>
+      </form>
+
+      <!-- Ticket Confirmation -->
+      <div id="ticketResponse" class="alert alert-success d-none">
+        Ticket submitted successfully! Ticket ID: <span id="ticketId"></span>
+      </div>
+
+      <!-- View History Section -->
+      <div class="mt-5">
+        <h5>View Ticket History</h5>
+
+        <!-- Filter Buttons -->
+        <div class="mb-3">
+          <button class="btn btn-outline-primary ticket-status-btn" onclick="filterTickets('Past')">Past</button>
+          <button class="btn btn-outline-warning ticket-status-btn" onclick="filterTickets('In-progress')">In Progress</button>
+          <button class="btn btn-outline-success ticket-status-btn" onclick="filterTickets('Completed')">Complete</button>
+        </div>
+
+        <ul id="ticketHistory" class="list-group">
+          <!-- Tickets will appear here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+ <script>
+    let btn = document.querySelector("#btn");
+    let sidebar = document.querySelector(".sidebar");
+    let kpiOverview = document.querySelector("#kpi-overview")
+    let dashboardBtn = document.querySelector(".dashboardBtn");
+    let managementBtn = document.querySelector(".managementBtn");
+    let verificationBtn = document.querySelector(".verificationBtn");
+
+    const toggle = document.querySelector('.dropdown-toggle');
+    const menu = document.querySelector('.dropdown-menu');
+
+    toggle.addEventListener('click', () => {
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (event) => {
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target)) {
+        sidebar.classList.remove('active');
+    }
+    });
+
+    btn.onclick = function() {
+      sidebar.classList.toggle("active");
+    }
+
+    // revisit
+  dashboardBtn.onclick = function() {
+  document.querySelector('#kpi-overview').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  managementBtn.onclick = function() {
+  document.querySelector('#kpi-management').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  verificationBtn.onclick = function() {
+  document.querySelector('#kpi-verification').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  </script>
+
+      <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+
+
+    let ticketCounter = 1;
+
+    document.getElementById("ticketForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const ticketId = ticketCounter++;
+      document.getElementById("ticketId").textContent = ticketId;
+      document.getElementById("ticketResponse").classList.remove("d-none");
+      e.target.reset();
+      appendTicketToHistory(ticketId, 'in-progress');
+    });
+
+    function appendTicketToHistory(ticketId, status) {
+      const ticketHistory = document.getElementById("ticketHistory");
+      const ticketItem = document.createElement("li");
+      ticketItem.classList.add("list-group-item");
+      ticketItem.setAttribute("data-status", status);
+      ticketItem.innerHTML = `
+        <strong>Ticket ID:</strong> ${ticketId}<br>
+        <strong>Status:</strong> ${status.charAt(0).toUpperCase() + status.slice(1)}<br>
+        <strong>Submitted On:</strong> ${new Date().toLocaleDateString()}<br>
+        <strong>Response:</strong> Your issue is being processed.
+      `;
+      ticketHistory.appendChild(ticketItem);
+    }
+
+function filterTickets(status) {
+  const allTickets = document.querySelectorAll("#ticketHistory .list-group-item");
+  allTickets.forEach(ticket => {
+    const ticketStatus = ticket.getAttribute("data-status");
+    if (status === 'all' || ticketStatus.toLowerCase() === status.toLowerCase()) {
+      ticket.style.display = 'block';
+    } else {
+      ticket.style.display = 'none';
+    }
+  });
+}
+
+</script>
+</body>
+</html>
