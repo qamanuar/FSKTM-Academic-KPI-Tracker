@@ -43,7 +43,7 @@ body {
   }
   
   .toggle-buttons button.active {
-    background-color: #bea9df;
+    background-color: #2e067d;
     color: white;
   }
   
@@ -79,7 +79,7 @@ body {
   }
   
   button[type="submit"] {
-    background-color: #bea9df;
+    background-color: #2e067d;
     color: white;
     border: none;
     padding: 12px;
@@ -91,7 +91,7 @@ body {
   }
   
   button[type="submit"]:hover {
-    background-color: #a27ae2;
+    background-color: #2e067d;
   }
   
   .hidden {
