@@ -138,3 +138,135 @@ nav a:hover{
 nav .logo a:hover {
   background-color: transparent;
 }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f5fa;
+  color: #2c3e50;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 78px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f8f4ff;
+  padding: 10px 14px;
+  transition: width 0.3s ease;
+  z-index: 1000;
+}
+.sidebar.active {
+  width: 250px;
+}
+
+.logo_content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo i {
+  font-size: 24px;
+  color: #2e067d;
+}
+.logo_name {
+  font-weight: 600;
+  color: #2e067d;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sidebar.active .logo_name {
+  opacity: 1;
+}
+
+#btn {
+  cursor: pointer;
+  color: #2e067d;
+  font-size: 24px;
+}
+
+/* Navigation */
+.nav_list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+}
+.nav_list li {
+  margin-bottom: 10px;
+}
+.nav_list a {
+  display: flex;
+  align-items: center;
+  color: #2e067d;
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 8px;
+}
+.nav_list a:hover {
+  background-color: #2e067d;
+  color: #fff;
+}
+.links_name {
+  margin-left: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sidebar.active .links_name {
+  opacity: 1;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 78px;
+  transition: margin-left 0.3s ease;
+}
+.sidebar.active ~ .main-content {
+  margin-left: 250px;
+}
+
+/* KPI cards */
+.kpi-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  color: white;
+}
+.bg-lightblue { background-color: #4fc3f7; }
+.bg-indigo { background-color: #3f51b5; }
+.bg-purple { background-color: #ab47bc; }
+
+/* Profile */
+.profile_content {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+}
+.profile_details {
+  display: flex;
+  align-items: center;
+}
+.profile_details img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.name_title {
+  color: #2e067d;
+}
+#log_out {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+#log_out:hover {
+  color: red;
+}
+.bg-dark-purple {
+  background-color: #2C0057;
+}
+
