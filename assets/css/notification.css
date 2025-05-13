@@ -1,12 +1,14 @@
 body{
     padding-bottom: 20vh;
     background-color: white;
+    height: 100vh;
 }
 
 main{
-  margin-top:8vh;
+  height: calc(100vh-80px);
+  margin : 20vh 0;
   background-color: #f4eeff;
-  /* font-family: 'Poppins'; */
+  font-family: 'Poppins';
   width: 100vh;
   margin-left: 40vh;
   padding: 5vh;
@@ -94,3 +96,29 @@ main{
   margin-left: 6px;
 }
 
+/* Header Navigation */
+
+header {
+  background-color: rgb(222, 204, 255);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  z-index: 1001;
+  height: 70px;
+}
+
+.header-container{
+  display: flex;
+  justify-content: space-between;
+}
+
+header ul{
+  justify-content: space-between;
+  display: flex;
+  gap: 10rem;
+}

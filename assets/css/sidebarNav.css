@@ -1,13 +1,12 @@
 .sidebar{
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 78px;
-    z-index: 1000; 
-    background-color: #f8f4ff;
-    padding: 6px 14px;
-    
+  top: 70px;
+  left: 0;
+  height: calc(100% - 70px);
+  width: 78px;
+  z-index: 1000;
+  background-color: #f8f4ff;
+  padding: 6px 14px;
   }
 
   .sidebar.active {

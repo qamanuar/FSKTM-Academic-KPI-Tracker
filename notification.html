@@ -16,6 +16,9 @@
 <!-- Boxicons Icons -->
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+<!-- Tailwind CSS -->
+ <script src="https://cdn.tailwindcss.com"></script>
+
 <!-- Custom CSS -->
 <link rel="stylesheet" href="assets/css/sidebarNav.css">
 <link rel="stylesheet" href="/assets/css/notification.css">
@@ -23,7 +26,25 @@
   </head>
   <body>
     
-    <!-- Side Navigation Bar -->
+    <header class="items-center flex justify-content-between">
+        <img src="./assets/images/fsktm-kpi-logo.png" alt="Logo" style="height: 60px; margin-left:30px">  
+        
+        <div>
+          <ul class="flex gap-lg-5">
+            <li id="username" class="text-lg justify-center text-[#2e067d] mt-1 font-medium">Name</li>
+            <li class="mt-1">
+                <a href="/General.html" class=" text-lg text-[#2e067d] border-2 border-[#2e067d] py-1 px-3 rounded-lg 
+                hover:bg-[#2e067d] hover:text-white transition duration-200">
+                Logout</a>
+            </li>
+          </ul>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+      <!-- Side Navigation Bar -->
     <div class = "sidebar">
       <div class = "logo_content">
         <div class="logo">
@@ -97,9 +118,6 @@
       </div>
     </div>
 
-    <!-- Main Content -->
-    <main>
-
       <!-- Notifications Section -->
       <section id="notifications" class="container mb-3">
         <h4>Notifications</h4>
@@ -121,6 +139,21 @@
       </section>
 
     </main>
+
+    <footer class="h-50 bg-[#2C0057] ml-[78px] flex items-center justify-between">
+      <img src="./assets/images/fsktm-kpi-logo-white.png" alt="KPI-Logo" class="w-1/4 h-[210px] ">
+
+      <div>
+        <ul class="text-white text-start">
+          <h2 class="text-xl font-semibold mb-1">Contact US</h2>
+          <li class="mb-1/2">kpi-admin@fsktm.um.edu.my</li>
+          <li class="mb-1/2">company address</li>
+          <li>+60 12 - 768 4400</li>
+        </ul>
+      </div>
+
+      <p class="text-white text-sm mr-10">COPYRIGHT 2025 © FSKTM KPI Tracker</p>
+    </footer>
 
   </div>
 
