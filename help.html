@@ -13,347 +13,294 @@
 
 <style>
     :root {
-      --bs-primary: #6f42c1;
-      --bs-primary-dark: #5a32a3;
-      --bs-light-bg: #f4f0fa;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--bs-light-bg);
-      margin: 0;
-    }
-
-    .main-content {
-      margin-left: 90px;
-      padding: 2rem;
-      flex-grow: 1;
-    }
-
-     .sidebar .nav-link.active {
-      background-color: var(--bs-primary);
-      color: white !important;
-    }
-
-    .nav-link:hover {
-      color: var(--bs-primary) !important;
-    }
-
-.sidebar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 78px;
-    z-index: 1000; 
-    background-color: #f8f4ff;
-    padding: 6px 14px;
-    
-  }
-
-  .sidebar.active {
-    width: 250px;
-  }
-
-  .sidebar .logo_content .logo{
-    height: 50px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .sidebar.active .logo_content .logo{
-    opacity: 1;
-    pointer-events: none;
-  }
-
-  .logo_content .logo i{
-    font-size: 28px;
-    margin-right: 10px;
-    color: #2e067d;
-  }
-
-  .sidebar .logo_content .logo .logo_name{
-    font-size: 16px;
-    font-weight: 00;
-    color: #2e067d;
-  }
-
-  .sidebar #btn {
-    position: absolute;
-    left: 47.5%;
-    top: 6px;
-    color: #2e067d;
-    font-size: 25px;
-    height: 50px;
-    width: 50px;
-    margin-left:5px ;
-    text-align: center;
-    line-height: 50px;
-    transform: translateX(-55%);
-    transition: left 0.3s ease;
-  }
-
-  .sidebar.active #btn {
-    left: 87%;
-  }
-
-  .sidebar #btn:hover {
-    color:#fff;
-    background: #2e067d;
-    border-radius: 12px;
-    white-space: nowrap;
-  }
-  
-  .sidebar .tooltip{
-    position: absolute;
-    height: 35px;
-    width: 122px;
-    top: 0;
-    left: 122px;
-    transform: translate(-50%, -110%);
-    border-radius: 12px;
-    line-height: 35px;
-    text-align: center;
-    background: #2e067d;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    color:#fff;
-    pointer-events:none;
-    display: block;
-  }
-
-  .sidebar ul {
-    margin-top: 20px;
-    list-style: none;
-    padding: 0;
-  }
-
-  .sidebar ul li{
-    list-style: none;
-    position: relative;
-    height: 50px;
-    width: 100%;
-    line-height: 50px;
-  }
-
-  .sidebar a {
-    text-decoration: none;
-    color: #2e067d;
-    position: relative;
-    align-items: center;
-  }
-
-  .sidebar .links_name{
-    display: flex;
-    border-radius: 12px;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .sidebar.active .links_name{
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .sidebar ul li a{
-    display: flex;
-    border-radius: 12px;
-    white-space: nowrap;
-    text-align: center;
-    padding-left: 8px;
-  }
-
-  .sidebar ul li a:hover{
-    color:#fff;
-    background: #2e067d;
-  }
-
-  .sidebar ul li a i{
-    height: 50px;
-    min-width: 35px;
-    line-height: 50px;
-    padding-right:3px;
-    font-size: 20px;
-  }
-
-  .sidebar .profile_content {
-    position: absolute;
-    background: none;
-    color: #2e067d;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  .sidebar .profile_content .profile{
-    position: relative;
-    padding: 10px 6px;
-    height: 60px;
-  }
-
-  .profile_content .profile .profile_details a {
-    display:flex;
-    align-items: center;
-  }
-
-  .sidebar.active .profile .profile_details a img{
-    height: 45px;
-    width: 45px;
-    object-fit: cover;
-    border-radius: 12px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a img{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile .profile_details a .name_title{
-    margin-left: 10px;
-    opacity: 1;
-    visibility: visible;
-    color: #2e067d;
-  }
-
-  .sidebar.active .profile .profile_details a .name{
-    font-size: 15px;
-    font-weight: 400;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a .name{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile .profile_details a .title{
-    font-size: 12px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a .title{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile #log_out {
-    position: absolute;
-    left:87%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    min-width: 50px;
-    line-height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .sidebar .profile #log_out {
-    position: absolute;
-    left:47.5%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    min-width: 50px;
-    line-height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .profile #log_out:hover {
-    background: #2e067d;
-    color: #fff;
-  }
-
-  .sidebar.active ~ main {
-    filter: blur(2px);
-    pointer-events: none;  /* prevent clicking on blurred content */
+  --bs-primary: #6f42c1;
+  --bs-primary-dark: #5a32a3;
+  --bs-light-bg: #f4f0fa;
 }
 
-.sidebar #btn:hover .tooltip{
-  color:#fff;
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bs-light-bg);
+  margin: 0;
+}
+
+.main-content {
+  margin-left: 90px;
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+.sidebar .nav-link.active {
+  background-color: var(--bs-primary);
+  color: white !important;
+}
+
+.nav-link:hover {
+  color: var(--bs-primary) !important;
+}
+
+.sidebar {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  height: calc(100% - 70px);
+  width: 78px;
+  z-index: 1000;
+  background-color: #f8f4ff;
+  padding: 6px 14px;
+  transition: width 0.3s ease;
+}
+
+.sidebar.active {
+  width: 250px;
+}
+
+.sidebar .logo_content .logo {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar.active .logo_content .logo {
+  opacity: 1;
+}
+
+.logo_content .logo i {
+  font-size: 28px;
+  margin-right: 10px;
+  color: #2e067d;
+}
+
+.logo_content .logo .logo_name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2e067d;
+}
+
+#btn {
+  position: absolute;
+  left: 47.5%;
+  top: 6px;
+  color: #2e067d;
+  font-size: 25px;
+  height: 50px;
+  width: 50px;
+  margin-left: 5px;
+  text-align: center;
+  line-height: 50px;
+  transform: translateX(-55%);
+  transition: left 0.3s ease;
+}
+
+.sidebar.active #btn {
+  left: 87%;
+}
+
+#btn:hover {
+  color: #fff;
   background: #2e067d;
   border-radius: 12px;
-  opacity: 1;
-  top: 90%;
+  white-space: nowrap;
 }
 
+.tooltip {
+  position: absolute;
+  height: 35px;
+  width: 122px;
+  top: 0;
+  left: 122px;
+  transform: translate(-50%, -110%);
+  border-radius: 12px;
+  line-height: 35px;
+  text-align: center;
+  background: #2e067d;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  pointer-events: none;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.sidebar ul {
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  position: relative;
+  height: 50px;
+  line-height: 50px;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #2e067d;
+  border-radius: 12px;
+  padding-left: 8px;
+  white-space: nowrap;
+}
+
+.sidebar ul li a i {
+  height: 50px;
+  min-width: 35px;
+  line-height: 50px;
+  padding-right: 3px;
+  font-size: 20px;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li:hover .tooltip,
+#btn:hover .tooltip,
 .profile #log_out:hover .tooltip {
+  color: #fff;
+  background: #2e067d;
   opacity: 1;
   visibility: visible;
   top: 90%;
 }
 
-.sidebar ul li:hover .tooltip{
-  color:#fff;
-  background: #2e067d;
-  border-radius: 12px;
-  opacity: 1;
-  top: 90%;
+.sidebar .links_name {
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.sidebar.active .tooltip{
+.sidebar.active .links_name {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar .profile_content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: #2e067d;
+}
+
+.sidebar .profile {
+  position: relative;
+  padding: 10px 6px;
+  height: 60px;
+}
+
+.profile .profile_details a {
+  display: flex;
+  align-items: center;
+}
+
+.profile a img {
+  height: 45px;
+  width: 45px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: opacity 0.3s;
+}
+
+.sidebar.active .profile a img {
+  opacity: 1;
+  visibility: visible;
+}
+
+.profile a img,
+.profile a .name,
+.profile a .title,
+.name_title {
   opacity: 0;
   visibility: hidden;
 }
- 
+
+.sidebar.active .profile a .name_title,
+.sidebar.active .profile a .name,
+.sidebar.active .profile a .title {
+  opacity: 1;
+  visibility: visible;
+  margin-left: 10px;
+}
+
+#log_out {
+  position: absolute;
+  bottom: 5px;
+  left: 47.5%;
+  transform: translateX(-50%);
+  min-width: 50px;
+  line-height: 50px;
+  font-size: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.sidebar.active #log_out {
+  left: 87%;
+}
+
+#log_out:hover {
+  background: #2e067d;
+  color: #fff;
+}
+
+.sidebar.active ~ main {
+  filter: blur(2px);
+  pointer-events: none;
+}
+
 header {
   background-color: rgb(222, 204, 255);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 0.5rem 1rem;
+  padding: 1rem;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  text-align: center;
-  justify-content: center;
   z-index: 1001;
-  height: 55px;
+  height: 70px;
 }
 
-
-.header-container{
+.header-container {
   display: flex;
   justify-content: space-between;
 }
 
-header ul{
-  justify-content: space-between;
+header ul {
   display: flex;
   gap: 10rem;
 }
 
-h2 {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  font-weight: 600;
+
+main {
+  padding: 2rem;
+  padding-top: 90px; /* ← Push content below the fixed header */
+  font-family: 'Poppins';
+  position: relative;
+  width: calc(100% - 78px);
+  left: 50px;
+  justify-content: center;
+  flex: 1 0 auto;
 }
 
-h4 {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  font-weight: 600;
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 
 </style>
 </head>
 <body>
-
+<body class="d-flex flex-column min-vh-100">
 <header class="items-center flex justify-content-between">
-<img src="assets/css/images/kpi-logo.png" alt="Logo" style="height: 45px; margin-left:30px">
+<img src="./assets/images/fsktm-kpi-logo.png" alt="Logo" style="height: 45px; margin-left:30px">
   <div>
     <ul class="flex gap-lg-5">
       <li id="username" class="text-lg justify-center text-[#2e067d] mt-1 font-medium">Name</li>
@@ -365,7 +312,7 @@ h4 {
   </div>
 </header>
 
-<div class="d-flex">
+  <div class="d-flex flex-grow-1">
   <!-- Side Navigation Bar -->
   <div class="sidebar" id="sidebar">
     <div class="logo_content">
@@ -432,10 +379,10 @@ h4 {
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <h2 class="mb-4">Help & Support</h2>
-
+  <main>
+    <main class="flex-grow-1 p-4">
+      <div class="main-content">
+        <h2 class="mb-4 fw-bold fs-2">Help & Support</h2>
     <!-- FAQ Section -->
       <div class="mb-5">
         <h4>Frequently Asked Questions</h4>
@@ -493,19 +440,21 @@ h4 {
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="h-32 bg-[#2C0057] ml-[78px] flex items-center justify-between px-6 py-4">
-<img src="./assets/images/fsktm-kpi-logo-white.png" alt="KPI-Logo" class="w-1/6 h-[150px]">
+ </main>
 
-  <div>
-    <ul class="text-white text-start">
-      <h2 class="text-xl font-semibold mb-1">Contact US</h2>
-      <li class="mb-1/2">kpi-admin@fsktm.um.edu.my</li>
-      <li class="mb-1/2">company address</li>
-      <li>+60 12 - 768 4400</li>
-    </ul>
-  </div>
-  <p class="text-white text-sm mr-10">COPYRIGHT 2025 © FSKTM KPI Tracker</p>
+<footer class="h-50 bg-[#2C0057] ml-[78px] flex items-center justify-between">
+      <img src="./assets/images/fsktm-kpi-logo-white.png" alt="KPI-Logo" class="w-1/4 h-[210px] ">
+
+      <div>
+        <ul class="text-white text-start">
+          <h2 class="text-xl font-semibold mb-1">Contact Us</h2>
+          <li class="mb-1/2">kpi-admin@fsktm.um.edu.my</li>
+          <li class="mb-1/2">company address</li>
+          <li>+60 12 - 768 4400</li>
+        </ul>
+      </div>
+
+      <p class="text-white text-sm mr-10">COPYRIGHT 2025 © FSKTM KPI Tracker</p>
 </footer>
 
 <!-- Scripts -->
