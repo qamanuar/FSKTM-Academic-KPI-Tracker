@@ -71,7 +71,7 @@ function showEdit() {
     document.getElementById("confirmPass").value = '';
 
       // Switch back to view mode
-    document.getElementById("editProfile").classList.add("hidden");
+    document.getElementById("settingsPanel").classList.add("hidden");
     document.getElementById("viewProfile").classList.remove("hidden");
   }
   
