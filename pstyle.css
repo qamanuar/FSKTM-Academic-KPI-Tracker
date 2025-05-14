@@ -1,288 +1,3 @@
-/*********************************************************Sidebar Nav Section*********************************************************************/
-
-  .sidebar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 78px;
-    z-index: 1000; 
-    background-color: #f8f4ff;
-    padding: 6px 14px;
-  }
-
-  .sidebar.active {
-    width: 250px;
-  }
-
-  .sidebar .logo_content .logo{
-    height: 50px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .sidebar.active .logo_content .logo{
-    opacity: 1;
-    pointer-events: none;
-  }
-
-  .logo_content .logo i{
-    font-size: 28px;
-    margin-right: 10px;
-    color: #2e067d;
-  }
-
-  .sidebar .logo_content .logo .logo_name{
-    font-size: 16px;
-    font-weight: 00;
-    color: #2e067d;
-  }
-
-  .sidebar #btn {
-    position: absolute;
-    left: 47.5%;
-    top: 6px;
-    color: #2e067d;
-    font-size: 25px;
-    height: 50px;
-    width: 50px;
-    margin-left:5px ;
-    text-align: center;
-    line-height: 50px;
-    transform: translateX(-55%);
-    transition: left 0.3s ease;
-  }
-
-  .sidebar.active #btn {
-    left: 87%;
-  }
-
-  .sidebar #btn:hover {
-    color:#fff;
-    background: #2e067d;
-    border-radius: 12px;
-    white-space: nowrap;
-  }
-  
-  .sidebar .tooltip{
-    position: absolute;
-    height: 35px;
-    width: 122px;
-    top: 0;
-    left: 122px;
-    transform: translate(-50%, -110%);
-    border-radius: 12px;
-    line-height: 35px;
-    text-align: center;
-    background: #2e067d;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    color:#fff;
-    pointer-events:none;
-    display: block;
-  }
-
-  .sidebar ul {
-    margin-top: 20px;
-    list-style: none;
-    padding: 0;
-  }
-
-  .sidebar ul li{
-    list-style: none;
-    position: relative;
-    height: 50px;
-    width: 100%;
-    line-height: 50px;
-  }
-
-  .sidebar a {
-    text-decoration: none;
-    color: #2e067d;
-    position: relative;
-    align-items: center;
-  }
-
-  .sidebar .links_name{
-    display: flex;
-    border-radius: 12px;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .sidebar.active .links_name{
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .sidebar ul li a{
-    display: flex;
-    border-radius: 12px;
-    white-space: nowrap;
-    text-align: center;
-    padding-left: 8px;
-  }
-
-  .sidebar ul li a:hover{
-    color:#fff;
-    background: #2e067d;
-  }
-
-  .sidebar ul li a i{
-    height: 50px;
-    min-width: 35px;
-    line-height: 50px;
-    padding-right:3px;
-    font-size: 20px;
-  }
-
-  /* Revisit for Dashboard's submenu */
-
-  /* .sidebar .submenu {
-    display: none;
-    list-style: none;
-    padding-left: 20px;
-  }
-  
-  li:hover .submenu {
-    display: block;
-  } */
-
-  .sidebar .profile_content {
-    position: absolute;
-    background: none;
-    color: #2e067d;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  .sidebar .profile_content .profile{
-    position: relative;
-    padding: 10px 6px;
-    height: 60px;
-  }
-
-  .profile_content .profile .profile_details a {
-    display:flex;
-    align-items: center;
-  }
-
-  .sidebar.active .profile .profile_details a img{
-    height: 45px;
-    width: 45px;
-    object-fit: cover;
-    border-radius: 12px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a img{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile .profile_details a .name_title{
-    margin-left: 10px;
-    opacity: 1;
-    visibility: visible;
-    color: #2e067d;
-  }
-
-  .sidebar.active .profile .profile_details a .name{
-    font-size: 15px;
-    font-weight: 400;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a .name{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile .profile_details a .title{
-    font-size: 12px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a .title{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile #log_out {
-    position: absolute;
-    left:87%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    min-width: 50px;
-    line-height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .sidebar .profile #log_out {
-    position: absolute;
-    left:47.5%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    min-width: 50px;
-    line-height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .profile #log_out:hover {
-    background: #2e067d;
-    color: #fff;
-  }
-
-  .sidebar.active ~ .mainPage {
-    filter: blur(2px);
-    pointer-events: none;  /* prevent clicking on blurred content */
-}
-
-.sidebar #btn:hover .tooltip{
-  color:#fff;
-  background: #2e067d;
-  border-radius: 12px;
-  opacity: 1;
-  top: 90%;
-}
-
-.profile #log_out:hover .tooltip {
-  opacity: 1;
-  visibility: visible;
-  top: 90%;
-}
-
-.sidebar ul li:hover .tooltip{
-  color:#fff;
-  background: #2e067d;
-  border-radius: 12px;
-  opacity: 1;
-  top: 90%;
-}
-
-.sidebar.active .tooltip{
-  opacity: 0;
-  visibility: hidden;
-}
-/*********************************************************Sidebar Nav Section*********************************************************************/
-
-
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -298,6 +13,7 @@ body {
   margin-top: 100px;
   margin-left: 150px;
   margin-right: 50px;
+  margin-bottom: 100px;
   display: flex;
   
 }
@@ -316,18 +32,24 @@ body {
   text-align: center;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
+.profile-pic-wrapper {
+  position: relative; /* Important for absolute positioning of the icon */
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+}
 .profile-pic {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   margin-bottom: 10px;
 }
 
-.edit-pic-btn, .settings-btn {
-  margin-top: 30px;
-  margin-bottom: 10px;
+.edit-pic-btn, .settings-btn, .editProfile-btn, .save, .cancel, .back {
+  margin-top: 10px;
   padding: 10px 14px;
   width: 100%;
   border: none;
@@ -335,6 +57,19 @@ body {
   color: white;
   font-weight: bold;
   cursor: pointer;
+}
+
+#viewProfile button {
+  background-color: #6944a0;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  width: auto; /* Adjust width as needed */
+  margin-top: 20px; /* Adjust spacing */
+  transition: background-color 0.3s ease;
 }
 
 .edit-pic-btn:hover, .settings-btn:hover {
@@ -380,11 +115,28 @@ button:hover {
 .deactivate-btn {
   background-color: #dc3545;
   margin-top: 10px;
+  padding: 5px; /* Adjust padding */
+  text-align: left; /* Align text to the left */
+  width: auto;
 }
 
 .deactivate-btn:hover {
   background-color: #c82333;
 }
+
+.change {
+  background-color: #2196F3;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 5px; /* Adjust padding */
+  text-align: left; /* Align text to the left */
+  width: auto;
+}
+
+.change:hover {
+  background-color: #1976D2;
+}
+
 
 .hidden {
   display: none;
@@ -400,9 +152,27 @@ hr {
   margin: 20px 0;
 }
 
-h2 {
-  margin-bottom: 100px;
+.main-panel h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: bolder;
+  font-size: 2.5em;
+  background-color: #f8f8f8;
+  padding: 8px;
+  border-radius: 5px;
 }
+
+#viewProfile p {
+  font-size: 1.1em;
+  line-height: 1.6; /* Add line gap */
+  margin-bottom: 8px; /* Adjust spacing between details */
+  font-weight: normal; /* Default font weight for the text */
+}
+
+#viewProfile p strong {
+  font-weight: bold; /* Make the labels bold */
+}
+
 .edit-pic-btn input[type="file"] {
   display: none;
 }
@@ -413,20 +183,21 @@ h2 {
 
 .edit-icon {
   position: absolute;
-  bottom: 5px;
+  bottom: 7px;
   right: 5px;
   background-color: #6944a0;
   color: white;
   border-radius: 50%;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   transition: background-color 0.3s ease;
+    z-index: 10; 
 }
 
 .edit-icon:hover {
