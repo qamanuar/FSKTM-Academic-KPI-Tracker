@@ -1,325 +1,32 @@
 /* Global Settings */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
 
 * {
-  font-family: 'Poppins', 'Inter', sans-serif;
+  font-family: "Poppins", "Inter", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 20px;
-  }
-
-* {
-    box-sizing: border-box;
-  }
-
-/*********************************************************Sidebar Nav Section*********************************************************************/
-
-  .sidebar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 78px;
-    z-index: 1000; 
-    background-color: #f8f4ff;
-    padding: 6px 14px;
-    
-  }
-
-  .sidebar.active {
-    width: 250px;
-  }
-
-  .sidebar .logo_content .logo{
-    height: 50px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .sidebar.active .logo_content .logo{
-    opacity: 1;
-    pointer-events: none;
-  }
-
-  .logo_content .logo i{
-    font-size: 28px;
-    margin-right: 10px;
-    color: #2e067d;
-  }
-
-  .sidebar .logo_content .logo .logo_name{
-    font-size: 16px;
-    font-weight: 00;
-    color: #2e067d;
-  }
-
-  .sidebar #btn {
-    position: absolute;
-    left: 47.5%;
-    top: 6px;
-    color: #2e067d;
-    font-size: 25px;
-    height: 50px;
-    width: 50px;
-    margin-left:5px ;
-    text-align: center;
-    line-height: 50px;
-    transform: translateX(-55%);
-    transition: left 0.3s ease;
-  }
-
-  .sidebar.active #btn {
-    left: 87%;
-  }
-
-  .sidebar #btn:hover {
-    color:#fff;
-    background: #2e067d;
-    border-radius: 12px;
-    white-space: nowrap;
-  }
-  
-  .sidebar .tooltip{
-    position: absolute;
-    height: 35px;
-    width: 122px;
-    top: 0;
-    left: 122px;
-    transform: translate(-50%, -110%);
-    border-radius: 12px;
-    line-height: 35px;
-    text-align: center;
-    background: #2e067d;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    color:#fff;
-    pointer-events:none;
-    display: block;
-  }
-
-  .sidebar ul {
-    margin-top: 20px;
-    list-style: none;
-    padding: 0;
-  }
-
-  .sidebar ul li{
-    list-style: none;
-    position: relative;
-    height: 50px;
-    width: 100%;
-    line-height: 50px;
-  }
-
-  .sidebar a {
-    text-decoration: none;
-    color: #2e067d;
-    position: relative;
-    align-items: center;
-  }
-
-  .sidebar .links_name{
-    display: flex;
-    border-radius: 12px;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .sidebar.active .links_name{
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .sidebar ul li a{
-    display: flex;
-    border-radius: 12px;
-    white-space: nowrap;
-    text-align: center;
-    padding-left: 8px;
-  }
-
-  .sidebar ul li a:hover{
-    color:#fff;
-    background: #2e067d;
-  }
-
-  .sidebar ul li a i{
-    height: 50px;
-    min-width: 35px;
-    line-height: 50px;
-    padding-right:3px;
-    font-size: 20px;
-  }
-
-  /* Revisit for Dashboard's submenu */
-
-  /* .sidebar .submenu {
-    display: none;
-    list-style: none;
-    padding-left: 20px;
-  }
-  
-  li:hover .submenu {
-    display: block;
-  } */
-
-  .sidebar .profile_content {
-    position: absolute;
-    background: none;
-    color: #2e067d;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  .sidebar .profile_content .profile{
-    position: relative;
-    padding: 10px 6px;
-    height: 60px;
-  }
-
-  .profile_content .profile .profile_details a {
-    display:flex;
-    align-items: center;
-  }
-
-  .sidebar.active .profile .profile_details a img{
-    height: 45px;
-    width: 45px;
-    object-fit: cover;
-    border-radius: 12px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a img{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile .profile_details a .name_title{
-    margin-left: 10px;
-    opacity: 1;
-    visibility: visible;
-    color: #2e067d;
-  }
-
-  .sidebar.active .profile .profile_details a .name{
-    font-size: 15px;
-    font-weight: 400;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a .name{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile .profile_details a .title{
-    font-size: 12px;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .sidebar .profile .profile_details a .title{
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar.active .profile #log_out {
-    position: absolute;
-    left:87%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    min-width: 50px;
-    line-height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .sidebar .profile #log_out {
-    position: absolute;
-    left:47.5%;
-    bottom: 5px;
-    transform: translateX(-50%);
-    min-width: 50px;
-    line-height: 50px;
-    font-size: 20px;
-    border-radius: 12px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .profile #log_out:hover {
-    background: #2e067d;
-    color: #fff;
-  }
-
-  .sidebar.active ~ .mainPage {
-    filter: blur(2px);
-    pointer-events: none;  /* prevent clicking on blurred content */
-}
-
-.sidebar #btn:hover .tooltip{
-  color:#fff;
-  background: #2e067d;
-  border-radius: 12px;
-  opacity: 1;
-  top: 90%;
-}
-
-.profile #log_out:hover .tooltip {
-  opacity: 1;
-  visibility: visible;
-  top: 90%;
-}
-
-.sidebar ul li:hover .tooltip{
-  color:#fff;
-  background: #2e067d;
-  border-radius: 12px;
-  opacity: 1;
-  top: 90%;
-}
-
-.sidebar.active .tooltip{
-  opacity: 0;
-  visibility: hidden;
-}
-
-/*********************************************************Sidebar Nav Section*********************************************************************/
-
-/*********************************************************Main Class Section*********************************************************************/
-
-  .mainPage {
-  position: relative;
-  height: 100px;
-  width: calc(100% - 78px);
-  left: 50px;
-  margin: 50px 20px 20px 20px;
-  justify-content: center;
-  transition: filter 0.2s ease;
-}
-
-.mainclass .container-lg{
-  font-size: 25px;
-  font-weight: 600;
   width: 100%;
+  padding: 20px 0px 0px 20px;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.mainPage {
+  position: relative;
+  height: auto;
+  min-height: 100px;
+  width: 99%;
+  padding: 60px 0px 0px 70px;
+  justify-content: center;
+  align-items: center;
+  transition: filter 0.2s ease;
 }
 
 /*********************************************************Main Class Section*********************************************************************/
@@ -337,7 +44,7 @@ body {
 .mainPage .managementBtn:hover,
 .mainPage .verificationBtn:hover {
   background: #6944a0;
-  color: #f6eeff;
+  color: #fff;
 }
 
 .mainPage #button.active {
@@ -370,7 +77,7 @@ hr.new1 {
   background: #f4eeff;
   border-radius: 12px;
   padding: 10px;
-  flex:3;
+  flex: 3;
   border: none;
   font-weight: 600;
   font-size: 22px;
@@ -390,15 +97,24 @@ hr.new1 {
   border-radius: 12px;
   padding: 10px;
   border: none;
-  flex:1.43;
+  flex: 1.43;
   font-weight: 600;
   font-size: 22px;
 }
 
-.mainPage .dashboardPendingVerification .verificationItems {
-  font-size: 17px;
-  margin:0px 5px 5px 5px;
-  font-weight: normal;
+.mainPage .dashboardPendingVerification hr.new1 {
+  margin-bottom: 0px;
+}
+
+.mainPage .dashboardPendingVerification button {
+  font-size: 20px;
+  font-weight: 550;
+  left: 0;
+  padding: 10px 0px 0px 0px;
+}
+
+.mainPage .dashboardPendingVerification button:hover {
+  color: #6944a0;
 }
 
 /*********************************************************Overview Section*********************************************************************/
@@ -416,7 +132,7 @@ hr.new1 {
   border-radius: 12px;
 }
 
-#kpi-management .text{
+#kpi-management .text {
   font-size: 22px;
   font-weight: 600;
   left: 10px;
@@ -430,7 +146,7 @@ hr.new1 {
   align-self: flex-center;
 }
 
-#kpi-management .row{
+#kpi-management .row {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -500,9 +216,9 @@ select:focus {
 
 .filters .search {
   border: none;
-  border:2px solid black;
+  border: 2px solid black;
   opacity: 1;
-  background:none;
+  background: none;
   padding: 10px 20px;
   border-radius: 12px;
   flex: 2;
@@ -524,20 +240,19 @@ select:focus {
   vertical-align: middle;
 }
 
-.KPITable table th{
+.KPITable table th {
   font-weight: 500;
   padding: 10px;
   background: #6944a0;
   color: #fff;
 }
 
-.KPITable table th:last-child{
+.KPITable table th:last-child {
   text-align: center;
 }
 
 .KPITable table th:first-child {
   width: 20%;
-
 }
 
 .KPITable table th:nth-child(2) {
@@ -548,17 +263,17 @@ select:focus {
   text-align: center;
 }
 
-.KPITable table td{
+.KPITable table td {
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.KPITable table td button{
+.KPITable table td button {
   background: none;
   font-size: 25px;
 }
 
-.KPITable table th, 
+.KPITable table th,
 .KPITable table td {
   border: none;
   text-align: left;
@@ -587,7 +302,7 @@ select:focus {
   border-radius: 12px;
 }
 
-.mainPage #kpi-verification .text{
+.mainPage #kpi-verification .text {
   font-size: 22px;
   font-weight: 600;
   left: 10px;
@@ -608,7 +323,6 @@ select:focus {
   border: 0.5px solid #f4eeff;
   overflow: hidden;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  
 }
 
 .verificationTable table {
@@ -617,7 +331,7 @@ select:focus {
   border: none;
 }
 
-.verificationTable table th{
+.verificationTable table th {
   font-weight: 500;
   padding: 10px;
   background: #6944a0;
@@ -632,19 +346,19 @@ select:focus {
   width: 15%;
 }
 
-.verificationTable table td{
+.verificationTable table td {
   vertical-align: middle;
   background: none;
 }
 
-.verificationTable table td button{
+.verificationTable table td button {
   font-size: 15px;
   background: none;
   border: 1.5px solid black;
   color: black;
 }
 
-.verificationTable table td button:hover{
+.verificationTable table td button:hover {
   background: #6944a0;
   color: #fff;
   border: 1.5px solid transparent;
@@ -669,7 +383,7 @@ select:focus {
   background: #f0f0f0;
 }
 
-.verificationTable table th, 
+.verificationTable table th,
 .verificationTable table td {
   border: none;
   text-align: left;
@@ -684,3 +398,41 @@ select:focus {
 }
 
 /*********************************************************Verification Section*********************************************************************/
+/*********************************************************Custom Footer Section*********************************************************************/
+.custom-footer {
+  background-color: #2C0057;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 60px;
+  color: white;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  width: 25%;
+  height: 210px;
+  object-fit: contain;
+}
+
+.footer-contact h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.footer-contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-contact li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-copy {
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
