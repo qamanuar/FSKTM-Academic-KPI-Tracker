@@ -24,3 +24,13 @@ header ul{
   display: flex;
   gap: 10rem;
 }
+
+header .logoutText{
+  color: #2e067d;
+  border-color: #2e067d;
+}
+
+header .logoutText:hover{
+  color: #fff;
+  background-color: #2e067d;
+}
