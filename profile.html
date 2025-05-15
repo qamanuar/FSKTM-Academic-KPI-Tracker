@@ -20,7 +20,7 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/assets/css/lecturerDashboard.css" />
-  <link rel="stylesheet" href="/assets/css/sidebarNav.css">
+  <link rel="stylesheet" href="/assets/css/sidebar.css">
   <link rel="stylesheet" href="/assets/css/header.css">
 </head>
 <body>
@@ -42,77 +42,63 @@
 
   <!-- Side Navigation Bar -->
   <div class = "sidebar">
-      <div class = "logo_content">
-        <div class="logo">
+    <div class = "logo_content">
+      <div class="logo">
           <i class='bx bxs-bar-chart-alt-2'></i>
           <div class="logo_name">FSKTM KPI Tracker</div>
         </div>
-        <i class='bx bx-menu' id = "btn" >
-          <span class = "tooltip">Menu</span>
-        </i>
-        <ul class="nav_list">
-          <li>
-            <a href = "profile.html">
-              <i class='bx bx-user'></i>
-              <span class="links_name">My Account</span>
-            </a>
-            <span class="tooltip">My Account</span>
-          </li>
-          <li>
-            <a href="LecturerDashboard.html">
-              <i class='bx bxs-dashboard'></i>
-              <span class="links_name">Lecturer Dashboard</span>
-            </a>
-            <span class="tooltip">KPI Dashboard</span>
-            
-            <!--Revisit-->
-            <!-- Submenu starts here -->
-            <!-- <ul class="submenu">
-              <li><a href="#">KPI Overview</a></li>
-              <li><a href="#">KPI Management</a></li>
-              <li><a href="#">KPI Verification</a></li>
-            </ul>
-          </li> -->
-  
-          <li>
-            <a href = "Student_Dash.html">
-              <i class='bx bxs-dashboard' ></i>
-              <span class="links_name">Student Dashboard</span>
-            </a>
-            <span class="tooltip">KPI Dashboard</span>
-          </li>
-          <li>
-            <a href = "notification.html">
-              <i class='bx bxs-bell'></i>
-              <span class="links_name">Notifications</span>
-            </a>
-            <span class="tooltip">Notifications</span>
-          </li>
-          <li>
-            <a href = "help.html">
-              <i class='bx bx-question-mark'></i>
-              <span class="links_name">Help & Support</span>
-            </a>
-            <span class="tooltip">Help & Support</span>
-          </li>
-        </ul>
-        <div class = "profile_content">
-          <div class = "profile">
-            <div class = "profile_details">
-              <a href = "profile.html">
-              <img src = "assets/images/my_account.jpeg" alt = "Profile Picture" >
-              <div class = "name_title">
-                <div class = "name">My Name</div>
-              <div class = "title">Lecturer</div>
-              </div></a>
-            </div>
-            <i class='bx bx-log-out' id = "log_out">
-              <span class = "tooltip">Log Out</span>
-            </i>
-          </div>
-        </div>
-      </div>
+      <i class='bx bx-menu' id = "btn" >
+        <span class = "tooltip">Menu</span>
+      </i>
+      <ul class="nav_list">
+        <li>
+          <a href = "profile.html">
+            <i class='bx bx-user'></i>
+            <span class="links_name">My Account</span>
+          </a>
+          <span class="tooltip">My Account</span>
+        </li>
+        <li>
+          <a href="LecturerDashboard.html">
+            <i class='bx bxs-dashboard'></i>
+            <span class="links_name">Lecturer Dashboard</span>
+          </a>
+          <span class="tooltip">KPI Dashboard</span>
+          
+          <!--Revisit-->
+          <!-- Submenu starts here -->
+          <!-- <ul class="submenu">
+            <li><a href="#">KPI Overview</a></li>
+            <li><a href="#">KPI Management</a></li>
+            <li><a href="#">KPI Verification</a></li>
+          </ul>
+        </li> -->
+
+        <li>
+          <a href = "Student_Dash.html">
+            <i class='bx bxs-dashboard' ></i>
+            <span class="links_name">Student Dashboard</span>
+          </a>
+          <span class="tooltip">KPI Dashboard</span>
+        </li>
+        <li>
+          <a href = "notification.html">
+            <i class='bx bxs-bell'></i>
+            <span class="links_name">Notifications</span>
+          </a>
+          <span class="tooltip">Notifications</span>
+        </li>
+        <li>
+          <a href = "help.html">
+            <i class='bx bx-question-mark'></i>
+            <span class="links_name">Help & Support</span>
+          </a>
+          <span class="tooltip">Help & Support</span>
+        </li>
+      </ul>
     </div>
+  </div>
+
     <main>
       <div class="profile-background">
       <div class="container">
@@ -217,28 +203,6 @@
       <p class="text-white text-sm mr-10">COPYRIGHT 2025 © FSKTM KPI Tracker</p>
     </footer>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-  const btn = document.querySelector("#btn");
-  const sidebar = document.querySelector(".sidebar");
-
-  // Toggle sidebar visibility
-  if (btn && sidebar) {
-    btn.addEventListener('click', function () {
-      sidebar.classList.toggle("active");
-    });
-  }
-
-  // Close sidebar when clicking outside
-  document.addEventListener('click', function (event) {
-    if (sidebar && sidebar.classList.contains('active') && !sidebar.contains(event.target) && event.target !== btn) {
-      sidebar.classList.remove('active');
-    }
-  });
-});
-    </script>
     <script src="./assets/js/sidebar_script.js"></script>
-  
-    <script src = "/assets/js/sidebar_script.js"></script>
 </body>
 </html>
