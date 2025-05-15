@@ -52,6 +52,13 @@ body {
   color: #f6eeff;
 }
 
+.mainPage .welcomeHeader {
+  font-size: 45px;
+  margin: 30px 10px 20px 0px;
+  color: #2e067d;
+  font-weight: medium;
+}
+
 /*********************************************************Buttons Section*********************************************************************/
 
 /*********************************************************Overview Section*********************************************************************/
@@ -73,7 +80,7 @@ hr.new1 {
   gap: 20px;
 }
 
-.mainPage .PerformanceAchievementPerCourse {
+.mainPage .PerformanceAchievement {
   background: #f4eeff;
   border-radius: 12px;
   padding: 10px;
@@ -83,7 +90,7 @@ hr.new1 {
   font-size: 22px;
 }
 
-.mainPage .PerformanceAchievementPerCourse ul li {
+.mainPage .PerformanceAchievement ul li {
   border: none;
   margin-top: 5px;
   border-radius: 5px;
@@ -162,7 +169,7 @@ hr.new1 {
   display: inline-block;
 }
 
-select {
+.studentsOrCoursesDropdown select {
   appearance: none;
 }
 
@@ -179,7 +186,7 @@ select:focus {
   background: none;
 }
 
-#dropdown-icon {
+.studentsOrCoursesDropdown #dropdown-icon {
   position: absolute;
   left: 94%;
   top: 50%;
@@ -247,16 +254,21 @@ select:focus {
   color: #fff;
 }
 
+.KPITable table select {
+  border-radius: 10px;
+  background: none;
+  padding: 5px;
+  color: black;
+  border: 1.5px solid black;
+}
+
+
 .KPITable table th:last-child {
   text-align: center;
 }
 
 .KPITable table th:first-child {
   width: 20%;
-}
-
-.KPITable table th:nth-child(2) {
-  width: 15%;
 }
 
 .KPITable table td:last-child {
@@ -342,10 +354,6 @@ select:focus {
   width: 20%;
 }
 
-.verificationTable table th:nth-child(2) {
-  width: 15%;
-}
-
 .verificationTable table td {
   vertical-align: middle;
   background: none;
@@ -377,6 +385,14 @@ select:focus {
   padding: 5px;
   color: black;
   border: 1.5px solid black;
+}
+
+.verificationTable table td:nth-child(5) {
+  text-align: center;
+}
+
+.verificationTable table td:nth-child(5) select {
+  width:100%;
 }
 
 .verificationTable {
