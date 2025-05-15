@@ -53,6 +53,7 @@ body {
   padding: 10px 14px;
   width: 100%;
   border: none;
+  border-radius: 12px;
   background-color: #6944a0;
   color: white;
   font-weight: bold;
@@ -64,7 +65,7 @@ body {
   color: white;
   border: none;
   padding: 10px 14px;
-  border-radius: 6px;
+  border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   width: auto; /* Adjust width as needed */
@@ -93,7 +94,7 @@ input[type="text"], input[type="email"], input[type="password"] {
   padding: 10px;
   margin-bottom: 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 12px;
 }
 
 button {
@@ -101,7 +102,7 @@ button {
   padding: 10px 16px;
   width: 100%;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   background-color: #6944a0;
   color: white;
   cursor: pointer;
@@ -114,10 +115,14 @@ button:hover {
 
 .deactivate-btn {
   background-color: #dc3545;
-  margin-top: 10px;
-  padding: 5px; /* Adjust padding */
-  text-align: left; /* Align text to the left */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  text-align: left; 
   width: auto;
+  color: white;
+  font-weight: bold;
+  border-radius: 12px;
 }
 
 .deactivate-btn:hover {
@@ -128,9 +133,12 @@ button:hover {
   background-color: #2196F3;
   margin-top: 10px;
   margin-bottom: 20px;
-  padding: 5px; /* Adjust padding */
-  text-align: left; /* Align text to the left */
+  padding: 10px 14px;
+  text-align: left; 
   width: auto;
+  color: white;
+  font-weight: bold;
+  border-radius: 12px;
 }
 
 .change:hover {
@@ -159,7 +167,7 @@ hr {
   font-size: 2.5em;
   background-color: #f8f8f8;
   padding: 8px;
-  border-radius: 5px;
+  border-radius: 12px;
 }
 
 #viewProfile p {

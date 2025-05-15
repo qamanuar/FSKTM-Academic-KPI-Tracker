@@ -1,24 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const btn = document.querySelector("#btn");
-  const sidebar = document.querySelector(".sidebar");
 
-  // Toggle sidebar visibility
-  if (btn && sidebar) {
-    btn.addEventListener('click', function () {
-      sidebar.classList.toggle("active");
-    });
-  }
-
-  // Close sidebar when clicking outside
-  document.addEventListener('click', function (event) {
-    if (sidebar && sidebar.classList.contains('active') && !sidebar.contains(event.target) && event.target !== btn) {
-      sidebar.classList.remove('active');
-    }
-  });
-});
-
-
-  console.log("read the functions in the sidebar");
+console.log("read the functions in the sidebar");
 
 // 1. Fake database (hardcoded data)
 const fakeNotifications = [

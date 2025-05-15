@@ -1,5 +1,5 @@
 function showEdit() {
-  const viewName = document.querySelector("#viewProfile p:nth-of-type(1)").textContent;
+  const viewName = document.querySelector("#viewProfile p:nth-of-type(1)").textContent.split(": ")[1];
   const viewEmail = document.querySelector("#viewProfile p:nth-of-type(2)").textContent.split(": ")[1];
   const viewCountry = document.querySelector("#viewProfile p:nth-of-type(3)").textContent.split(": ")[1];
   const viewTimezone = document.querySelector("#viewProfile p:nth-of-type(4)").textContent.split(": ")[1];
@@ -34,7 +34,7 @@ function showEdit() {
     const newRegistrationNo = document.getElementById("editRegistrationNo").value;
 
   // Update the view profile section with the new values
-    document.querySelector("#viewProfile p:nth-of-type(1)").textContent = newName;
+    document.querySelector("#viewProfile p:nth-of-type(1)").textContent =`Name: ${newName}`;
     document.querySelector("#viewProfile p:nth-of-type(2)").textContent = `Email: ${newEmail}`;
     document.querySelector("#viewProfile p:nth-of-type(3)").textContent = `Country: ${newCountry}`;
     document.querySelector("#viewProfile p:nth-of-type(4)").textContent = `Time Zone: ${newTimezone}`;

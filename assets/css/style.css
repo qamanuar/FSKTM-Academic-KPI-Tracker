@@ -93,43 +93,10 @@ footer {
 
 /* ================================================ NAVIGATION CONATINER ========================================================= */
 
-/* Navigation */
-.nav_list {
-  list-style: none;
-  padding-left: 0;
-  margin-top: 20px;
-}
-.nav_list li {
-  margin-bottom: 10px;
-}
-.nav_list a {
-  display: flex;
-  align-items: center;
-  color: #2e067d;
-  text-decoration: none;
-  padding: 8px;
-  border-radius: 8px;
-}
-.nav_list a:hover {
-  background-color: #2e067d;
-  color: #fff;
-}
-.links_name {
-  margin-left: 10px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.sidebar.active .links_name {
-  opacity: 1;
-}
-
 /* Main content */
 .main-content {
   margin-left: 78px;
   transition: margin-left 0.3s ease;
-}
-.sidebar.active ~ .main-content {
-  margin-left: 250px;
 }
 
 /* KPI cards */
