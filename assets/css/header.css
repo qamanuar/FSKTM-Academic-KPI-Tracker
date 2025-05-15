@@ -30,6 +30,11 @@ header .logoutText{
   border-color: #2e067d;
 }
 
+header #username{
+  color: #2e067d;
+  font-weight: 500;
+}
+
 header .logoutText:hover{
   color: #fff;
   background-color: #2e067d;
