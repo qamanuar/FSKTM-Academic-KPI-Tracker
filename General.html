@@ -21,7 +21,8 @@
       <input type="text" id="name" placeholder="Enter your name" required />
 
       <label for="id">Id <span>*</span></label>
-      <input type="id" id="id" placeholder="Enter your id" required />
+      <!-- Use type="text" instead of type="id" -->
+      <input type="text" id="id" placeholder="Enter your id" required />
 
       <label for="password">Password <span>*</span></label>
       <input type="password" id="password" placeholder="Create a password" required />
@@ -33,7 +34,8 @@
     <!-- Login Form -->
     <form id="loginForm" class="form-content hidden" onsubmit="handleLogin(event)">
       <label for="loginId">Id <span>*</span></label>
-      <input type="id" id="loginId" placeholder="Enter your id" required />
+      <!-- Use type="text" here as well -->
+      <input type="text" id="loginId" placeholder="Enter your id" required />
 
       <label for="loginPassword">Password <span>*</span></label>
       <input type="password" id="loginPassword" placeholder="Enter your password" required />
