@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>General</title>
+  <link rel="stylesheet" href="/css/gstyle.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h2>General</h2>
+
+    <div class="toggle-buttons">
+      <button id="registerTab" class="active" onclick="toggleForm('register')">Register</button>
+      <button id="loginTab" onclick="toggleForm('login')">Login</button>
+    </div>
+
+    <!-- Register Form -->
+    <form id="registerForm" class="form-content" onsubmit="handleRegister(event)">
+      <label for="name">Name <span>*</span></label>
+      <input type="text" id="name" placeholder="Enter your name" required />
+
+      <label for="id">Id <span>*</span></label>
+      <!-- Use type="text" instead of type="id" -->
+      <input type="text" id="id" placeholder="Enter your id" required />
+
+      <label for="password">Password <span>*</span></label>
+      <input type="password" id="password" placeholder="Create a password" required />
+      <small>Must be at least 8 characters.</small>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="form-content hidden" onsubmit="handleLogin(event)">
+      <label for="loginId">Id <span>*</span></label>
+      <!-- Use type="text" here as well -->
+      <input type="text" id="loginId" placeholder="Enter your id" required />
+
+      <label for="loginPassword">Password <span>*</span></label>
+      <input type="password" id="loginPassword" placeholder="Enter your password" required />
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script src="/js/gscript.js"></script>
+</body>
+</html>
