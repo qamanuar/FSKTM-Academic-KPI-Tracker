@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile Page</title>
+  <link rel="stylesheet" href="/css/pstyle.css">
+  
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Boxicons Icons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/header.css">
+  <link href="/css/sidebar.css" rel="stylesheet">
+</head>
+<body>
+
+  <header class="items-center flex justify-content-between">
+    <img src="./assets/images/fsktm-kpi-logo.png" alt="Logo" style="height: 60px; margin-left:30px">  
+    <div>
+      <ul class="flex gap-lg-5">
+        <li id="username" class="text-lg justify-center text-[#2e067d] mt-1 font-medium"></li>
+        <li class="mt-1">
+          <a href="/General.html" class="text-lg text-[#2e067d] border-2 border-[#2e067d] py-1 px-3 rounded-lg 
+            hover:bg-[#2e067d] hover:text-white transition duration-200">
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo_content">
+      <div class="logo">
+        <i class='bx bxs-bar-chart-alt-2'></i>
+        <div class="logo_name">FSKTM KPI Tracker</div>
+      </div>
+      <i class='bx bx-menu' id="btn"><span class="tooltip">Menu</span></i>
+      <ul class="nav_list">
+        <li><a href="profile.html"><i class='bx bx-user'></i><span class="links_name">My Account</span></a></li>
+        <li><a href="LecturerDashboard.html"><i class='bx bxs-dashboard'></i><span class="links_name">Lecturer Dashboard</span></a></li>
+        <li><a href="Student_Dash.html"><i class='bx bxs-dashboard'></i><span class="links_name">Student Dashboard</span></a></li>
+        <li><a href="notification.html"><i class='bx bxs-bell'></i><span class="links_name">Notifications</span></a></li>
+        <li><a href="help.html"><i class='bx bx-question-mark'></i><span class="links_name">Help & Support</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="mainPage">
+    <div class="profile-background">
+      <div class="container">
+        <!-- Left Panel -->
+        <aside class="sidebarProfile">
+          <div class="profile-pic-wrapper">
+            <img src="assets/images/profile-pic.jpg" alt="" class="profile-pic" id="profileImage">
+            <label class="edit-icon">
+              <input type="file" accept="image/*" onchange="changeProfilePic(event)" hidden>
+              <span>🖉</span>
+            </label>
+          </div>
+          <button class="settings-btn" onclick="showSettings()">⚙️ Settings</button>
+          <button class="editProfile-btn" onclick="showEdit()">Edit Profile</button>
+        </aside>
+
+        <!-- Right Panel -->
+        <main class="main-panel">
+          <!-- View Profile -->
+          <div id="viewProfile">
+            <h2>User Details</h2>
+            <p><strong>Name:</strong> <span id="profileName"></span></p>
+            <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+            <p><strong>Country:</strong> <span id="profileCountry"></span></p>
+            <p><strong>Time Zone:</strong> <span id="profileTimezone"></span></p>
+            <p><strong>Registration No:</strong> <span id="profileRegNo"></span></p>
+            <button onclick="showEdit()">Edit Profile</button>
+          </div>
+
+          <!-- Edit Profile -->
+          <div id="editProfile" class="hidden">
+            <h2>Edit Profile</h2>
+            <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
+            <div class="form-group"><label>Email</label><input type="text" id="editEmail"></div>
+            <div class="form-group"><label>Country</label><input type="text" id="editCountry"></div>
+            <div class="form-group"><label>Timezone</label><input type="text" id="editTimezone"></div>
+            <div class="form-group"><label>Registration Number</label><input type="text" id="editRegistrationNo" readonly></div>
+            <div class="btn-group">
+              <button class="save" onclick="saveProfile()">Save</button>
+              <button class="cancel" onclick="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Settings Panel -->
+          <div id="settingsPanel" class="hidden">
+            <h2>Account Settings</h2>
+            <h4>Change Password</h4>
+            <input type="password" placeholder="Current Password" id="currentPass">
+            <input type="password" placeholder="New Password" id="newPass">
+            <input type="password" placeholder="Confirm New Password" id="confirmPass">
+            <button class="change" onclick="changePassword()">Update Password</button>
+            <hr>
+            <h4>Deactivate Account</h4>
+            <button class="deactivate-btn" onclick="deactivateAccount()">Deactivate Account</button>
+            <div class="btn-group">
+              <button class="back" onclick="closeSettings()">Back to Profile</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </main>
+
+  <footer class="h-50 bg-[#2C0057] ml-[58.5px] flex items-center justify-between">
+    <img src="./assets/images/fsktm-kpi-logo-white.png" alt="KPI-Logo" class="w-1/4 h-[210px]">
+    <div>
+      <ul class="text-white text-start">
+        <h2 class="text-xl font-semibold mb-1">Contact Us</h2>
+        <li>kpi-admin@fsktm.um.edu.my</li>
+        <li>company address</li>
+        <li>+60 12 - 768 4400</li>
+      </ul>
+    </div>
+    <p class="text-white text-sm mr-10">COPYRIGHT 2025 © FSKTM KPI Tracker</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/sidebar_script.js"></script>
+  <script src="/js/pscript.js" defer></script>
+</body>
+</html>
