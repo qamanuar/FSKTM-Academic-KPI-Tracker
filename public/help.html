@@ -216,33 +216,47 @@ body, html {
   </div>
 </div>
 
-      <!-- Ticket Support Form -->
-      <div class="mt-8"></div>
-      <h2 class="text-xl font-semibold mb-2">Submit a Help or Support Ticket</h2>      <form id="ticketForm" class="card p-4 mb-4">
-        <div class="mb-3">
-          <label for="issueTitle" class="form-label">Issue Title</label>
-          <input type="text" id="issueTitle" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="issueDescription" class="form-label">Description</label>
-          <textarea id="issueDescription" rows="4" class="form-control" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Ticket</button>
-      </form>
+       <!-- Feedback Form -->
+<h4>Submit Feedback</h4>
+<form id="feedbackForm" class="card p-4 mb-4">
+  <div class="mb-3">
+    <label for="user" class="form-label">Your Name</label>
+    <input type="text" id="user" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Your Email</label>
+    <input type="email" id="email" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label for="message" class="form-label">Message</label>
+    <textarea id="message" rows="4" class="form-control" required></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>
 
-      <!-- Ticket Confirmation -->
-      <div id="ticketResponse" class="alert alert-success d-none">
-        Ticket submitted successfully! Ticket ID: <span id="ticketId"></span>
+<div id="feedbackResponse" class="alert alert-success d-none">
+  Feedback submitted successfully. Thank you!
+</div>
+
+<h5 class="mt-5">Submitted Feedback</h5>
+<ul id="feedbackList" class="list-group mb-4"></ul>
+
+<!-- Feedback Details Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="feedbackModalLabel">Feedback Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-
-    <!-- Ticket History -->
-    <h5>View Ticket History</h5>
-    <div class="mb-3">
-      <button class="btn btn-outline-primary" onclick="filterTickets('in-progress')">In Progress</button>
-      <button class="btn btn-outline-warning" onclick="filterTickets('past')">Past</button>
-      <button class="btn btn-outline-success" onclick="filterTickets('completed')">Completed</button>
+      <div class="modal-body" id="modalContent">
+        <!-- Details will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="deleteBtn">Delete Feedback</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
-    <ul id="ticketHistory" class="list-group"></ul>
   </div>
 </div>
 
