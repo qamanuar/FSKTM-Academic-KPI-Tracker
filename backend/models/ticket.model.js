@@ -2,24 +2,22 @@ import mongoose from 'mongoose';
 
 const mongoose = require('mongoose');
 
-const ticketSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  status: {
-    type: String,
-    enum: ['in-progress', 'past', 'completed'],
-    default: 'in-progress'
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  }
+// FAQ Schema
+const faqSchema = new mongoose.Schema({
+  question: String,
+  answer: String
 });
 
-module.exports = mongoose.model('Ticket', ticketSchema);
+// Feedback Schema
+const feedbackSchema = new mongoose.Schema({
+  user: String,
+  email: String,
+  message: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+// Export all models
+const FAQ = mongoose.model('FAQ', faqSchema);
+const Feedback = mongoose.model('Feedback', feedbackSchema);
+
+module.exports = { FAQ, Feedback };

@@ -8,6 +8,8 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import studentRoutes from './routes/student.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
+import ticketRoutes from './routes/ticket.routes.js';
+
 
 dotenv.config();
 
@@ -19,7 +21,7 @@ const connection = process.env.MONGO_URI;
 app.use(cors());
 app.use(express.json());
 app.use("/api/notifications", notificationRoutes);
-
+app.use("/api/tickets", ticketRoutes);
 
 // Static frontend serving
 const __filename = fileURLToPath(import.meta.url);
