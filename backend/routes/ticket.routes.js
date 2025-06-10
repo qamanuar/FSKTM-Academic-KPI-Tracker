@@ -4,33 +4,28 @@ const { FAQ, Feedback } = require('../models/ticket.model');
 
 // ─── FAQ ROUTES ─────────────────────────────────────
 
+const predefinedFaqs = [
+  { question: "How do I reset my password?", answer: "Click on 'Forgot Password' at login and follow the instructions." },
+  { question: "Where can I view my ticket history?", answer: "Go to your profile and click on 'My Tickets'." },
+  { question: "How long does it take to receive feedback?", answer: "Usually within 24-48 hours." }
+];
+
+const insertPredefinedFaqs = async () => {
+  const count = await FAQ.countDocuments();
+  if (count === 0) {
+    await FAQ.insertMany(predefinedFaqs);
+    console.log("Predefined FAQs inserted.");
+  }
+};
+insertPredefinedFaqs();
+
 // View all FAQs
 router.get('/faqs', async (req, res) => {
   const faqs = await FAQ.find();
   res.json(faqs);
 });
 
-// Add new FAQ
-router.post('/faqs', async (req, res) => {
-  const { question, answer } = req.body;
-  const faq = new FAQ({ question, answer });
-  await faq.save();
-  res.status(201).json(faq);
-});
-
-// Update FAQ
-router.put('/faqs/:id', async (req, res) => {
-  const updated = await FAQ.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updated);
-});
-
-// Delete FAQ
-router.delete('/faqs/:id', async (req, res) => {
-  await FAQ.findByIdAndDelete(req.params.id);
-  res.json({ message: 'FAQ deleted' });
-});
-
-
+module.exports = router;
 // ─── FEEDBACK ROUTES ─────────────────────────────────────
 
 // Submit feedback
