@@ -24,6 +24,7 @@ async function handleRegister(event) {
 
   const name = document.getElementById('name').value.trim();
   const id = document.getElementById('id').value.trim();
+  const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
 
   if (password.length < 8) {
