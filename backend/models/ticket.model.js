@@ -18,4 +18,4 @@ const feedbackSchema = new mongoose.Schema({
 const FAQ = mongoose.model('FAQ', faqSchema);
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 
-export { FAQ, Feedback }; // ES Module Export
+export { FAQ, Feedback };
