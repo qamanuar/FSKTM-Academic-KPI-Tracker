@@ -418,7 +418,7 @@ body, html {
         }
 
         try {
-          const res = await fetch(`http://localhost:3000/api/students/${session.id}`);
+          const res = await fetch(`/api/students/${session.id}`);
           const data = await res.json();
 
           if (res.ok && data.user) {
