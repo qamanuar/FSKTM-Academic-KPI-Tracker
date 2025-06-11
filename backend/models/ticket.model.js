@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
-
 // FAQ Schema
 const faqSchema = new mongoose.Schema({
   question: String,
@@ -20,4 +18,4 @@ const feedbackSchema = new mongoose.Schema({
 const FAQ = mongoose.model('FAQ', faqSchema);
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 
-module.exports = { FAQ, Feedback };
+export { FAQ, Feedback }; // ES Module Export

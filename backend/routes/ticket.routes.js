@@ -1,7 +1,6 @@
 // routes/ticket.routes.js
-const express = require('express');
-const router = express.Router();
-const { FAQ, Feedback } = require('../models/ticket.model');
+import express from 'express';
+import { FAQ, Feedback } from '../models/ticket.model.js';
 
 // Insert predefined FAQs only once
 const predefinedFaqs = [
@@ -52,5 +51,4 @@ router.delete('/feedback/:id', async (req, res) => {
   res.json({ message: 'Feedback deleted' });
 });
 
-// ✅ Export once at the end
-module.exports = router;
+export default router;
