@@ -166,6 +166,7 @@ body, html {
 </div>
 <!-- Feedback Form -->
 <h4>Submit Feedback</h4>
+
 <form id="feedbackForm" class="card p-4 mb-4">
   <div class="mb-3">
     <label for="user" class="form-label">Your Name</label>
@@ -229,7 +230,7 @@ body, html {
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
- async function loadFAQs() {
+  async function loadFAQs() {
     try {
       const res = await fetch('/api/help/faqs');
       if (!res.ok) throw new Error('Failed to load FAQs');
@@ -270,11 +271,7 @@ body, html {
     }
   }
 
-  // Initialize everything when DOM is loaded
-  document.addEventListener("DOMContentLoaded", async () => {
-    await loadFAQs();
-  });
-
+  document.addEventListener("DOMContentLoaded", loadFAQs);
 </script>
 
 <script>
@@ -290,60 +287,73 @@ body, html {
 
   feedbackForm.addEventListener("submit", async function (e) {
     e.preventDefault();
-
-    const feedback = {
-      user: document.getElementById("user").value,
-      email: document.getElementById("email").value,
-      message: document.getElementById("message").value
-    };
-
-    if (!feedback.user.trim() || !feedback.email.trim() || !feedback.message.trim()) {
-  alert('Please fill all fields');
-  return;
-}
-
-if (!feedback.email.includes('@')) {
-  alert('Please enter a valid email address');
-  return;
-}
-
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    
     try {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Submitting...';
+
+      const feedback = {
+        user: document.getElementById("user").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        message: document.getElementById("message").value.trim()
+      };
+
+      if (!feedback.user || !feedback.email || !feedback.message) {
+        alert('Please fill all fields');
+        return;
+      }
+      
+      if (!feedback.email.includes('@')) {
+        alert('Please enter a valid email address');
+        return;
+      }
+
       const res = await fetch("/api/tickets/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(feedback)
       });
 
-      if (res.ok) {
-        feedbackForm.reset();
-        feedbackResponse.classList.remove("d-none");
-        setTimeout(() => feedbackResponse.classList.add("d-none"), 3000);
-        fetchFeedbacks(); // refresh list
-      } else {
-        alert("Something went wrong.");
-      }
+      if (!res.ok) throw new Error('Submission failed');
+      
+      feedbackForm.reset();
+      feedbackResponse.classList.remove("d-none");
+      setTimeout(() => feedbackResponse.classList.add("d-none"), 3000);
+      await fetchFeedbacks();
+      
     } catch (error) {
       console.error("Submission error:", error);
+      alert("Failed to submit feedback. Please try again.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
     }
-    
   });
 
   async function fetchFeedbacks() {
-    feedbackList.innerHTML = "";
-    const res = await fetch("/api/tickets/feedback");
-    const feedbacks = await res.json();
+    feedbackList.innerHTML = '<li class="list-group-item text-center py-3">Loading feedback...</li>';
+    try {
+      const res = await fetch("/api/tickets/feedback");
+      if (!res.ok) throw new Error('Failed to load feedback');
+      const feedbacks = await res.json();
 
-    feedbacks.forEach(fb => {
-      const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between align-items-center";
-      li.innerHTML = `
-        <span>
-          <strong>${fb.user}</strong>: ${fb.message.substring(0, 30)}...
-        </span>
-        <button class="btn btn-sm btn-outline-info" onclick="viewFeedback('${fb._id}')">View</button>
-      `;
-      feedbackList.appendChild(li);
-    });
+      feedbackList.innerHTML = '';
+      feedbacks.forEach(fb => {
+        const li = document.createElement("li");
+        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        li.innerHTML = `
+          <span>
+            <strong>${fb.user}</strong>: ${fb.message.substring(0, 30)}...
+          </span>
+          <button class="btn btn-sm btn-outline-info" onclick="viewFeedback('${fb._id}')">View</button>
+        `;
+        feedbackList.appendChild(li);
+      });
+    } catch (error) {
+      feedbackList.innerHTML = '<li class="list-group-item text-center text-danger py-3">Failed to load feedback</li>';
+    }
   }
 
   // View specific feedback
@@ -370,16 +380,18 @@ if (!feedback.email.includes('@')) {
     const confirmDelete = confirm("Are you sure you want to delete this feedback?");
     if (!confirmDelete) return;
 
-    const res = await fetch(`/api/tickets/feedback/${currentFeedbackId}`, {
-      method: "DELETE"
-    });
+    try {
+      const res = await fetch(`/api/tickets/feedback/${currentFeedbackId}`, {
+        method: "DELETE"
+      });
 
-    if (res.ok) {
+      if (!res.ok) throw new Error('Deletion failed');
+
       const modal = bootstrap.Modal.getInstance(document.getElementById('feedbackModal'));
       modal.hide();
-      fetchFeedbacks();
-      alert("Feedback deleted.");
-    } else {
+      await fetchFeedbacks();
+    } catch (error) {
+      console.error("Deletion error:", error);
       alert("Failed to delete feedback.");
     }
   });
