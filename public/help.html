@@ -229,45 +229,52 @@ body, html {
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  async function loadFAQs() {
-    const res = await fetch('/api/help/faqs');
-    const faqs = await res.json();
-
-    document.addEventListener("DOMContentLoaded", () => {
-  loadFAQs().then(() => {
-    document.querySelectorAll(".faq-toggle").forEach(button => {
-      button.addEventListener("click", () => {
-        const content = button.nextElementSibling;
-        const icon = button.querySelector("svg");
-
-        content.classList.toggle("hidden");
-        icon.classList.toggle("rotate-180");
-      });
-    });
-  });
-});
-
-    const faqContainer = document.querySelector('.faq-items-container');
-    faqContainer.innerHTML = faqs.map(faq => `
-      <div class="faq-item border border-gray-200 rounded-lg overflow-hidden mb-3 bg-white shadow">
-        <button type="button"
-          class="faq-toggle w-full px-4 py-3 flex justify-between items-center text-left hover:bg-gray-50 transition">
-          <span class="text-base font-medium text-gray-800">${faq.question}</span>
-          <svg class="w-4 h-4 transition-transform duration-200 transform rotate-0 text-gray-600"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-content hidden px-4 pb-3 text-gray-600 text-sm bg-gray-50">
-          ${faq.answer}
+ async function loadFAQs() {
+    try {
+      const res = await fetch('/api/help/faqs');
+      if (!res.ok) throw new Error('Failed to load FAQs');
+      const faqs = await res.json();
+      
+      const faqContainer = document.querySelector('.faq-items-container');
+      faqContainer.innerHTML = faqs.map(faq => `
+        <div class="faq-item border border-gray-200 rounded-lg overflow-hidden mb-3 bg-white shadow">
+          <button type="button"
+            class="faq-toggle w-full px-4 py-3 flex justify-between items-center text-left hover:bg-gray-50 transition">
+            <span class="text-base font-medium text-gray-800">${faq.question}</span>
+            <svg class="w-4 h-4 transition-transform duration-200 transform rotate-0 text-gray-600"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-content hidden px-4 pb-3 text-gray-600 text-sm bg-gray-50">
+            ${faq.answer}
+          </div>
         </div>
-      </div>
-    `).join('');
-    
+      `).join('');
+      
+      // Attach event listeners to the newly created FAQ items
+      document.querySelectorAll(".faq-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+          const content = button.nextElementSibling;
+          const icon = button.querySelector("svg");
+          content.classList.toggle("hidden");
+          icon.classList.toggle("rotate-180");
+        });
+      });
+    } catch (error) {
+      console.error("FAQ loading error:", error);
+      document.querySelector('.faq-items-container').innerHTML = `
+        <div class="alert alert-danger">Failed to load FAQs. Please try again later.</div>
+      `;
+    }
   }
 
-  document.addEventListener("DOMContentLoaded", loadFAQs);
+  // Initialize everything when DOM is loaded
+  document.addEventListener("DOMContentLoaded", async () => {
+    await loadFAQs();
+  });
+
 </script>
 
 <script>
