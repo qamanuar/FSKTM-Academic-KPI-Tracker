@@ -32,11 +32,18 @@ async function handleRegister(event) {
     return;
   }
 
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const country = await fetch('https://ipapi.co/json/')
+  .then(res => res.json())
+  .then(data => data.country_name)
+  .catch(() => '-');
+
   try {
     const response = await fetch('http://localhost:3000/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, id, password }),
+      body: JSON.stringify({ name, id, email, password, country, timezone }),
     });
 
     const data = await response.json();
@@ -73,14 +80,35 @@ async function handleLogin(event) {
     if (response.ok) {
       // In gscript.js (after successful login)
       localStorage.setItem("userSession", JSON.stringify({
+        _id: data.user._id, //<-- add this MongoDB ID for password updates
         id: data.user.id,
         name: data.user.name
       }));
 
+      localStorage.setItem("userId", data.user._id);
+
 
       window.location.href = "profile.html"; // redirect to profile
     }
-    else {
+    else if (response.status === 403 && data.message === "Account is deactivated") {
+      const recover = confirm("This account is deactivated. Do you want to recover it?");
+      if (recover) {
+        const recoverRes = await fetch(`http://localhost:3000/api/auth/recover/${id}`, {
+          method: "PUT",
+        });
+
+        const recoverData = await recoverRes.json();
+        if (recoverRes.ok) {
+          alert("Account recovered successfully. Please login again.");
+          location.reload();
+        } else {
+          alert(recoverData.message || "Failed to recover account");
+        }
+      } else {
+        alert("Login canceled.");
+        location.reload();
+      }
+     } else {
       alert(`Login failed: ${data.message}`);
     }
   } catch (error) {

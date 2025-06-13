@@ -24,6 +24,12 @@ function cancelEdit() {
 }
 
 function showSettings() {
+   // Clear old/stale input values
+  document.getElementById("currentPass").value = "";
+  document.getElementById("newPass").value = "";
+  document.getElementById("confirmPass").value = "";
+
+
   document.getElementById("viewProfile").classList.add("hidden");
   document.getElementById("editProfile").classList.add("hidden");
   document.getElementById("settingsPanel").classList.remove("hidden");
@@ -46,10 +52,12 @@ window.onload = function () {
         if (!user) return alert("User not found");
 
         // Populate HTML with user details
+        document.querySelector('.profile-pic').src = user.profilePic || 'assets/images/profile-pic.jpg';
+
         document.querySelector("#viewProfile p:nth-of-type(1)").textContent = `Name: ${user.name}`;
         document.querySelector("#viewProfile p:nth-of-type(2)").textContent = `Email: ${user.email}`;
-        document.querySelector("#viewProfile p:nth-of-type(3)").textContent = `Country: ${user.country}`;
-        document.querySelector("#viewProfile p:nth-of-type(4)").textContent = `Time Zone: ${user.timezone}`;
+        document.querySelector("#viewProfile p:nth-of-type(3)").textContent = `Country: ${user.country || "-"}`;
+        document.querySelector("#viewProfile p:nth-of-type(4)").textContent = `Time Zone: ${user.timezone || "-"}`;
         document.querySelector("#viewProfile p:nth-of-type(5)").textContent = `Registration No: ${user.id}`;
         document.getElementById("username").textContent = user.name;
 
@@ -111,7 +119,8 @@ async function saveProfile() {
 // ======== CHANGE PASSWORD ========
 
 async function changePassword() {
-  const userId = localStorage.getItem("userId");
+  const userSession = JSON.parse(localStorage.getItem("userSession"));
+  const userId = userSession?.id;
   const current = document.getElementById("currentPass").value;
   const newPass = document.getElementById("newPass").value;
   const confirm = document.getElementById("confirmPass").value;
@@ -119,6 +128,8 @@ async function changePassword() {
   if (newPass !== confirm) {
     return alert("New passwords do not match!");
   }
+
+  console.log("Changing password for users:", userId);
 
   try {
     const res = await fetch(`http://localhost:3000/api/auth/password/${userId}`, {
@@ -130,6 +141,14 @@ async function changePassword() {
     const data = await res.json();
     if (res.ok) {
       alert("Password updated successfully!");
+
+      const updatedUser = await fetch('https://localhost:3000/api/students/${userId}')
+      .then(res => res.json())
+      .then(data => data.user);
+
+      if(updatedUser){
+        localStorage.setItem("userSession", JSON.stringify(updatedUser));
+      }
     } else {
       alert(data.message || "Failed to change password");
     }
@@ -143,10 +162,22 @@ async function changePassword() {
 
 function deactivateAccount() {
   if (confirm("Are you sure you want to deactivate your account?")) {
-    alert("Account has been deactivated.");
-    document.getElementById("editProfile").classList.add("hidden");
-    document.getElementById("viewProfile").classList.add("hidden");
-    document.body.innerHTML = "<h2>Account deactivated. Goodbye!</h2>";
+    const session = JSON.parse(localStorage.getItem("userSession"));
+    if (!session?._id) return alert("No active user found");
+    
+    fetch(`http://localhost:3000/api/auth/deactivate/${session._id}`, {
+      method: "PUT"
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message || "Account deactivated.");
+      localStorage.clear();
+      document.body.innerHTML = "<h2>Account deactivated. Goodbye!</h2>";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Failed to deactivate account.");
+    });
   }
 }
 
@@ -154,10 +185,26 @@ function deactivateAccount() {
 
 function changeProfilePic(event) {
   const file = event.target.files[0];
+  const userSession = JSON.parse(localStorage.getItem("userSession"));
+  const userId = userSession?._id;
+
   if (file) {
     const reader = new FileReader();
-    reader.onload = function(e) {
-      document.querySelector('.profile-pic').src = e.target.result;
+    reader.onload = async function(e) {
+      const base64Img = e.target.result;
+      document.querySelector('.profile-pic').src = base64Img;
+
+      // Save to DB
+      try {
+        await fetch(`http://localhost:3000/api/auth/profile-pic/${userId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profilePic: base64Img })
+        });
+      } catch (err) {
+        alert("Failed to save profile picture.");
+        console.error(err);
+      }
     };
     reader.readAsDataURL(file);
   }
