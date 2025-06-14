@@ -45,7 +45,7 @@ function closeSettings() {
 window.onload = function () {
   const session = JSON.parse(localStorage.getItem("userSession"));
   if (session && session.id) {
-    fetch(`/api/students/${session.id}`)
+    fetch(`/api/students/${session._id}`)
       .then(res => res.json())
       .then(data => {
         const user = data.user;
@@ -62,7 +62,7 @@ window.onload = function () {
         document.getElementById("username").textContent = user.name;
 
         // Save again just in case
-        localStorage.setItem("userId", user.id);
+        localStorage.setItem("userId", user._id);
       })
       .catch(err => {
         console.error(err);
