@@ -1,5 +1,5 @@
 import express from 'express';
-const router = express.Router(); // ✅ Declare this before using it
+const router = express.Router(); 
 
 import { FAQ, Feedback } from '../models/ticket.model.js';
 
@@ -21,15 +21,36 @@ insertPredefinedFaqs();
 
 // ─── FAQ ROUTES ─────────────────────────────────────
 router.get('/faqs', async (req, res) => {
-  const faqs = await FAQ.find();
-  res.json(faqs);
+  try {
+    const faqs = await FAQ.find();
+    res.json(faqs);
+  } catch (error) {
+    console.error("FAQ loading error:", error);
+    res.status(500).json({ error: "Failed to load FAQs" });
+  }
 });
 
 // ─── FEEDBACK ROUTES ─────────────────────────────────────
 router.post('/feedback', async (req, res) => {
-  const feedback = new Feedback(req.body);
-  await feedback.save();
-  res.status(201).json(feedback);
+  try {
+    const { name, email, message } = req.body;
+    
+    if (!email || !message) {
+      return res.status(400).json({ error: "Email and message are required" });
+    }
+
+    const feedback = new Feedback({
+      name,    // Now matches frontend
+      email,
+      message
+    });
+
+    await feedback.save();
+    res.status(201).json(feedback);
+  } catch (error) {
+    console.error("Feedback submission error:", error);
+    res.status(500).json({ error: "Failed to submit feedback" });
+  }
 });
 
 router.get('/feedback', async (req, res) => {
@@ -52,4 +73,4 @@ router.delete('/feedback/:id', async (req, res) => {
   res.json({ message: 'Feedback deleted' });
 });
 
-export default router; // ✅ Don’t forget this
+export default router;

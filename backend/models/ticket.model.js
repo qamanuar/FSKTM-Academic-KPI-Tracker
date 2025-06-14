@@ -8,7 +8,7 @@ const faqSchema = new mongoose.Schema({
 
 // Feedback Schema
 const feedbackSchema = new mongoose.Schema({
-  user: String,
+  name: String,
   email: String,
   message: String,
   createdAt: { type: Date, default: Date.now }
