@@ -92,3 +92,7 @@ server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
 
+
+import studentDashRoutes from './routes/studentDash.routes.js';
+app.use('/api/student', studentDashRoutes);
+
