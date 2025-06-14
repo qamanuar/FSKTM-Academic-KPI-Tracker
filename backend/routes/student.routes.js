@@ -25,16 +25,21 @@ const upload = multer({ storage: storage });
 // GET /api/students/:id
 router.get('/:id', async (req, res) => {
   try {
-    const student = await User.findOne({ id: req.params.id });
-    if (!student) {
-      return res.status(404).json({ message: 'User not found' });
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      // fallback to matrix ID if not a valid ObjectId
+      user = await User.findOne({ id: req.params.id });
     }
-    res.json({ user: student });
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 // Update student profile

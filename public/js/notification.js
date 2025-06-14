@@ -1,174 +1,294 @@
+console.log("🔔 Notification script loaded");
 
-console.log("read the functions in the sidebar");
+const container = document.querySelector('.notification-container');
+const noNotifications = document.querySelector('.no-notifications');
+const tabs = document.querySelectorAll('.tab-btn');
+const line = document.querySelector('.line');
+const deleteAllBtn = document.querySelector('.btn-danger');
 
-// 1. Fake database (hardcoded data)
-const fakeNotifications = [
-  {
-    id: 1,
-    title: "Attendance dropped",
-    category: "alerts",
-    is_read: false,
-    timestamp: "2025-04-27T09:00:00"
-  },
-  {
-    id: 2,
-    title: "GPA Goal Achieved! 🏆",
-    category: "alerts",
-    is_read: false,
-    timestamp: "2025-04-26T15:30:00"
-  },
-  {
-    id: 3,
-    title: "Assignment missing! ⚠️",
-    category: "achievements",
-    is_read: false,
-    timestamp: "2025-04-26T08:00:00"
-  },
-  {
-    id: 4,
-    title: "Completed 10 study",
-    category: "achievements",
-    is_read: false,
-    timestamp: "2025-04-25T10:00:00"
-  },
-  {
-    id: 5,
-    title: "Completed an assignment",
-    category: "achievements",
-    is_read: false,
-    timestamp: "2025-04-25T10:00:00"
-  },{
-    id: 1,
-    title: "Attendance dropped",
-    category: "alerts",
-    is_read: false,
-    timestamp: "2025-04-27T09:00:00"
-  },
-  {
-    id: 2,
-    title: "GPA Goal Achieved! 🏆",
-    category: "alerts",
-    is_read: false,
-    timestamp: "2025-04-26T15:30:00"
-  },
-  {
-    id: 3,
-    title: "Assignment missing! ⚠️",
-    category: "achievements",
-    is_read: false,
-    timestamp: "2025-04-26T08:00:00"
-  },
-  {
-    id: 4,
-    title: "Completed 10 study",
-    category: "achievements",
-    is_read: false,
-    timestamp: "2025-04-25T10:00:00"
-  },
-  {
-    id: 5,
-    title: "Completed an assignment",
-    category: "achievements",
-    is_read: false,
-    timestamp: "2025-04-25T10:00:00"
-  }
-];
+let allNotifications = [];
 
-console.log("read the hardcoded information");
-
-// 2. Helper function
+/* ===== Helper: Format Time ===== */
 function timeAgo(timestamp) {
   const now = new Date();
   const past = new Date(timestamp);
   const seconds = Math.floor((now - past) / 1000);
-
   if (seconds < 60) return `${seconds}s ago`;
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
   return `${Math.floor(seconds / 86400)}d ago`;
 }
 
-// 3. DOM references
-const container = document.querySelector('.notification-container');
-const noNotifications = document.querySelector('.no-notifications');
-const tabs = document.querySelectorAll('.tab-btn');
-const line = document.querySelector('.line');
-
-// 4. Render notifications
-function renderNotifications(notifications, filterType = 'all') {
-  container.innerHTML = '';
-
-  let hasNotifications = false;
-
-  const sortedNotifications = [...notifications].sort((a, b) => {
-    // First, prioritize unread (false comes before true)
-    if (a.is_read !== b.is_read) {
-      return a.is_read - b.is_read;
-    }
-    // If both have same is_read, sort by timestamp (newest first)
-    return new Date(b.timestamp) - new Date(a.timestamp);
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/js/sw.js").then(() => {
+    console.log("✅ Service Worker registered");
   });
-
-  sortedNotifications.forEach(notification => {
-    const matchCategory = (filterType === 'all') || (notification.category === filterType);
-  
-    if (matchCategory) {
-      const div = document.createElement('div');
-      div.className = 'notification p-3 mb-2 border rounded';
-  
-      if (notification.is_read) {
-        div.classList.add('read'); // 👉 Add read class if notification is already read
-      }
-  
-      div.setAttribute('data-category', notification.category || '');
-      div.style.cursor = 'pointer';
-      div.onclick = () => {
-        notification.is_read = true; // Mark as read
-        renderNotifications(fakeNotifications, filterType); // Re-render with the same filter
-        location.href = '#'; // Navigate
-      };
-  
-      div.innerHTML = `
-        <div>${notification.title}</div>
-        <small class="text-muted">${timeAgo(notification.timestamp)}</small>
-      `;
-  
-      container.appendChild(div);
-      hasNotifications = true;
-    }
-  });
-  
-  noNotifications.style.display = hasNotifications ? 'none' : 'block';
-  
 }
 
-console.log("read the render notification");
 
-// 5. Tab click
+/* ===== Render Notifications List ===== */
+function renderNotifications(data, filter = "all") {
+  container.innerHTML = "";
+
+  const filtered = data.filter(n => {
+    if (filter === "all") return true;
+    if (filter === "alerts") return n.isAlert;
+    if (filter === "achievements") return n.isAchievement;
+    return false;
+  });
+
+  if (!filtered.length) {
+    noNotifications.style.display = "block";
+    return;
+  }
+
+  noNotifications.style.display = "none";
+
+  const sorted = filtered.sort((a, b) => {
+    if (a.isRead !== b.isRead) return a.isRead - b.isRead;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
+  sorted.forEach(n => {
+    const div = document.createElement("div");
+    div.className = "notification group flex justify-between items-center w-full bg-purple-400 p-4 mb-2 rounded-md transition relative";
+    if (n.isRead) div.classList.add("read");
+
+    div.innerHTML = `
+      <div class="text-md">
+        <strong>${n.title}</strong><br/>
+        <small class="text-muted">${timeAgo(n.createdAt)}</small>
+      </div>
+      <div class="absolute right-3 group-hover:block transition hidden">
+        <button class="delete-btn bg-purple-300 text-white w-8 h-8 rounded-md text-2xl font-bold">×</button>
+      </div>
+    `;
+
+    // Delete Button
+    const deleteBtn = div.querySelector(".delete-btn");
+    deleteBtn.onclick = async (e) => {
+      e.stopPropagation();
+      if (confirm("Delete this notification?")) {
+        await deleteNotification(n._id);
+      }
+    };
+
+    // On Click Show Modal + Mark as Read
+    div.onclick = async (e) => {
+      if (e.target.closest("button")) return;
+      if (!n.isRead) await markAsRead(n._id);
+      showModal({ title: n.title, message: n.message, createdAt: n.createdAt });
+    };
+
+    container.appendChild(div);
+  });
+
+  updateUnreadBadge(data);
+}
+
+/* ===== Badge Counters ===== */
+function updateUnreadBadge(data) {
+  const totalUnread = data.filter(n => !n.isRead).length;
+  const alertsUnread = data.filter(n => n.isAlert && !n.isRead).length;
+  const achievementsUnread = data.filter(n => n.isAchievement && !n.isRead).length;
+
+  const badges = {
+    "unread-badge": totalUnread,
+    "alerts-badge": alertsUnread,
+    "achievements-badge": achievementsUnread
+  };
+
+  for (const id in badges) {
+    const badge = document.getElementById(id);
+    if (badge) {
+      if (badges[id] > 0) {
+        badge.textContent = badges[id];
+        badge.classList.remove("hidden");
+      } else {
+        badge.classList.add("hidden");
+      }
+    }
+  }
+}
+
+/* ===== Modal Functions ===== */
+function showModal({ title, message, createdAt }) {
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalMessage").textContent = message;
+  document.getElementById("modalTime").textContent = timeAgo(createdAt);
+
+  const modal = document.getElementById("notificationModal");
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  modal.addEventListener("click", (e) => {
+    if (e.target.id === "notificationModal") closeModal();
+  });
+}
+
+function closeModal() {
+  document.getElementById("notificationModal").classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+/* ===== API Requests ===== */
+async function fetchNotifications() {
+  if (!window.userId) return console.warn("❌ userId not found.");
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/notifications/${window.userId}`);
+    const data = await res.json();
+    if (res.ok) {
+      allNotifications = data;
+      renderNotifications(allNotifications, getCurrentTab());
+    }
+  } catch (err) {
+    console.error("❌ Fetch failed:", err);
+  }
+}
+
+async function markAsRead(id) {
+  try {
+    await fetch(`http://localhost:3000/api/notifications/mark-read/${id}`, {
+      method: "PUT"
+    });
+    allNotifications = allNotifications.map(n => n._id === id ? { ...n, isRead: true } : n);
+    renderNotifications(allNotifications, getCurrentTab());
+  } catch (err) {
+    console.error("❌ Mark as read failed:", err);
+  }
+}
+
+async function deleteNotification(id) {
+  try {
+    await fetch(`http://localhost:3000/api/notifications/${id}`, {
+      method: "DELETE"
+    });
+    allNotifications = allNotifications.filter(n => n._id !== id);
+    renderNotifications(allNotifications, getCurrentTab());
+  } catch (err) {
+    console.error("❌ Delete failed:", err);
+  }
+}
+
+async function deleteAllNotifications() {
+  if (!confirm("Delete all notifications?")) return;
+  try {
+    await fetch(`http://localhost:3000/api/notifications/delete-all/${window.userId}`, {
+      method: "DELETE"
+    });
+    allNotifications = [];
+    renderNotifications([], getCurrentTab());
+  } catch (err) {
+    console.error("❌ Delete all failed:", err);
+  }
+}
+
+/* ===== Tabs ===== */
+function getCurrentTab() {
+  const active = document.querySelector('.tab-btn.active');
+  return active ? active.getAttribute('data-type') : 'all';
+}
+
 tabs.forEach(tab => {
   tab.addEventListener('click', (e) => {
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
 
-    // Move the underline
-    line.style.width = e.target.offsetWidth + "px";
-    line.style.left = e.target.offsetLeft + "px";
+    line.style.width = tab.offsetWidth + "px";
+    line.style.left = tab.offsetLeft + "px";
 
-    const selectedType = tab.getAttribute('data-type');
-    renderNotifications(fakeNotifications, selectedType);
+    renderNotifications(allNotifications, getCurrentTab());
   });
 });
 
-console.log("read the tab click");
+if (deleteAllBtn) deleteAllBtn.addEventListener("click", deleteAllNotifications);
 
-// 6. Initial load
+/* ===== Setup WebSocket ===== */
+function initSocket(userId) {
+  const socket = io(); // Auto-resolves localhost or deployed origin
+
+  socket.on("connect", () => {
+    console.log("✅ Socket connected");
+    socket.emit("register", userId);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.warn("⚠️ Socket disconnected:", reason);
+  });
+
+  socket.on("notification", (data) => {
+    console.log("📥 New real-time notification:", data);
+
+    // Ensure Notification permission
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission().then((perm) => {
+        if (perm === "granted") showBrowserNotification(data);
+      });
+    } else {
+      showBrowserNotification(data);
+    }
+
+    allNotifications.unshift(data);
+    renderNotifications(allNotifications, getCurrentTab());
+  });
+}
+
+// 🔔 Show browser push notification
+function showBrowserNotification(data) {
+  try {
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage(data);
+    } else {
+      new Notification(data.title || "🔔 New Notification", {
+        body: data.message || "",
+        icon: "https://cdn-icons-png.flaticon.com/512/1827/1827392.png"
+      });
+    }
+  } catch (err) {
+    console.error("❌ Failed to show browser notification:", err);
+  }
+}
+
+
+
+/* ===== Initialization ===== */
+window.addEventListener("DOMContentLoaded", async () => {
+  const session = JSON.parse(localStorage.getItem("userSession"));
+  if (!session || !session.id) {
+    alert("No user session found.");
+    window.location.href = "General.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/students/${session.id}`);
+    const data = await res.json();
+
+    if (res.ok && data.user) {
+      document.getElementById("username").textContent = data.user.name;
+      window.userId = data.user._id;
+      console.log("✅ Loaded user:", window.userId);
+
+      fetchNotifications();
+      initSocket(window.userId);
+    }
+  } catch (err) {
+    console.error("❌ Load user failed:", err);
+    alert("Failed to load user info.");
+  }
+});
+
+// Request push notification permission
+if (Notification.permission === "granted") {
+  new Notification(data.title || "🔔 New Notification", {
+    body: data.message || "",
+    icon: "https://cdn-icons-png.flaticon.com/512/1827/1827392.png"
+  });
+}
+
+// Click "All" tab on load
 window.onload = () => {
-  renderNotifications(fakeNotifications, 'all');
-  
-  // Also update underline line manually to match the "All" tab
-  const activeTab = document.querySelector('.tab-btn.active');
-  line.style.width = activeTab.offsetWidth + "px";
-  line.style.left = activeTab.offsetLeft + "px";
+  const allTab = document.querySelector('.tab-btn[data-type="all"]');
+  if (allTab) allTab.click();
 };
-
-console.log("read the initial laod");

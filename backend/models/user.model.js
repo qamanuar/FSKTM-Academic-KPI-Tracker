@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['student', 'advisor'], default: 'student' },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // for students
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // for advisors
-  createdAt: { type: Date, default: Date.now }
+  isActive: { type: Boolean, default: true }, // ✅ Soft delete flag
+  createdAt: { type: Date, default: Date.now },
+  profilePic: { type: String, default: '' }
 });
 
 const User = mongoose.model('User', userSchema);

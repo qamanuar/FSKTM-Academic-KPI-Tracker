@@ -5,9 +5,11 @@
   "description": "Features: 1. Lecterur's Dashboard (Last Visited - 06.05.2025)     - Have to revisit for submenu and sidebar styling",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "kill3000": "lsof -ti :3000 | xargs kill -9",
+    "start": "node backend/server.js",
     "dev": "nodemon ./backend/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "checkdb": "node backend/checkDB.js"
   },
   "repository": {
     "type": "git",
@@ -21,13 +23,16 @@
   },
   "homepage": "https://github.com/qamanuar/FSKTM-Academic-KPI-Tracker#readme",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.5",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.15.1",
-    "multer": "^2.0.1"
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.3",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

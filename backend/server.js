@@ -44,6 +44,55 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Start server
-app.listen(PORT, () => {
+import http from "http";
+import { Server as SocketIOServer } from "socket.io";
+
+// Replace this line:
+const server = http.createServer(app); // 👈 wrap express app in HTTP server
+const io = new SocketIOServer(server, {
+  cors: { origin: "*" }
+});
+
+const connectedUsers = new Map();
+
+io.on("connection", (socket) => {
+  console.log("🔌 Client connected:", socket.id);
+
+  socket.on("register", (userId) => {
+    connectedUsers.set(userId, socket.id);
+    console.log(`✅ Registered user: ${userId}`);
+  });
+
+  socket.on("disconnect", () => {
+    for (const [userId, socketId] of connectedUsers.entries()) {
+      if (socketId === socket.id) {
+        connectedUsers.delete(userId);
+        break;
+      }
+    }
+    console.log("❌ Client disconnected:", socket.id);
+  });
+});
+
+// Expose function to emit notifications
+export function emitNotification(userId, notification) {
+  const socketId = connectedUsers.get(userId);
+  console.log(`📣 Attempting to emit notification to user ${userId}, socket: ${socketId}`);
+
+  if (socketId) {
+    io.to(socketId).emit("notification", notification);
+    console.log("📤 Notification emitted:", notification);
+  } else {
+    console.warn(`⚠️ No active socket found for user ${userId}`);
+  }
+}
+
+// Start server using HTTP server
+server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
+
+import studentDashRoutes from './routes/studentDash.routes.js';
+app.use('/api/student', studentDashRoutes);
+

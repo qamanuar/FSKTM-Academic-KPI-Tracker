@@ -3,11 +3,11 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 
 const router = express.Router();
-
 // 🔐 Register new user
 router.post('/register', async (req, res) => {
+console.log("Register payload:", req.body);
   try {
-    const { name, id, password } = req.body;
+    const { name, id, password, email, country, timezone } = req.body;
 
     if (!name || !id || !password) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -23,10 +23,10 @@ router.post('/register', async (req, res) => {
     const newUser = new User({
       name,
       id,
+      email,  
       password: hashedPassword,
-      email: "-",           // default
-      country: "-",         // default
-      timezone: "-",        // default
+      country: country || "-",         // default
+      timezone: timezone || "-",        // default
       registrationNo: "-"   // default
     });
 
@@ -53,6 +53,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid ID or password' });
     }
 
+    if(!user.isActive){
+      return res.status(403).json({message:'Account is deactivated',deactivated:true});
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid ID or password' });
@@ -70,6 +74,42 @@ router.post('/login', async (req, res) => {
         registrationNo: user.registrationNo
       }
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Soft delete (deactivate account)
+router.put('/deactivate/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { isActive: false },
+      { new: true }
+    );
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "Account deactivated" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// 🔁 Recover account
+router.put('/recover/:id', async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { id: req.params.id },
+      { isActive: true }, // Reactivate the user
+      { new: true }
+    );
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ message: 'Account recovered successfully' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -101,7 +141,7 @@ router.put('/password/:id', async (req, res) => {
   try {
     const { current, newPass } = req.body;
 
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params._id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const isMatch = await bcrypt.compare(current, user.password);
@@ -112,6 +152,26 @@ router.put('/password/:id', async (req, res) => {
     await user.save();
 
     res.json({ message: 'Password changed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Upload profile picture
+router.put('/profile-pic/:id', async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+
+    const updated = await User.findByIdAndUpdate(
+      req.params.id,
+      { profilePic },
+      { new: true }
+    );
+
+    if (!updated) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ message: 'Profile picture updated', user: updated });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
