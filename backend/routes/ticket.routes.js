@@ -25,7 +25,6 @@ router.get('/faqs', async (req, res) => {
     const faqs = await FAQ.find();
     res.json(faqs);
   } catch (error) {
-    console.error("FAQ loading error:", error);
     res.status(500).json({ error: "Failed to load FAQs" });
   }
 });

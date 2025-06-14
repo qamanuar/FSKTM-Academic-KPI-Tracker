@@ -297,7 +297,7 @@ body, html {
       </div>
     `;
 
-    const res = await fetch('http://localhost:5000/api/tickets/faqs');
+    const res = await fetch('http://localhost:3000/api/tickets/faqs');
     
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
@@ -348,7 +348,7 @@ body, html {
   let currentFeedbackId = null;
 
   // Base API URL
-  const API_BASE_URL = 'http://localhost:5000/api/tickets';
+  const API_BASE_URL = 'http://localhost:3000/api/tickets';
 
   // Initialize on page load
   document.addEventListener("DOMContentLoaded", () => {
@@ -367,7 +367,7 @@ body, html {
       submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Submitting...';
 
       const feedbackData = {
-        name: document.getElementById("user").value.trim(), // Changed from 'user' to 'name'
+        name: document.getElementById("user").value.trim(), 
         email: document.getElementById("email").value.trim(),
         message: document.getElementById("message").value.trim()
       };
