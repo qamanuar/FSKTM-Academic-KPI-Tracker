@@ -45,7 +45,7 @@ function closeSettings() {
 window.onload = function () {
   const session = JSON.parse(localStorage.getItem("userSession"));
   if (session && session.id) {
-    fetch(`http://localhost:3000/api/students/${session.id}`)
+    fetch(`/api/students/${session.id}`)
       .then(res => res.json())
       .then(data => {
         const user = data.user;
@@ -88,7 +88,7 @@ async function saveProfile() {
   };
 
   try {
-    const response = await fetch(`http://localhost:3000/api/students/${id}`, {
+    const response = await fetch(`/api/students/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData)
@@ -132,7 +132,7 @@ async function changePassword() {
   console.log("Changing password for users:", userId);
 
   try {
-    const res = await fetch(`http://localhost:3000/api/auth/password/${userId}`, {
+    const res = await fetch(`/api/auth/password/${userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ current, newPass }),
@@ -142,7 +142,7 @@ async function changePassword() {
     if (res.ok) {
       alert("Password updated successfully!");
 
-      const updatedUser = await fetch('https://localhost:3000/api/students/${userId}')
+      const updatedUser = await fetch('/api/students/${userId}')
       .then(res => res.json())
       .then(data => data.user);
 
@@ -165,7 +165,7 @@ function deactivateAccount() {
     const session = JSON.parse(localStorage.getItem("userSession"));
     if (!session?._id) return alert("No active user found");
     
-    fetch(`http://localhost:3000/api/auth/deactivate/${session._id}`, {
+    fetch(`/api/auth/deactivate/${session._id}`, {
       method: "PUT"
     })
     .then(res => res.json())
@@ -196,7 +196,7 @@ function changeProfilePic(event) {
 
       // Save to DB
       try {
-        await fetch(`http://localhost:3000/api/auth/profile-pic/${userId}`, {
+        await fetch(`/api/auth/profile-pic/${userId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ profilePic: base64Img })
