@@ -3,7 +3,7 @@ import {
   getStudentKPIs,
   uploadKPIEvidence,
   getDashboardSummary
-} from '../controllers/studentDashboard.controller.js';
+} from '../controllers/studentDash.controller.js';
 import multer from 'multer';
 
 const router = express.Router();

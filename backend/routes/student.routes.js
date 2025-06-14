@@ -46,7 +46,7 @@ router.get('/:id', async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const updates = req.body;
-    const user = await User.findOneAndUpdate(
+    const user = await User.findByIdAndUpdate(
       { id: req.params.id }, // assuming 'id' is registration number
       updates,
       { new: true }

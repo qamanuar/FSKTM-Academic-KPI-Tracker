@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, default: "-" },
   country: { type: String, default: "-" },
   timezone: { type: String, default: "-" },
+  registrationNo: { type: String, default: "-" },
   role: { type: String, enum: ['student', 'advisor'], default: 'student' },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // for students
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // for advisors
