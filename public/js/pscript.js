@@ -120,7 +120,7 @@ async function saveProfile() {
 
 async function changePassword() {
   const userSession = JSON.parse(localStorage.getItem("userSession"));
-  const userId = userSession?.id;
+  const userId = userSession?._id;
   const current = document.getElementById("currentPass").value;
   const newPass = document.getElementById("newPass").value;
   const confirm = document.getElementById("confirmPass").value;
@@ -129,7 +129,7 @@ async function changePassword() {
     return alert("New passwords do not match!");
   }
 
-  console.log("Changing password for users:", userId);
+  console.log("Sending password change:", { userId, current, newPass });
 
   try {
     const res = await fetch(`/api/auth/password/${userId}`, {
@@ -142,11 +142,11 @@ async function changePassword() {
     if (res.ok) {
       alert("Password updated successfully!");
 
-      const updatedUser = await fetch('/api/students/${userId}')
-      .then(res => res.json())
-      .then(data => data.user);
+      const updatedUser = await fetch(`/api/students/${userId}`)
+        .then(res => res.json())
+        .then(data => data.user);
 
-      if(updatedUser){
+      if (updatedUser) {
         localStorage.setItem("userSession", JSON.stringify(updatedUser));
       }
     } else {
@@ -157,6 +157,7 @@ async function changePassword() {
     alert("Server error");
   }
 }
+
 
 // ======== DEACTIVATE ACCOUNT UI ========
 

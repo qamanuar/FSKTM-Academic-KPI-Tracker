@@ -40,7 +40,7 @@ async function handleRegister(event) {
   .catch(() => '-');
 
   try {
-    const response = await fetch('http://localhost:3000/api/auth/register', {
+    const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, id, email, password, country, timezone }),
@@ -69,7 +69,7 @@ async function handleLogin(event) {
   const password = document.getElementById('loginPassword').value;
 
   try {
-    const response = await fetch('http://localhost:3000/api/auth/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, password }),
@@ -93,7 +93,7 @@ async function handleLogin(event) {
     else if (response.status === 403 && data.message === "Account is deactivated") {
       const recover = confirm("This account is deactivated. Do you want to recover it?");
       if (recover) {
-        const recoverRes = await fetch(`http://localhost:3000/api/auth/recover/${id}`, {
+        const recoverRes = await fetch(`/api/auth/recover/${id}`, {
           method: "PUT",
         });
 
