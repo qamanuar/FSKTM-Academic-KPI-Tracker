@@ -88,22 +88,6 @@ body, html {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-
-.spinner-border {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  vertical-align: -0.125em;
-  border: 0.25em solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: spinner-border 0.75s linear infinite;
-}
-
-@keyframes spinner-border {
-  to { transform: rotate(360deg); }
-}
-
 </style>
 
 </head>
@@ -291,6 +275,7 @@ const feedbackResponse = document.getElementById("feedbackResponse");
 const feedbackList = document.getElementById("feedbackList");
 const refreshFeedbackBtn = document.getElementById("refreshFeedbackBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
+const submitBtn = document.getElementById("submitBtn");
 
 // Base API URL
 const API_BASE_URL = 'http://localhost:3000/api/tickets';
@@ -317,31 +302,24 @@ function setupEventListeners() {
 async function handleFormSubmit(e) {
   e.preventDefault();
 
-  // 1. Get user session and form data
-  const session = JSON.parse(localStorage.getItem("userSession"));
-  const currentUserId = session?._id || session?.id;
-  const submitBtn = document.getElementById("submitBtn");
   const email = document.getElementById("email").value.trim();
   const message = document.getElementById("message").value.trim();
 
-  // 2. Validation
   if (!email || !message) {
     showAlert('Email and message are required', 'danger');
     return;
   }
 
   try {
-    // 3. UI Loading State
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
       ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
     `;
 
-    // 4. Prepare request
     const method = currentFeedbackId ? 'PUT' : 'POST';
     const url = currentFeedbackId
-      ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
+      ? `${API_BASE_URL}/feedback/${currentFeedbackId}?userId=${currentUserId}`
       : `${API_BASE_URL}/feedback`;
 
     const response = await fetch(url, {
@@ -349,47 +327,23 @@ async function handleFormSubmit(e) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        // Include authorization if available
-        ...(localStorage.getItem('token') && {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        })
       },
-      body: JSON.stringify({
-        email,
-        message,
-        userId: currentUserId || null // Fallback to null if not available
-      })
+      body: JSON.stringify({ email, message, userId: currentUserId })
     });
 
-    // 5. Handle response
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || 
-        `Server error: ${response.status} ${response.statusText}`
-      );
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to submit feedback');
     }
 
-    // 6. Success handling
-    const successMessage = currentFeedbackId 
-      ? 'Feedback updated successfully!' 
-      : 'Feedback submitted successfully!';
-    
-    showAlert(successMessage, 'success');
+    showAlert(currentFeedbackId ? 'Feedback updated!' : 'Feedback submitted!', 'success');
     feedbackForm.reset();
     cancelEdit();
-    await fetchFeedbacks(); // Refresh the list
-
-  } catch (error) {
-    console.error('Submission error:', error);
-    showAlert(
-      error.message.includes('Server error') 
-        ? error.message 
-        : 'Failed to submit feedback. Please try again.',
-      'danger'
-    );
+    await fetchFeedbacks();
+  } catch (err) {
+    console.error('Submit error:', err);
+    showAlert(err.message, 'danger');
   } finally {
-    // 7. Reset UI
     submitBtn.disabled = false;
     submitBtn.textContent = currentFeedbackId ? 'Update Feedback' : 'Submit Feedback';
   }
@@ -440,13 +394,12 @@ async function viewFeedback(id) {
 
     const modalFooter = document.getElementById("modalFooter");
     modalFooter.innerHTML = `
-      ${fb.userId === currentUserId ? `
-        <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
-        <button type="button" class="btn btn-primary" id="editModalBtn">Edit</button>
-      ` : ''}
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    `;
-
+    ${fb.userId === currentUserId ? `
+    <button type="button" class="btn btn-danger me-2" id="deleteBtn">Delete</button>
+    <button type="button" class="btn btn-primary me-2" id="editModalBtn">Edit</button>
+  ` : ''}
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+`;
     document.getElementById("deleteBtn")?.addEventListener("click", () => deleteFeedback(id));
     document.getElementById("editModalBtn")?.addEventListener("click", () => {
       bootstrap.Modal.getInstance(document.getElementById('feedbackModal')).hide();
