@@ -93,7 +93,7 @@ async function handleLogin(event) {
     else if (response.status === 403 && data.message === "Account is deactivated") {
       const recover = confirm("This account is deactivated. Do you want to recover it?");
       if (recover) {
-        const recoverRes = await fetch(`/api/auth/recover/${id}`, {
+        const recoverRes = await fetch(`/api/auth/recover/${user.id}`, {
           method: "PUT",
         });
 
