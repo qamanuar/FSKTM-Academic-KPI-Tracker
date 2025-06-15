@@ -65,6 +65,7 @@ try {
               `<button class="btn btn-sm btn-outline-primary upload-btn" data-kpi-id="${kpi._id}" data-bs-toggle="modal" data-bs-target="#submitModal">Upload</button>`
             }
           </td>
+                    <td>${kpi.assignerComment ? kpi.assignerComment : '<span class="text-muted">No comment</span>'}</td>
         </tr>
       `;
     });
