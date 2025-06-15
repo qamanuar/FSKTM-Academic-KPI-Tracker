@@ -1,3 +1,4 @@
+
 // Toggle between Register and Login forms
 function toggleForm(formType) {
   const registerForm = document.getElementById('registerForm');
@@ -32,26 +33,36 @@ async function handleRegister(event) {
     return;
   }
 
+  let role = '';
+  if (/^L\d{8}$/.test(id)) {
+    role = 'advisor';
+  } else if (/^2\d{7}$/.test(id)) {
+    role = 'student';
+  } else {
+    alert('Invalid ID format. Use 2XXXXXXX for students or LXXXXXXXX for advisors.');
+    return;
+  }
+
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const country = await fetch('https://ipapi.co/json/')
-  .then(res => res.json())
-  .then(data => data.country_name)
-  .catch(() => '-');
+    .then(res => res.json())
+    .then(data => data.country_name)
+    .catch(() => '-');
 
   try {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, id, email, password, country, timezone }),
+      body: JSON.stringify({ name, id, email, password, country, timezone, role }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      alert(`Registered successfully as ${name}`);
+      alert(`Registered successfully. Please check your email to verify your account.`);
       event.target.reset();
-      toggleForm('login'); // Switch to login form after successful registration
+      toggleForm('login');
     } else {
       alert(`Registration failed: ${data.message}`);
     }
@@ -61,87 +72,27 @@ async function handleRegister(event) {
   }
 }
 
-// Login user by sending data to backend API
-async function handleLogin(event) {
-  event.preventDefault();
-
-  const id = document.getElementById('loginId').value.trim();
-  const password = document.getElementById('loginPassword').value;
+// Trigger forgot password flow
+async function handleForgotPassword() {
+  const email = prompt("Enter your registered email address:");
+  if (!email) return;
 
   try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, password }),
+    const response = await fetch("/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      // In gscript.js (after successful login)
-      localStorage.setItem("userSession", JSON.stringify({
-        _id: data.user._id, //<-- add this MongoDB ID for password updates
-        id: data.user.id,
-        name: data.user.name
-      }));
-
-      localStorage.setItem("userId", data.user._id);
-
-
-      window.location.href = "profile.html"; // redirect to profile
-    }
-    else if (response.status === 403 && data.message === "Account is deactivated") {
-      const recover = confirm("This account is deactivated. Do you want to recover it?");
-      if (recover) {
-        const recoverRes = await fetch(`/api/auth/recover/${user.id}`, {
-          method: "PUT",
-        });
-
-        const recoverData = await recoverRes.json();
-        if (recoverRes.ok) {
-          alert("Account recovered successfully. Please login again.");
-          location.reload();
-        } else {
-          alert(recoverData.message || "Failed to recover account");
-        }
-      } else {
-        alert("Login canceled.");
-        location.reload();
-      }
-     } else {
-      alert(`Login failed: ${data.message}`);
+      alert("Password reset email has been sent. Please check your inbox.");
+    } else {
+      alert(data.message || "Failed to send reset email.");
     }
   } catch (error) {
-    alert('An error occurred. Please try again.');
-    console.error('Login error:', error);
+    alert("An error occurred. Please try again.");
+    console.error("Forgot Password Error:", error);
   }
 }
-
-// Session timeout logic (logs out user after inactivity)
-let timeoutDuration = 5 * 60 * 1000; // 5 minutes
-let sessionTimer;
-
-function resetSessionTimer() {
-  clearTimeout(sessionTimer);
-  sessionTimer = setTimeout(logoutUser, timeoutDuration);
-}
-
-function startSessionTracking() {
-  document.addEventListener("mousemove", resetSessionTimer);
-  document.addEventListener("keydown", resetSessionTimer);
-  resetSessionTimer();
-}
-
-function logoutUser() {
-  alert("You have been logged out due to inactivity.");
-  localStorage.removeItem("userSession");
-  window.location.reload();
-}
-
-// Start session tracking if user session exists on page load
-window.onload = function () {
-  const user = localStorage.getItem("userSession");
-  if (user) {
-    startSessionTracking();
-  }
-};
