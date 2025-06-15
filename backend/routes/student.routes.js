@@ -45,10 +45,10 @@ router.get('/:id', async (req, res) => {
 // Update student profile
 router.put("/:id", async (req, res) => {
   try {
-    const updates = req.body;
+    
     let user = await User.findById(req.params.id);
 if (!user) {
-  user = await User.findByIdAndUpdate(
+  user = await User.findOneAndUpdate(
     { id: req.params.id },
     req.body,
     { new: true }
@@ -61,6 +61,10 @@ if (!user) {
   );
 }
 
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "Profile updated", user }); // ✅ Send back user
+  
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
