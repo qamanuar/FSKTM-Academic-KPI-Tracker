@@ -6,12 +6,25 @@ const faqSchema = new mongoose.Schema({
   answer: String
 });
 
-// Feedback Schema
+// Feedback Schema 
 const feedbackSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  message: String,
-  createdAt: { type: Date, default: Date.now }
+  email: { 
+    type: String, 
+    required: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format'] // Email validation
+  },
+  message: { 
+    type: String, 
+    required: true 
+  },
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'  // Links to User model if you have one
+  },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
+  }
 });
 
 // Export all models
