@@ -22,6 +22,9 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/students", studentRoutes);
+
 
 // Static frontend serving
 const __filename = fileURLToPath(import.meta.url);
@@ -32,10 +35,6 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public", "General.html"));
 });
-
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/students", studentRoutes);
 
 // MongoDB Connection
 mongoose
