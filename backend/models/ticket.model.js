@@ -21,11 +21,9 @@ const feedbackSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User'  // Links to User model if you have one
   },
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
-  }
-});
+  
+  } , { timestamps: true});
+
 
 // Export all models
 const FAQ = mongoose.model('FAQ', faqSchema);

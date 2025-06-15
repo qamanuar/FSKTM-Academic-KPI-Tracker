@@ -45,7 +45,7 @@ router.get('/faqs', async (req, res) => {
 // ─── FEEDBACK ROUTES ─────────────────────────────────────
 router.post('/feedback', async (req, res) => { // ← Added async here
   try {
-    const { email, message, userId } = req.body;
+    const { email, message, userId} = req.body;
 
     console.log("📥 POST /feedback body:", req.body);
 
@@ -56,7 +56,7 @@ router.post('/feedback', async (req, res) => { // ← Added async here
     const feedback = new Feedback({
       email,
       message,
-      userId: userId || null
+      userId
     });
 
     await feedback.save(); // ← Now properly awaited
