@@ -101,7 +101,7 @@ router.put('/deactivate/:id', async (req, res) => {
 // 🔁 Recover account
 router.put('/recover/:id', async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate(
+    const user = await User.findByIdAndUpdate(
       { id: req.params.id },
       { isActive: true }, // Reactivate the user
       { new: true }
@@ -121,15 +121,24 @@ router.put('/update/:id', async (req, res) => {
   try {
     const { name, email, country, timezone, registrationNo } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { name, email, country, timezone, registrationNo },
-      { new: true }
-    );
+    let updatedUser = await User.findById(req.params.id);
+if (updatedUser) {
+  updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    { name, email, country, timezone, registrationNo },
+    { new: true }
+  );
+} else {
+  updatedUser = await User.findOneAndUpdate(
+    { id: req.params.id },
+    { name, email, country, timezone, registrationNo },
+    { new: true }
+  );
+}
 
-    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+res.json({ message: 'Profile updated', user: updatedUser });
 
-    res.json({ message: 'Profile updated', user: updatedUser });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

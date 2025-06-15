@@ -44,7 +44,7 @@ function closeSettings() {
 
 window.onload = function () {
   const session = JSON.parse(localStorage.getItem("userSession"));
-  if (session && session.id) {
+  if (session && session._id) {
     fetch(`/api/students/${session._id}`)
       .then(res => res.json())
       .then(data => {
@@ -173,7 +173,7 @@ function deactivateAccount() {
     .then(data => {
       alert(data.message || "Account deactivated.");
       localStorage.clear();
-      document.body.innerHTML = "<h2>Account deactivated. Goodbye!</h2>";
+      window.location.href = "./General.html";
     })
     .catch(err => {
       console.error(err);
