@@ -317,7 +317,7 @@ async function handleFormSubmit(e) {
       message: document.getElementById("message").value
     };
 
-    const response = await fetch('http://localhost:3000/api/feedback', {
+    const response = await fetch('http://localhost:3000/api/tickets/feedback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
