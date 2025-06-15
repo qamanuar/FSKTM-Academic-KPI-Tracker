@@ -27,7 +27,8 @@ console.log("Register payload:", req.body);
       password: hashedPassword,
       country: country || "-",         // default
       timezone: timezone || "-",        // default
-      registrationNo: "-"   // default
+      registrationNo: "-",   // default
+      isActive: true
     });
 
     await newUser.save();
@@ -101,7 +102,7 @@ router.put('/deactivate/:id', async (req, res) => {
 // 🔁 Recover account
 router.put('/recover/:id', async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(
+    const user = await User.findOneAndUpdate(
       { id: req.params.id },
       { isActive: true }, // Reactivate the user
       { new: true }
