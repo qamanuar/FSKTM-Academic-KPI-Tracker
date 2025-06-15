@@ -78,7 +78,7 @@ window.onload = function () {
 // ======== UPDATE PROFILE ========
 
 async function saveProfile() {
-  const id = localStorage.getItem("userId",user._id);
+  const id = localStorage.getItem("userId");
 
   const updatedData = {
     name: document.getElementById("editName").value,

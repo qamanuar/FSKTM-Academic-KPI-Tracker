@@ -48,7 +48,7 @@ router.put("/:id", async (req, res) => {
     const updates = req.body;
     let user = await User.findById(req.params.id);
 if (!user) {
-  user = await User.findOneAndUpdate(
+  user = await User.findByIdAndUpdate(
     { id: req.params.id },
     req.body,
     { new: true }
