@@ -93,46 +93,15 @@ router.get('/feedback/:id', async (req, res) => {
   }
 });
 
-router.put('/feedback/:id', async (req, res) => {
-  try {
-    const { userId } = req.body;
-    const feedback = await Feedback.findById(req.params.id);
-    
-    if (!feedback) {
-      return res.status(404).json({ error: "Feedback not found" });
-    }
-    
-    // Verify ownership
-    if (feedback.userId.toString() !== userId) {
-      return res.status(403).json({ error: "Unauthorized to edit this feedback" });
-    }
+if (feedback.userId.toString() !== userId)
 
-    const updated = await Feedback.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(updated);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update feedback" });
-  }
-});
-
+//delete
 router.delete('/feedback/:id', async (req, res) => {
   try {
-    const { userId } = req.body;
-    const feedback = await Feedback.findById(req.params.id);
-    
-    if (!feedback) {
+    const deleted = await Feedback.findByIdAndDelete(req.params.id);
+    if (!deleted) {
       return res.status(404).json({ error: "Feedback not found" });
     }
-    
-    // Verify ownership
-    if (feedback.userId.toString() !== userId) {
-      return res.status(403).json({ error: "Unauthorized to delete this feedback" });
-    }
-
-    await Feedback.findByIdAndDelete(req.params.id);
     res.json({ message: 'Feedback deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete feedback" });
