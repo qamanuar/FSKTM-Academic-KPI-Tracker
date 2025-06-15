@@ -75,6 +75,19 @@ body, html {
 .accordion-button::after {
   background-image: none !important;
 }
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 </style>
 
@@ -290,47 +303,51 @@ function setupEventListeners() {
   cancelEditBtn.addEventListener("click", cancelEdit);
 }
 
-// Handle form submission
 async function handleFormSubmit(e) {
   e.preventDefault();
   const submitBtn = document.getElementById("submitBtn");
-  
+  const feedbackResponse = document.getElementById("feedbackResponse");
+
   try {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+    submitBtn.innerHTML = '<span class="spinner">Sending...</span>';
 
-    const feedbackData = {
-      email: document.getElementById("email").value.trim(), // Ensure this matches
-      message: document.getElementById("message").value.trim(),
-      userId: currentUserId
+    const formData = {
+      email: document.getElementById("email").value,
+      message: document.getElementById("message").value
     };
 
-    const url = currentFeedbackId 
-  ? `${API_BASE_URL}/tickets/feedback/${currentFeedbackId}`
-  : `${API_BASE_URL}/tickets/feedback`;
-      
-    const method = currentFeedbackId ? 'PUT' : 'POST';
-
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(feedbackData)
+    const response = await fetch('http://localhost:3000/api/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json' // Explicitly ask for JSON
+      },
+      body: JSON.stringify(formData)
     });
 
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || 'Operation failed');
+    // First check if the response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      throw new Error(text || 'Server returned non-JSON response');
     }
 
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Operation failed');
+    }
+
+    // Success case
+    feedbackResponse.textContent = 'Feedback submitted successfully!';
+    feedbackResponse.className = 'alert alert-success';
     feedbackForm.reset();
-    showAlert(currentFeedbackId ? 'Feedback updated successfully!' : 'Feedback submitted successfully!', 'success');
-    currentFeedbackId = null;
-    submitBtn.textContent = 'Submit Feedback';
-    cancelEditBtn.style.display = 'none';
-    await fetchFeedbacks();
-    
+
   } catch (error) {
-    showAlert(error.message, 'danger');
+    console.error('Submission error:', error);
+    feedbackResponse.textContent = error.message || 'Operation failed';
+    feedbackResponse.className = 'alert alert-error';
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = 'Submit Feedback';
