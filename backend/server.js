@@ -25,8 +25,6 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
 
-
-
 // Static frontend serving
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -87,12 +85,28 @@ export function emitNotification(userId, notification) {
   }
 }
 
+import studentDashRoutes from './routes/studentDash.routes.js';
+app.use('/api/student', studentDashRoutes);
+
+// Lecturer Dashboard
+// App config
+import methodOverride from "method-override";
+app.use(methodOverride("_method"));
+app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join("uploads")));
+
+import lecturerRoutes from "./routes/indexLD.js";
+app.use("/lecturer-dashboard", (req, res, next) => {
+  app.set("view engine", "ejs");
+  app.set("views", path.join("public"));
+  next();
+}, lecturerRoutes);
+
+app.get(/(.*)/, (req, res) => {
+  res.status(404).send("Sorry, Page Not Found!");
+});
+
 // Start server using HTTP server
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
-
-import studentDashRoutes from './routes/studentDash.routes.js';
-app.use('/api/student', studentDashRoutes);
-
