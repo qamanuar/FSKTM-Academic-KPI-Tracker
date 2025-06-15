@@ -310,10 +310,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setupFormValidation();
 });
 
-    function setupEventListeners() {
-      document.getElementById("feedbackForm").addEventListener("submit", handleFormSubmit);
-      document.getElementById("refreshFeedbackBtn").addEventListener("click", fetchFeedbacks);
-    }
+function setupEventListeners() {
+  feedbackForm.addEventListener("submit", handleFormSubmit);
+  refreshFeedbackBtn.addEventListener("click", fetchFeedbacks);
+  cancelEditBtn?.addEventListener("click", cancelEdit);
+}
 
 async function handleFormSubmit(e) {
       e.preventDefault();
