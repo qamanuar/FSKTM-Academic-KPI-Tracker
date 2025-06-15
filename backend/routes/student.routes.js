@@ -46,13 +46,21 @@ router.get('/:id', async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const updates = req.body;
-    const user = await User.findByIdAndUpdate(
-      { id: req.params.id }, // assuming 'id' is registration number
-      updates,
-      { new: true }
-    );
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json({ message: "Profile updated", user });
+    let user = await User.findById(req.params.id);
+if (!user) {
+  user = await User.findOneAndUpdate(
+    { id: req.params.id },
+    req.body,
+    { new: true }
+  );
+} else {
+  user = await User.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+}
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
