@@ -88,6 +88,22 @@ body, html {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+    /* Add these new styles */
+    .user-owned-feedback {
+      border-left: 3px solid #6f42c1;
+    }
+    .spinner-border {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      vertical-align: -0.125em;
+      border: 0.25em solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spinner-border 0.75s linear infinite;
+    }
+
 </style>
 
 </head>
@@ -184,47 +200,47 @@ body, html {
 </div>
 
 <!-- Feedback Section -->
-<div class="feedback-section">
-  <!-- Feedback Form -->
-  <div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-      <h4 class="mb-0">Submit Feedback</h4>
-    </div>
-    <div class="card-body">
-      <form id="feedbackForm" class="mb-4">
-        <div class="mb-3">
-          <label for="email" class="form-label">Your Email</label>
-         <input type="email" id="email" class="form-control" required>
+      <div class="feedback-section">
+        <!-- Feedback Form -->
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Submit Feedback</h4>
+          </div>
+          <div class="card-body">
+            <form id="feedbackForm" class="mb-4">
+              <div class="mb-3">
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" id="email" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" rows="4" class="form-control" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                Submit Feedback
+              </button>
+            </form>
+            <div id="feedbackResponse" class="alert d-none"></div>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="message" class="form-label">Message</label>
-          <textarea id="message" rows="4" class="form-control" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary w-100" id="submitBtn">
-          Submit Feedback
-        </button>
-      </form>
-      <div id="feedbackResponse" class="alert d-none"></div>
-    </div>
-  </div>
 
-  <!-- Feedback List -->
-  <div class="card">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">Recent Feedback</h5>
-      <button class="btn btn-sm btn-outline-primary" id="refreshFeedbackBtn">
-        <i class="bi bi-arrow-clockwise"></i> Refresh
-      </button>
-    </div>
-    <div class="card-body p-0">
-      <ul id="feedbackList" class="list-group list-group-flush">
-        <li class="list-group-item text-center py-4 text-muted">
-          No feedback yet. Be the first to submit!
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
+        <!-- Feedback List -->
+        <div class="card">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Recent Feedback</h5>
+            <button class="btn btn-sm btn-outline-primary" id="refreshFeedbackBtn">
+              <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+          </div>
+          <div class="card-body p-0">
+            <ul id="feedbackList" class="list-group list-group-flush">
+              <li class="list-group-item text-center py-4 text-muted">
+                No feedback yet. Be the first to submit!
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
 <!-- Feedback Details Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
@@ -294,106 +310,100 @@ document.addEventListener("DOMContentLoaded", () => {
   setupFormValidation();
 });
 
-function setupEventListeners() {
-  feedbackForm.addEventListener("submit", handleFormSubmit);
-  refreshFeedbackBtn.addEventListener("click", fetchFeedbacks);
-  cancelEditBtn?.addEventListener("click", cancelEdit);
-}
-
-async function handleFormSubmit(e) {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value.trim();
-  const message = document.getElementById("message").value.trim();
-
-  if (!email || !message) {
-    showAlert('Email and message are required', 'danger');
-    return;
-  }
-
-  try {
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `
-      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-      ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
-    `;
-
-    const method = currentFeedbackId ? 'PUT' : 'POST';
-    const url = currentFeedbackId
-  ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
-  : `${API_BASE_URL}/feedback`;
-
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({ email, message })
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to submit feedback');
+    function setupEventListeners() {
+      document.getElementById("feedbackForm").addEventListener("submit", handleFormSubmit);
+      document.getElementById("refreshFeedbackBtn").addEventListener("click", fetchFeedbacks);
     }
 
-    showAlert(currentFeedbackId ? 'Feedback updated!' : 'Feedback submitted!', 'success');
-    feedbackForm.reset();
-    cancelEdit();
-    await fetchFeedbacks();
-  } catch (err) {
-    console.error('Submit error:', err);
-    showAlert(err.message, 'danger');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = currentFeedbackId ? 'Update Feedback' : 'Submit Feedback';
-  }
-}
+async function handleFormSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById("submitBtn");
+      
+      try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
+        `;
+
+        const formData = {
+          email: document.getElementById("email").value.trim(),
+          message: document.getElementById("message").value.trim(),
+          userId: currentUserId // Always include
+        };
+
+        const method = currentFeedbackId ? 'PUT' : 'POST';
+        const url = currentFeedbackId
+          ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
+          : `${API_BASE_URL}/feedback`;
+
+        const response = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Operation failed');
+        }
+
+        showAlert('Feedback submitted successfully!', 'success');
+        feedbackForm.reset();
+        await fetchFeedbacks();
+      } catch (error) {
+        console.error('Submission error:', error);
+        showAlert(error.message || 'Failed to submit feedback', 'danger');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = currentFeedbackId ? 'Update Feedback' : 'Submit Feedback';
+      }
+    }
 
 async function fetchFeedbacks() {
-  try {
-    const res = await fetch(`${API_BASE_URL}/feedback`);
-    if (!res.ok) throw new Error('Failed to fetch feedbacks');
-
-    const feedbacks = await res.json();
-    renderFeedbacks(feedbacks); // Now the list gets updated
-  } catch (err) {
-    console.error("Fetch error:", err);
-    feedbackList.innerHTML = `
-      <li class="list-group-item text-danger text-center">
-        Failed to load feedbacks. Please try again later.
-      </li>
-    `;
-  }
-}
+      try {
+        const res = await fetch(`${API_BASE_URL}/feedback`);
+        if (!res.ok) throw new Error('Failed to load feedback');
+        
+        const feedbacks = await res.json();
+        renderFeedbacks(feedbacks);
+      } catch (error) {
+        console.error('Fetch error:', error);
+        feedbackList.innerHTML = `
+          <li class="list-group-item text-center text-danger py-3">
+            Failed to load feedback. <button onclick="fetchFeedbacks()">Retry</button>
+          </li>
+        `;
+      }
+    }
 
 function renderFeedbacks(feedbacks) {
-  feedbackList.innerHTML = feedbacks.length > 0
-    ? feedbacks.map(fb => `
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <strong>${fb.email}</strong> <!-- Fallback to email if name is missing -->
-          <div class="text-muted small">
-            ${new Date(fb.createdAt).toLocaleString()}
-          </div>
-          <div>${fb.message.substring(0, 50)}...</div>
-        </div>
-        <div>
-          <button onclick="editFeedback('${fb._id}')" class="btn btn-sm btn-outline-primary me-2">
-            <i class="bi bi-pencil"></i> Edit
-            </button>
-            <button onclick="deleteFeedback('${fb._id}')" class="btn btn-sm btn-outline-danger me-2">
-              <i class="bi bi-trash"></i> Delete
-              </button>
-
-          <button onclick="viewFeedback('${fb._id}')" class="btn btn-sm btn-outline-info">
-            <i class="bi bi-eye"></i> View
-          </button>
-        </div>
-      </li>
-    `).join('')
-    : '<li class="list-group-item text-center py-3">No feedback submitted yet</li>';
-}
+      feedbackList.innerHTML = feedbacks.length > 0 
+        ? feedbacks.map(fb => `
+            <li class="list-group-item d-flex justify-content-between align-items-center 
+                ${fb.userId === currentUserId ? 'user-owned-feedback' : ''}">
+              <div>
+                <strong>${fb.email}</strong>
+                <div class="text-muted small">${new Date(fb.createdAt).toLocaleString()}</div>
+                <div>${fb.message.substring(0, 50)}...</div>
+              </div>
+              <div>
+                ${fb.userId === currentUserId ? `
+                  <button onclick="editFeedback('${fb._id}')" class="btn btn-sm btn-outline-primary me-2">
+                    <i class="bi bi-pencil"></i> Edit
+                  </button>
+                  <button onclick="confirmDelete('${fb._id}')" class="btn btn-sm btn-outline-danger me-2">
+                    <i class="bi bi-trash"></i> Delete
+                  </button>
+                ` : ''}
+                <button onclick="viewFeedback('${fb._id}')" class="btn btn-sm btn-outline-info">
+                  <i class="bi bi-eye"></i> View
+                </button>
+              </div>
+            </li>
+          `).join('')
+        : '<li class="list-group-item text-center py-3">No feedback yet</li>';
+    }
 
 async function viewFeedback(id) {
   try {
@@ -455,7 +465,8 @@ async function deleteFeedback(id) {
     if (!confirmed) return;
 
     const res = await fetch(`${API_BASE_URL}/feedback/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: { 'Content-Type': 'application/json' }
     });
 
     if (!res.ok) throw new Error('Deletion failed');
