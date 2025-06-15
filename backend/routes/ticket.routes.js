@@ -93,8 +93,6 @@ router.get('/feedback/:id', async (req, res) => {
   }
 });
 
-if (feedback.userId.toString() !== userId)
-
 //delete
 router.delete('/feedback/:id', async (req, res) => {
   try {
@@ -102,6 +100,7 @@ router.delete('/feedback/:id', async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ error: "Feedback not found" });
     }
+    await feedback.deleteOne();
     res.json({ message: 'Feedback deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete feedback" });
