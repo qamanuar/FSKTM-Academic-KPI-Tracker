@@ -27,7 +27,8 @@ console.log("Register payload:", req.body);
       password: hashedPassword,
       country: country || "-",         // default
       timezone: timezone || "-",        // default
-      registrationNo: "-"   // default
+      registrationNo: "-",   // default
+      isActive: true
     });
 
     await newUser.save();
