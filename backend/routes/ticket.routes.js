@@ -43,7 +43,6 @@ router.get('/faqs', async (req, res) => {
 });
 
 // ─── FEEDBACK ROUTES ─────────────────────────────────────
-// ─── FEEDBACK ROUTES ─────────────────────────────────────
 router.post('/feedback', async (req, res) => { // ← Added async here
   try {
     const { email, message, userId } = req.body;
