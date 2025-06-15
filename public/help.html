@@ -79,21 +79,20 @@ body, html {
 </style>
 
 </head>
-<body class="min-h-screen flex flex-col">
-<header class="items-center flex justify-content-between">
-    <img src="./assets/images/fsktm-kpi-logo.png" alt="Logo" style="height: 60px; margin-left:30px">  
-    <div>
-      <ul class="flex gap-lg-5">
-        <li id="username" class="text-lg justify-center text-[#2e067d] mt-1 font-medium"></li>
-        <li class="mt-1">
-          <a href="/General.html" class="text-lg text-[#2e067d] border-2 border-[#2e067d] py-1 px-3 rounded-lg 
-            hover:bg-[#2e067d] hover:text-white transition duration-200">
-            Logout
-          </a>
-        </li>
-      </ul>
-    </div>
-  </header>
+  <!-- Header -->
+   <header class="items-center flex justify-content-between">
+        <img src="./assets/images/fsktm-kpi-logo.png" alt="Logo" style="height: 60px; margin-left:30px">  
+        <div>
+          <ul class="flex gap-lg-5">
+            <li id="username" class="text-lg justify-center text-[#2e067d] mt-1 font-medium"></li>
+            <li class="mt-1">
+                <a href="/General.html" class=" text-lg text-[#2e067d] border-2 border-[#2e067d] py-1 px-3 rounded-lg 
+                hover:bg-[#2e067d] hover:text-white transition duration-200">
+                Logout</a>
+            </li>
+          </ul>
+        </div>
+    </header>
 
   <div class="flex flex-1">
   <!-- Side Navigation Bar -->
@@ -160,12 +159,16 @@ body, html {
         <h2 class="mb-4 fw-bold fs-2">Help & Support</h2>
 
 <!-- FAQ Section -->
-<div class="mb-5">
+<div class="mb-8">
   <h4 class="text-xl font-semibold mb-5 text-gray-800">Frequently Asked Questions</h4>
-  <button onclick="loadFAQs()" class="btn btn-sm btn-outline-primary mb-3">
+  <button 
+    onclick="loadFAQs()" 
+    class="px-4 py-2 mb-4 text-sm font-medium text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-600 hover:text-white transition duration-200"
+  >
     Load FAQs
   </button>
-  <div class="faq-items-container"></div>
+  
+  <div class="faq-items-container space-y-4"></div>
 </div>
 
 <!-- Feedback Section -->
@@ -179,8 +182,7 @@ body, html {
       <form id="feedbackForm" class="mb-4">
         <div class="mb-3">
           <label for="email" class="form-label">Your Email</label>
-          <input type="email" id="email" class="form-control" required
-                 value="<?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?>">
+         <input type="email" id="email" class="form-control" required>
         </div>
         <div class="mb-3">
           <label for="message" class="form-label">Message</label>
@@ -503,54 +505,94 @@ async function loadFAQs() {
   const faqContainer = document.querySelector('.faq-items-container');
   
   try {
+    // Loading state with accessibility
     faqContainer.innerHTML = `
-      <div class="text-center py-4">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Loading FAQs...</p>
+      <div role="status" aria-live="polite" class="flex flex-col items-center justify-center py-8 space-y-3">
+        <div class="animate-spin rounded-full h-8 w-8 border-4 border-purple-200 border-t-purple-600" aria-hidden="true"></div>
+        <p class="text-gray-600">Loading FAQs...</p>
       </div>
     `;
 
-    const res = await fetch('http://localhost:3000/api/tickets/faqs');
+    const response = await fetch('http://localhost:3000/api/tickets/faqs');
     
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+    if (!response.ok) {
+      throw new Error(`Failed to load: ${response.status}`);
     }
 
-    const faqs = await res.json();
+    const faqs = await response.json();
     
-    if (!faqs || faqs.length === 0) {
-      throw new Error('No FAQs found');
+    if (!faqs?.length) {
+      throw new Error('No FAQs available');
     }
 
-    faqContainer.innerHTML = faqs.map(faq => `
-      <div class="faq-item card mb-3">
-        <div class="card-header bg-light" data-bs-toggle="collapse" href="#faq-${faq._id}">
-          <h5 class="mb-0 d-flex justify-content-between align-items-center">
-            ${faq.question}
-            <i class="bi bi-chevron-down"></i>
-          </h5>
-        </div>
-        <div id="faq-${faq._id}" class="collapse">
-          <div class="card-body">
-            ${faq.answer}
-          </div>
+    faqContainer.innerHTML = faqs.map((faq, index) => `
+      <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm mb-4 last:mb-0">
+        <button
+          id="faq-btn-${index}"
+          class="w-full px-5 py-4 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+          aria-expanded="false"
+          aria-controls="faq-content-${index}"
+          onclick="toggleFAQ(${index})"
+        >
+          <h3 class="font-medium text-gray-800 text-left">${faq.question}</h3>
+          <svg 
+            id="faq-icon-${index}"
+            class="w-5 h-5 text-gray-500 transform transition-transform duration-200"
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div
+          id="faq-content-${index}"
+          class="hidden px-5 py-4 bg-white border-t border-gray-100"
+          aria-labelledby="faq-btn-${index}"
+        >
+          <p class="text-gray-600">${faq.answer}</p>
         </div>
       </div>
     `).join('');
 
   } catch (error) {
-    console.error("FAQ loading error:", error);
+    console.error('FAQ loading error:', error);
     faqContainer.innerHTML = `
-      <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        Failed to load FAQs. Please try again later.
-        <button onclick="loadFAQs()" class="btn btn-sm btn-link">Retry</button>
+      <div role="alert" aria-live="assertive" class="px-4 py-3 bg-red-50 border-l-4 border-red-500 text-red-700">
+        <p class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          ${error.message || 'Failed to load FAQs'}
+        </p>
+        <button 
+          onclick="loadFAQs()" 
+          class="mt-2 px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800 hover:underline focus:outline-none focus:ring-2 focus:ring-red-500"
+        >
+          Retry
+        </button>
       </div>
-        `;
+    `;
   }
 }
+
+// Toggle function for FAQ items
+function toggleFAQ(index) {
+  const button = document.getElementById(`faq-btn-${index}`);
+  const content = document.getElementById(`faq-content-${index}`);
+  const icon = document.getElementById(`faq-icon-${index}`);
+  
+  const isExpanded = button.getAttribute('aria-expanded') === 'true';
+  
+  // Toggle visibility
+  content.classList.toggle('hidden');
+  icon.classList.toggle('rotate-180');
+  
+  // Update ARIA attributes
+  button.setAttribute('aria-expanded', !isExpanded);
+}
+
 </script>
 <script src = "/js/sidebar_script.js"></script>
 <script>
@@ -563,32 +605,41 @@ async function loadFAQs() {
       icon.classList.toggle("rotate-180");
     });
   });
+
 </script>
+
 <script>
-      window.addEventListener("DOMContentLoaded", async () => {
-        const session = JSON.parse(localStorage.getItem("userSession"));
-        if (!session || !session.id) {
-          alert("No user session found. Please log in.");
-          window.location.href = "General.html";
-          return;
-        }
+// Update the user info loading script
+window.addEventListener("DOMContentLoaded", async () => {
+  const userSession = JSON.parse(localStorage.getItem("userSession"));
+  
+  if (!userSession) {
+    window.location.href = "General.html";
+    return;
+  }
 
-        try {
-          const res = await fetch(`/api/students/${session.id}`);
-          const data = await res.json();
+  // Set username fallback
+  const usernameElement = document.getElementById("username");
+  usernameElement.textContent = userSession.name || "User";
+  
+  // Set email in form if available
+  if (userSession.email) {
+    document.getElementById("email").value = userSession.email;
+  }
 
-          if (res.ok && data.user) {
-            // ✅ Update the header name to match profile.html
-            document.getElementById("username").textContent = data.user.name;
-          } else {
-            throw new Error(data.message || "User not found");
-          }
-        } catch (err) {
-          console.error(err);
-          alert("Failed to load user info.");
-        }
-      });
-    </script>
+  try {
+    const res = await fetch(`/api/users/${userSession._id || userSession.id}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.email) {
+        document.getElementById("email").value = data.email;
+      }
+    }
+  } catch (err) {
+    console.error("User info fetch error:", err);
+  }
+});
+</script>
 
 </body>
 </html>
