@@ -12,7 +12,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Set username in header
   document.getElementById("username").textContent = userSession.name || "Student";
+  // Fetch and display notifications
+try {
+  const notificationsRes = await fetch(`/api/notifications/${studentId}`);
+  const notifications = await notificationsRes.json();
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const urgentCount = notifications.filter(n => n.isAlert && !n.isRead).length;
 
+  // Update the notification card
+  document.querySelector('.kpi-card.bg-purple .card-body').innerHTML = `
+    <h4>${notifications.length}</h4>
+    <small>${unreadCount} unread, ${urgentCount} urgent</small>
+  `;
+} catch (err) {
+  // Optionally handle error
+}
   // Fetch and display dashboard summary
   try {
     const summaryRes = await fetch(`/api/student/${studentId}/summary`);
@@ -51,6 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               `<button class="btn btn-sm btn-outline-primary upload-btn" data-kpi-id="${kpi._id}" data-bs-toggle="modal" data-bs-target="#submitModal">Upload</button>`
             }
           </td>
+                    <td>${kpi.assignerComment ? kpi.assignerComment : '<span class="text-muted">No comment</span>'}</td>
         </tr>
       `;
     });
