@@ -103,7 +103,7 @@ router.put('/deactivate/:id', async (req, res) => {
 router.put('/recover/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
-      { id: req.params.id },
+      req.params.id ,
       { isActive: true }, // Reactivate the user
       { new: true }
     );
