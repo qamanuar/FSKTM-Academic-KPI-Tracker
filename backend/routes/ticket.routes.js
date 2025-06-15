@@ -57,8 +57,7 @@ router.post('/feedback', async (req, res) => {
 
     const feedback = new Feedback({
       email,
-      message,
-      userId: userId || null // Optional
+      message,m
     });
 
     await feedback.save();
