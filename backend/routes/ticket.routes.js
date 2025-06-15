@@ -96,14 +96,31 @@ router.get('/feedback/:id', async (req, res) => {
 //delete
 router.delete('/feedback/:id', async (req, res) => {
   try {
-    const deleted = await Feedback.findByIdAndDelete(req.params.id);
-    if (!deleted) {
+    const { userId } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const feedback = await Feedback.findById(req.params.id);
+    
+    if (!feedback) {
       return res.status(404).json({ error: "Feedback not found" });
     }
-    await feedback.deleteOne();
+    
+    // Verify ownership
+    if (feedback.userId.toString() !== userId) {
+      return res.status(403).json({ error: "Unauthorized to delete this feedback" });
+    }
+
+    await Feedback.findByIdAndDelete(req.params.id);
     res.json({ message: 'Feedback deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete feedback" });
+    console.error("Delete error:", error);
+    res.status(500).json({ 
+      error: "Failed to delete feedback",
+      details: error.message 
+    });
   }
 });
 
