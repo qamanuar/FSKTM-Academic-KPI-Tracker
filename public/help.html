@@ -350,6 +350,23 @@ async function handleFormSubmit(e) {
   }
 }
 
+async function fetchFeedbacks() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/feedback`);
+    if (!res.ok) throw new Error('Failed to fetch feedbacks');
+
+    const feedbacks = await res.json();
+    renderFeedbacks(feedbacks); // Now the list gets updated
+  } catch (err) {
+    console.error("Fetch error:", err);
+    feedbackList.innerHTML = `
+      <li class="list-group-item text-danger text-center">
+        Failed to load feedbacks. Please try again later.
+      </li>
+    `;
+  }
+}
+
 function renderFeedbacks(feedbacks) {
   feedbackList.innerHTML = feedbacks.length > 0
     ? feedbacks.map(fb => `
