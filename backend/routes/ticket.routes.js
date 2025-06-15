@@ -43,14 +43,13 @@ router.get('/faqs', async (req, res) => {
 });
 
 // ─── FEEDBACK ROUTES ─────────────────────────────────────
-router.post('/feedback', async (req, res) => {
+// ─── FEEDBACK ROUTES ─────────────────────────────────────
+router.post('/feedback', async (req, res) => { // ← Added async here
   try {
     const { email, message, userId } = req.body;
 
-    // Log the incoming data
     console.log("📥 POST /feedback body:", req.body);
 
-    // Validation
     if (!email || !message) {
       return res.status(400).json({ error: "Email and message are required" });
     }
@@ -58,15 +57,14 @@ router.post('/feedback', async (req, res) => {
     const feedback = new Feedback({
       email,
       message,
-      userId: userId || null // Optional
+      userId: userId || null
     });
 
-    await feedback.save();
+    await feedback.save(); // ← Now properly awaited
     res.status(201).json(feedback);
 
   } catch (error) {
-    // ADD THIS LOG
-    console.error("❌ Error in POST /feedback:", error); 
+    console.error("❌ Error in POST /feedback:", error);
     res.status(500).json({ 
       error: "Failed to submit feedback",
       details: error.message 
