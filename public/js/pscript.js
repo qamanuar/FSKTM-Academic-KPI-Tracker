@@ -173,7 +173,7 @@ function deactivateAccount() {
     .then(data => {
       alert(data.message || "Account deactivated.");
       localStorage.clear();
-      window.location.href = "General.html";
+      window.location.href = "./General.html";
     })
     .catch(err => {
       console.error(err);
