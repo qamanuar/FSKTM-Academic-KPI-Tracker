@@ -306,8 +306,8 @@ async function handleFormSubmit(e) {
     };
 
     const url = currentFeedbackId 
-      ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
-      : `${API_BASE_URL}/feedback`;
+  ? `${API_BASE_URL}/tickets/feedback/${currentFeedbackId}`
+  : `${API_BASE_URL}/tickets/feedback`;
       
     const method = currentFeedbackId ? 'PUT' : 'POST';
 

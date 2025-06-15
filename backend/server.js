@@ -24,7 +24,6 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
-app.use("/api/feedback", ticketRoutes); // for feedback routes only
 
 
 
