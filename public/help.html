@@ -459,6 +459,13 @@ async function editFeedback(id) {
   }
 }
 
+async function confirmDelete(id) {
+      if (confirm('Are you sure you want to delete this feedback?')) {
+        await deleteFeedback(id);
+      }
+    }
+
+
 async function deleteFeedback(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/feedback/${id}`, {
