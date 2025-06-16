@@ -9,52 +9,52 @@ document.querySelectorAll(".edit-btn").forEach((btn) => {
   });
 });
 
-async function openEditForm(studentId) {
+document.querySelector(".newBtn").addEventListener("click", function () {
+  console.log("new student click")
+  openEditForm();
+});
+
+async function openEditForm(studentId = null) {
   try {
-    const res = await fetch(`/lecturer-dashboard/student/${studentId}`);
+    const url = studentId ? `/student/${studentId}` : `/student/new`;
+    const res = await fetch(url);
     const html = await res.text();
 
     const modal = document.getElementById("myForm");
-    if (!modal) {
-      console.error("Modal with ID #myForm not found in the DOM");
-      return;
-    }
+    if (!modal) return console.error("Modal #myForm not found");
 
     const formContainer = modal.querySelector(".FormContainer");
     formContainer.innerHTML = `
-            <div class="header">
-                <h2 class="EditText">Edit</h2>
-                <button class="close-btn" aria-label="Close" id="close">&times;</button>
-            </div>
-            ${html}
-        `;
+      <div class="header">
+        <h2 class="EditText">${studentId ? "Edit Student" : "New Student"}</h2>
+        <button class="close-btn" aria-label="Close" id="close">&times;</button>
+      </div>
+      ${html}
+    `;
 
-    const closeBtn = modal.querySelector(".close-btn"); // Select the button *inside* the now updated modal
+    modal.style.display = "flex";
+
+    const closeBtn = modal.querySelector(".close-btn");
     if (closeBtn) {
       closeBtn.onclick = () => (modal.style.display = "none");
     }
 
-    modal.style.display = "flex";
+    const fileInput = modal.querySelector("#fileUpload");
+    const fileLabel = modal.querySelector("#custom-file-label");
 
-    const fileInput = document.getElementById("fileUpload");
-    const fileLabel = document.getElementById("custom-file-label");
-
-    // Set label to existing filename if present
-    const existingFileName = fileLabel.dataset.filename;
+    const existingFileName = fileLabel?.dataset.filename;
     if (existingFileName) {
       fileLabel.textContent = `📄 ${existingFileName}`;
     }
 
-    fileInput.addEventListener("change", function () {
+    fileInput?.addEventListener("change", function () {
       const fileName = this.files[0]?.name;
       fileLabel.textContent = fileName
         ? `📄 ${fileName}`
         : "Add Supporting File (PDF/DOC)";
     });
 
-    console.log("Editing student with ID:", studentId);
-
-    const form = document.querySelector("form");
+    const form = modal.querySelector("form");
     form.onsubmit = function (e) {
       const confirmed = confirm("Submit the form?");
       if (!confirmed) {
@@ -65,9 +65,10 @@ async function openEditForm(studentId) {
       form.submit();
     };
   } catch (error) {
-    console.error("Failed to load student form:", error);
+    console.error("Failed to load form:", error);
   }
 }
+
 
 function closeEditForm() {
   modal.style.display = "none";
