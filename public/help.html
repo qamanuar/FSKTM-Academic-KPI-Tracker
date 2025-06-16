@@ -325,6 +325,7 @@ function setupEventListeners() {
 
 async function handleFormSubmit(e) {
       e.preventDefault();
+      
       const submitBtn = document.getElementById("submitBtn");
       
       try {
@@ -339,34 +340,40 @@ async function handleFormSubmit(e) {
           message: document.getElementById("message").value.trim(),
           userId: currentUserId // Always include
         };
-
-        const method = currentFeedbackId ? 'PUT' : 'POST';
-        const url = currentFeedbackId
-          ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
-          : `${API_BASE_URL}/feedback`;
-
+        
+        //determine API endpoint
+        const url = currentFeedbackId 
+        ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
+        : `${API_BASE_URL}/feedback`;
+        
         const response = await fetch(url, {
-          method,
+          method: currentFeedbackId ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
-
+        
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.message || 'Operation failed');
+          throw new Error(error.message || 'Submission failed');
         }
 
         showAlert('Feedback submitted successfully!', 'success');
         feedbackForm.reset();
-        await fetchFeedbacks();
-      } catch (error) {
-        console.error('Submission error:', error);
-        showAlert(error.message || 'Failed to submit feedback', 'danger');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = currentFeedbackId ? 'Update Feedback' : 'Submit Feedback';
-      }
-    }
+
+currentFeedbackId = null;
+    document.getElementById("cancelEditBtn").style.display = 'none';
+    submitBtn.textContent = 'Submit Feedback';
+    
+    showAlert('Feedback submitted successfully!', 'success');
+    await fetchFeedbacks(); // Refresh the list
+    
+  } catch (error) {
+    console.error('Submission error:', error);
+    showAlert(error.message || 'Failed to submit feedback', 'danger');
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
 
 async function fetchFeedbacks() {
       try {
@@ -542,6 +549,13 @@ function setupFormValidation() {
     document.getElementById("submitBtn").disabled = !isValid;
   });
 }
+
+  feedbackForm.addEventListener('submit', (e) => {
+    if (!feedbackForm.checkValidity()) {
+      e.preventDefault();
+      showAlert('Please fill all fields correctly', 'warning');
+    }
+  });
 
 // FAQ Loading Function
 async function loadFAQs() {
