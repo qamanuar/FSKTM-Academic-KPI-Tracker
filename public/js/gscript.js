@@ -1,6 +1,6 @@
 
 // Toggle between Register and Login forms
-function toggleForm(formType) {
+window.toggleForm = function(formType) {
   const registerForm = document.getElementById('registerForm');
   const loginForm = document.getElementById('loginForm');
   const registerTab = document.getElementById('registerTab');
@@ -17,7 +17,7 @@ function toggleForm(formType) {
     registerTab.classList.remove('active');
     loginTab.classList.add('active');
   }
-}
+};
 
 // Register user by sending data to backend API
 async function handleRegister(event) {
@@ -87,7 +87,6 @@ async function handleForgotPassword() {
     const data = await response.json();
 
     if (response.ok) {
-<<<<<<< HEAD
       // In gscript.js (after successful login)
       localStorage.setItem("userSession", JSON.stringify({
         _id: data.user._id, //<-- add this MongoDB ID for password updates
@@ -120,11 +119,6 @@ async function handleForgotPassword() {
       }
      } else {
       alert(`Login failed: ${data.message}`);
-=======
-      alert("Password reset email has been sent. Please check your inbox.");
-    } else {
-      alert(data.message || "Failed to send reset email.");
->>>>>>> ae927a3fc9bfd54f5fd9dfd44b9bf4aff0a09293
     }
   } catch (error) {
     alert("An error occurred. Please try again.");
