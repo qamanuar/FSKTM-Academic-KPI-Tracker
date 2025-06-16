@@ -329,43 +329,41 @@ function setupEventListeners() {
 
 async function handleFormSubmit(e) {
   e.preventDefault();
+  const submitBtn = document.getElementById("submitBtn");
   
   try {
-    // Disable button and show spinner
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `
-      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-      ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
-    `;
+    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${currentFeedbackId ? 'Updating...' : 'Submitting...'}`;
 
-    const formData = {
-      email: document.getElementById("email").value.trim(),
-      message: document.getElementById("message").value.trim(),
-      userId: currentUserId
-    };
-
-    const response = await fetch(currentFeedbackId 
+    const url = currentFeedbackId 
       ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
-      : `${API_BASE_URL}/feedback`, {
+      : `${API_BASE_URL}/feedback`;
+
+    const response = await fetch(url, {
       method: currentFeedbackId ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({
+        email: document.getElementById("email").value.trim(),
+        message: document.getElementById("message").value.trim(),
+        userId: currentUserId // REQUIRED
+      })
     });
 
-    if (!response.ok) throw new Error(await response.text());
+    if (!response.ok) {
+      const error = await response.json().catch(() => null);
+      throw new Error(error?.message || 'Request failed');
+    }
 
-    // Reset form state
+    // Success handling
     feedbackForm.reset();
     currentFeedbackId = null;
     if (cancelEditBtn) cancelEditBtn.style.display = 'none';
     submitBtn.textContent = 'Submit Feedback';
-    
-    showAlert('Feedback submitted successfully!', 'success');
+    showAlert('Success!', 'success');
     await fetchFeedbacks();
-    
+
   } catch (error) {
-    console.error('Submission error:', error);
-    showAlert(error.message || 'Failed to submit feedback', 'danger');
+    showAlert(error.message.includes('<!DOCTYPE') ? 'Update failed' : error.message, 'danger');
   } finally {
     submitBtn.disabled = false;
   }
@@ -494,26 +492,21 @@ async function editFeedback(id) {
   }
 }
 
+// Delete feedback
 async function deleteFeedback(id) {
   try {
-    const res = await fetch(`${API_BASE_URL}/feedback/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/feedback/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUserId }) // assuming this is required
+      body: JSON.stringify({ userId: currentUserId })
     });
 
-    if (!res.ok) throw new Error('Failed to delete');
-showAlert('Feedback deleted successfully!', 'success');
-await fetchFeedbacks(); // Refresh the list
-
-const modalElement = document.getElementById('feedbackModal');
-const modalInstance = bootstrap.Modal.getInstance(modalElement);
-if (modalInstance) {
-  modalInstance.hide();
-}
+    if (!response.ok) throw new Error('Delete failed');
+    
+    showAlert('Deleted!', 'success');
+    await fetchFeedbacks();
   } catch (error) {
-    console.error('Delete error:', error);
-    showAlert(error.message || 'Failed to delete feedback', 'danger');
+    showAlert(error.message, 'danger');
   }
 }
 
