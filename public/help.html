@@ -227,6 +227,10 @@ body, html {
   </div>
 </form>
 
+  <!-- Add this alert container -->
+  <div id="feedbackResponse" class="alert d-none" role="alert"></div>
+</div>
+
         <!-- Feedback List -->
         <div class="card">
           <div class="card-header bg-light d-flex justify-content-between align-items-center">
@@ -324,48 +328,40 @@ function setupEventListeners() {
 }
 
 async function handleFormSubmit(e) {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById("submitBtn");
-      
-      try {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `
-          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-          ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
-        `;
+  e.preventDefault();
+  
+  try {
+    // Disable button and show spinner
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
+    `;
 
-        const formData = {
-          email: document.getElementById("email").value.trim(),
-          message: document.getElementById("message").value.trim(),
-          userId: currentUserId // Always include
-        };
-        
-        //determine API endpoint
-        const url = currentFeedbackId 
-        ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
-        : `${API_BASE_URL}/feedback`;
-        
-        const response = await fetch(url, {
-          method: currentFeedbackId ? 'PUT' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || 'Submission failed');
-        }
+    const formData = {
+      email: document.getElementById("email").value.trim(),
+      message: document.getElementById("message").value.trim(),
+      userId: currentUserId
+    };
 
-        showAlert('Feedback submitted successfully!', 'success');
-        feedbackForm.reset();
+    const response = await fetch(currentFeedbackId 
+      ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
+      : `${API_BASE_URL}/feedback`, {
+      method: currentFeedbackId ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
 
-currentFeedbackId = null;
-    document.getElementById("cancelEditBtn").style.display = 'none';
+    if (!response.ok) throw new Error(await response.text());
+
+    // Reset form state
+    feedbackForm.reset();
+    currentFeedbackId = null;
+    if (cancelEditBtn) cancelEditBtn.style.display = 'none';
     submitBtn.textContent = 'Submit Feedback';
     
     showAlert('Feedback submitted successfully!', 'success');
-    await fetchFeedbacks(); // Refresh the list
+    await fetchFeedbacks();
     
   } catch (error) {
     console.error('Submission error:', error);
@@ -545,17 +541,16 @@ function showAlert(message, type) {
 
 function setupFormValidation() {
   feedbackForm.addEventListener('input', () => {
-    const isValid = feedbackForm.checkValidity();
-    document.getElementById("submitBtn").disabled = !isValid;
+    document.getElementById("submitBtn").disabled = !feedbackForm.checkValidity();
   });
-}
-
-  feedbackForm.addEventListener('submit', (e) => {
+  
+  feedbackForm.addEventListener('submit', function(e) {
     if (!feedbackForm.checkValidity()) {
       e.preventDefault();
       showAlert('Please fill all fields correctly', 'warning');
     }
   });
+}
 
 // FAQ Loading Function
 async function loadFAQs() {
