@@ -114,3 +114,6 @@ app.get(/(.*)/, (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
+const ticketRoutes = require('./routes/ticket.routes');
+app.use('/api/tickets', ticketRoutes); // 👈 MUST be mounted here

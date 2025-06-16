@@ -129,6 +129,8 @@ router.put('/feedback/:id', async (req, res) => {
     const { id } = req.params;
     const { email, message, userId } = req.body;
 
+    console.log("PUT Request for feedback ID:", id, "by user:", userId);
+
     if (!userId) return res.status(400).json({ error: "User ID required" });
 
     const updated = await Feedback.findOneAndUpdate(
@@ -140,9 +142,9 @@ router.put('/feedback/:id', async (req, res) => {
     if (!updated) return res.status(404).json({ error: "Feedback not found or unauthorized" });
     res.json(updated);
   } catch (error) {
+    console.error("PUT /feedback/:id error:", error);
     res.status(500).json({ error: error.message });
   }
 });
-
 
 export default router;
