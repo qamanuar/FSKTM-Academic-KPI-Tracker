@@ -85,7 +85,7 @@ function deleteStudentInfo(studentId, studentName) {
   )
     return;
 
-  fetch(`/lecturer-dashboard/student/${studentId}?_method=DELETE`, {
+  fetch(`/student/${studentId}?_method=DELETE`, {
     method: "POST", // because method-override requires POST with `_method=DELETE`
   })
     .then((res) => {
@@ -183,7 +183,7 @@ async function submitVerificationForm(studentId) {
   const comment = commentInput ? commentInput.value : "";
 
   try {
-    const res = await fetch(`/lecturer-dashboard/student/${studentId}/verify`, {
+    const res = await fetch(`/student/${studentId}/verify`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ verificationStatus, comment }),
