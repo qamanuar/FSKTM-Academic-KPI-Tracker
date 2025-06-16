@@ -1,7 +1,7 @@
 
 .form-popup {
   position: fixed;
-  top: 10;
+  top: 20px;
   left: 0;
   width: 100vw;
   height: 100vh;
@@ -24,7 +24,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
   .FormContainer .header h2 {
     font-weight: 500;

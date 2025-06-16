@@ -1,8 +1,18 @@
 
-<form action="/lecturer-dashboard/student/uploadNew" method="POST" enctype="multipart/form-data">
+<form action="/lecturer-dashboard/student/uploadNew" method="POST" enctype="multipart/form-data" id="newStudentForm">
   
-  <label for="studentName">Student Name</label>
-  <input type="text" id="studentName" name="studentName" value="<%= student.studentName %>" required />
+  
+<input type="hidden" name="advisor" id="advisorIdHidden" />
+
+<label mb-1>Academic Advisor: <span id="advisorNameDisplay"></span></label><br>
+
+<label for="student">Select Student</label>
+<select id="student" name="student" class="form-control" required>
+  <option value="">-- Select Student --</option>
+  <% students.forEach(function(student) { %>
+    <option value="<%= student._id %>"><%= student.id %> - <%= student.name %></option>
+  <% }) %>
+</select>
 
   <label for="studentYear">Student Year</label>
 <select id="studentYear" name="studentYear" required>

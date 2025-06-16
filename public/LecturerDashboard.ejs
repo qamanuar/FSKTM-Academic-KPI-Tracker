@@ -74,13 +74,13 @@
           </ul>
         </li> -->
 
-        <li>
+        <!-- <li>
           <a href = "Student_Dash.html">
             <i class='bx bxs-dashboard' ></i>
             <span class="links_name">Student Dashboard</span>
           </a>
           <span class="tooltip">KPI Dashboard</span>
-        </li>
+        </li> -->
         <li>
           <a href = "notification.html">
             <i class='bx bxs-bell'></i>
@@ -155,7 +155,7 @@
             <button class="notAssignedBtn">Not Assigned</button>
             <input class="search" type="text" placeholder="Search">
             <button class="resetBtn">Reset</button>
-            <button class="New newBtn">New Student</button>
+            <button class="New newBtn" id = "newStudentButton">New Student</button>
           </div>                  
           
           <div class="row KPITable">
@@ -314,10 +314,11 @@
     if (welcomeMessage) {
       welcomeMessage.textContent = `Welcome ${userSession.name || "User"}!`;
     }
-    
-    // Set email in form if available
-    if (userSession.email) {
-      document.getElementById("email").value = userSession.email;
+
+    // Set the data-userid attribute on the "New Student" button
+    const newStudentButton = document.getElementById("newStudentButton");
+    if (newStudentButton && userSession._id) {
+      newStudentButton.dataset.userid = userSession._id;
     }
 
     try {
