@@ -313,7 +313,11 @@ document.addEventListener("DOMContentLoaded", () => {
 function setupEventListeners() {
   feedbackForm.addEventListener("submit", handleFormSubmit);
   refreshFeedbackBtn.addEventListener("click", fetchFeedbacks);
-  cancelEditBtn?.addEventListener("click", cancelEdit);
+  
+  if (cancelEditBtn) {
+    cancelEditBtn.addEventListener("click", cancelEdit);
+    cancelEditBtn.style.display = 'none'; // Hide by default
+  }
 }
 
 async function handleFormSubmit(e) {
@@ -452,7 +456,12 @@ async function editFeedback(id) {
     document.getElementById("message").value = fb.message;
 
     document.getElementById("submitBtn").textContent = 'Update Feedback';
-    cancelEditBtn.style.display = 'block';
+
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    if (cancelEditBtn) {
+      cancelEditBtn.style.display = 'block';
+    }
+
     feedbackForm.scrollIntoView({ behavior: 'smooth' });
   } catch (error) {
     showAlert(error.message, 'danger');
