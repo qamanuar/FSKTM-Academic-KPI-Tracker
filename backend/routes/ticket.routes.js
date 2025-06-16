@@ -124,35 +124,25 @@ router.delete('/feedback/:id', async (req, res) => {
   }
 });
 
-// PUT /api/tickets/feedback/:id - Update feedback
 router.put('/feedback/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { email, message, userId } = req.body;
 
-    // Validate required fields
-    if (!userId) {
-      return res.status(400).json({ error: "User ID is required" });
-    }
+    if (!userId) return res.status(400).json({ error: "User ID required" });
 
-    // Find and update only if user owns the feedback
-    const updatedFeedback = await Feedback.findOneAndUpdate(
-      { 
-        _id: id,
-        userId: userId // Security check
-      },
+    const updated = await Feedback.findOneAndUpdate(
+      { _id: id, userId }, // Verify ownership
       { email, message },
-      { new: true } // Return updated document
+      { new: true }
     );
 
-    if (!updatedFeedback) {
-      return res.status(404).json({ error: "Feedback not found or unauthorized" });
-    }
-
-    res.json(updatedFeedback);
+    if (!updated) return res.status(404).json({ error: "Feedback not found or unauthorized" });
+    res.json(updated);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 export default router;
