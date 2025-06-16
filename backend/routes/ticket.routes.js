@@ -124,4 +124,25 @@ router.delete('/feedback/:id', async (req, res) => {
   }
 });
 
+router.put('/feedback/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { email, message, userId } = req.body;
+
+    if (!userId) return res.status(400).json({ error: "User ID required" });
+
+    const updated = await Feedback.findOneAndUpdate(
+      { _id: id, userId }, // Verify ownership
+      { email, message },
+      { new: true }
+    );
+
+    if (!updated) return res.status(404).json({ error: "Feedback not found or unauthorized" });
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 export default router;

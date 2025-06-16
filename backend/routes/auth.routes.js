@@ -7,6 +7,27 @@ import crypto from 'crypto';
 
 const router = express.Router();
 
+
+    // Email verification route
+router.get('/verify/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    console.log("Verifying token:", token); // Debug log
+
+    const user = await User.findOne({ verificationToken: token });
+    if (!user) {
+      return res.status(400).send('Invalid or expired verification link.');
+    }
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+    res.send('Email verified successfully! You can now log in.');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error.');
+  }
+});
+
 // Register new user
 router.post('/register', async (req, res) => {
   console.log("Register payload:", req.body);
@@ -36,7 +57,8 @@ router.post('/register', async (req, res) => {
       role,
       country: country || "-",
       timezone: timezone || "-",
-      registrationNo: "-"
+      registrationNo: "-",
+      verificationToken 
     });
 
     await newUser.save();
