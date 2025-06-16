@@ -16,7 +16,7 @@ document.querySelector(".newBtn").addEventListener("click", function () {
 
 async function openEditForm(studentId = null) {
   try {
-    const url = studentId ? `/student/${studentId}` : `/student/new`;
+    const url = studentId ? `/lecturer-dashboard/student/${studentId}` : `/lecturer-dashboard/student/new`;
     const res = await fetch(url);
     const html = await res.text();
 
@@ -55,6 +55,12 @@ async function openEditForm(studentId = null) {
     });
 
     const form = modal.querySelector("form");
+
+    if (!form) {
+  console.error("Form not found inside modal");
+  return;
+}
+
     form.onsubmit = function (e) {
       const confirmed = confirm("Submit the form?");
       if (!confirmed) {
@@ -68,7 +74,6 @@ async function openEditForm(studentId = null) {
     console.error("Failed to load form:", error);
   }
 }
-
 
 function closeEditForm() {
   modal.style.display = "none";
