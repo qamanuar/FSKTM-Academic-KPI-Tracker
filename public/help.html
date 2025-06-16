@@ -332,38 +332,49 @@ async function handleFormSubmit(e) {
   const submitBtn = document.getElementById("submitBtn");
   
   try {
+    // Show loading state
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${currentFeedbackId ? 'Updating...' : 'Submitting...'}`;
+    submitBtn.innerHTML = `
+      <span class="spinner-border spinner-border-sm"></span>
+      ${currentFeedbackId ? 'Updating...' : 'Submitting...'}
+    `;
 
+    const formData = {
+      email: document.getElementById("email").value.trim(),
+      message: document.getElementById("message").value.trim(),
+      userId: currentUserId // Required for auth
+    };
+
+    const method = currentFeedbackId ? 'PUT' : 'POST';
     const url = currentFeedbackId 
       ? `${API_BASE_URL}/feedback/${currentFeedbackId}`
       : `${API_BASE_URL}/feedback`;
 
     const response = await fetch(url, {
-      method: currentFeedbackId ? 'PUT' : 'POST',
+      method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: document.getElementById("email").value.trim(),
-        message: document.getElementById("message").value.trim(),
-        userId: currentUserId // REQUIRED
-      })
+      body: JSON.stringify(formData)
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => null);
-      throw new Error(error?.message || 'Request failed');
+      const error = await response.text();
+      throw new Error(error.includes('<!DOCTYPE') ? 'Operation failed' : error);
     }
 
-    // Success handling
+    // Reset form on success
     feedbackForm.reset();
     currentFeedbackId = null;
     if (cancelEditBtn) cancelEditBtn.style.display = 'none';
     submitBtn.textContent = 'Submit Feedback';
-    showAlert('Success!', 'success');
+    
+    showAlert(
+      currentFeedbackId ? 'Feedback updated!' : 'Feedback submitted!', 
+      'success'
+    );
     await fetchFeedbacks();
-
+    
   } catch (error) {
-    showAlert(error.message.includes('<!DOCTYPE') ? 'Update failed' : error.message, 'danger');
+    showAlert(error.message, 'danger');
   } finally {
     submitBtn.disabled = false;
   }
@@ -507,6 +518,13 @@ async function deleteFeedback(id) {
     await fetchFeedbacks();
   } catch (error) {
     showAlert(error.message, 'danger');
+  }
+}
+
+// Confirm before deletion
+function confirmDelete(id) {
+  if (confirm("Are you sure you want to delete this feedback?")) {
+    deleteFeedback(id);
   }
 }
 

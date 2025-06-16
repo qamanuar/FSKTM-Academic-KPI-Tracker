@@ -135,33 +135,23 @@ router.put('/feedback/:id', async (req, res) => {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    // Find and verify ownership before updating
-    const feedback = await Feedback.findOne({
-      _id: id,
-      userId: userId
-    });
-
-    if (!feedback) {
-      return res.status(404).json({ 
-        error: "Feedback not found or unauthorized" 
-      });
-    }
-
-    // Update the feedback
-    const updatedFeedback = await Feedback.findByIdAndUpdate(
-      id,
+    // Find and update only if user owns the feedback
+    const updatedFeedback = await Feedback.findOneAndUpdate(
+      { 
+        _id: id,
+        userId: userId // Security check
+      },
       { email, message },
-      { new: true } // Return the updated document
+      { new: true } // Return updated document
     );
 
-    res.json(updatedFeedback);
+    if (!updatedFeedback) {
+      return res.status(404).json({ error: "Feedback not found or unauthorized" });
+    }
 
+    res.json(updatedFeedback);
   } catch (error) {
-    console.error("Update error:", error);
-    res.status(500).json({ 
-      error: "Failed to update feedback",
-      details: error.message 
-    });
+    res.status(500).json({ error: error.message });
   }
 });
 
