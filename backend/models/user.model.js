@@ -13,7 +13,9 @@ const userSchema = new mongoose.Schema({
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // for advisors
   isActive: { type: Boolean, default: true }, // ✅ Soft delete flag
   createdAt: { type: Date, default: Date.now },
-  profilePic: { type: String, default: '' }
+  profilePic: { type: String, default: '' },
+  verificationToken: { type: String },
+  isVerified: { type: Boolean, default: false },
 });
 
 const User = mongoose.model('User', userSchema);

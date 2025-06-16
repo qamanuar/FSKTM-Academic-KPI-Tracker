@@ -172,55 +172,30 @@
     <script src="/js/notification.js"></script>
     <script src="/js/sidebar_script.js"></script>
     <script>
-    window.addEventListener("DOMContentLoaded", async () => {
-      const session = JSON.parse(localStorage.getItem("userSession"));
-      if (!session || !session.id) {
-        alert("No user session found. Please log in.");
-        window.location.href = "General.html";
-        return;
-      }
-
-      try {
-        const res = await fetch(`http://localhost:3000/api/students/${session.id}`);
-        const data = await res.json();
-
-        if (res.ok && data.user) {
-          document.getElementById("username").textContent = data.user.name;
-          window.userId = data.user._id;
-          console.log("✅ User ID detected:", window.userId);
-
-          // ✅ Only now connect to Socket.IO with the actual userId
-          initSocket(window.userId);
-
-          // ✅ Now safe to fetch notifications
-          fetchNotifications();
-        } else {
-          throw new Error(data.message || "User not found");
-        }
-      } catch (err) {
-        console.error("❌ Failed to load user info:", err);
-        alert("Failed to load user info.");
-      }
-    });
-
+  window.addEventListener("DOMContentLoaded", async () => {
     const session = JSON.parse(localStorage.getItem("userSession"));
     if (!session || !session.id) {
       alert("No user session found. Please log in.");
       window.location.href = "General.html";
       return;
     }
+
+    // Set the correct backend URL (localhost vs. deployed)
+    const BASE_URL = window.location.hostname.includes("localhost")
+      ? "http://localhost:3000"
+      : "https://your-render-backend.onrender.com"; // ⬅️ Replace with your actual Render backend URL
+
     try {
-      const res = await fetch(`http://localhost:3000/api/students/${session.id}`);
+      const res = await fetch(`${BASE_URL}/api/students/${session.id}`);
       const data = await res.json();
 
       if (res.ok && data.user) {
         document.getElementById("username").textContent = data.user.name;
-
-        // ✅ SET window.userId to MongoDB _id (not matrix id)
         window.userId = data.user._id;
         console.log("✅ User ID detected:", window.userId);
 
-        // ✅ Now it's safe to fetch notifications
+        // Socket connection and notifications start
+        initSocket(window.userId);
         fetchNotifications();
       } else {
         throw new Error(data.message || "User not found");
@@ -228,7 +203,14 @@
     } catch (err) {
       console.error("❌ Failed to load user info:", err);
       alert("Failed to load user info.");
-      }
-    </script>
+    }
+
+    // Ask for push notification permission on first load
+    if (Notification.permission !== "granted") {
+      await Notification.requestPermission();
+    }
+  });
+</script>
+
   </body>
 </html>

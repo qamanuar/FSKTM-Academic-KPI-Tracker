@@ -183,7 +183,7 @@ async function submitVerificationForm(studentId) {
   const comment = commentInput ? commentInput.value : "";
 
   try {
-    const res = await fetch(`/lecturer-dashboard/student/${studentId}/verify`, {
+    const res = await fetch(`/student/${studentId}/verify`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ verificationStatus, comment }),

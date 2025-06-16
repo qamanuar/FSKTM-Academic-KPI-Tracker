@@ -49,6 +49,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get('/student/new', (req, res) => {
+  res.render('partials/newStudent', {
+    student: {
+      _id: "", // leave blank so the form action can be replaced
+      studentName: "",
+      studentYear: "",
+      semester: "",
+      session: "",
+      kpiType: "KPI Type",
+      assignerComment: "",
+      verificationStatus: "Not Verified",
+      evidenceUrl: null
+    }
+  });
+});
+
 // Show a specific student's form
 router.get("/student/:id", async (req, res) => {
   try {
@@ -89,6 +105,31 @@ router.put("/student/:id/upload", upload.single("supportingFile"), async (req, r
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).send("Error uploading file");
+  }
+});
+
+router.post("/student/uploadNew", upload.single("supportingFile"), async (req, res) => {
+  try {
+    const studentData = {
+      ...req.body,
+      status: "Assigned",
+      verificationStatus: "Not Verified",
+      submitted: false,
+    };
+
+    if (req.file) {
+      studentData.supportingFile = "/uploads/" + req.file.filename;
+    }
+
+    const newStudent = new KPIAssignment(studentData);
+    await newStudent.save();
+
+    console.log("New student created:", newStudent._id);
+
+    res.redirect("/lecturer-dashboard"); // redirect after creation, or to newStudent page
+  } catch (err) {
+    console.error("Error creating new student:", err);
+    res.status(500).send("Error creating new student");
   }
 });
 
