@@ -279,14 +279,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Request push notification permission
-if (Notification.permission === "granted") {
-  new Notification(data.title || "🔔 New Notification", {
-    body: data.message || "",
-    icon: "https://cdn-icons-png.flaticon.com/512/1827/1827392.png"
-  });
-}
-
 // Click "All" tab on load
 window.onload = () => {
   const allTab = document.querySelector('.tab-btn[data-type="all"]');

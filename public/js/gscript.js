@@ -1,5 +1,6 @@
+
 // Toggle between Register and Login forms
-function toggleForm(formType) {
+window.toggleForm = function(formType) {
   const registerForm = document.getElementById('registerForm');
   const loginForm = document.getElementById('loginForm');
   const registerTab = document.getElementById('registerTab');
@@ -16,7 +17,7 @@ function toggleForm(formType) {
     registerTab.classList.remove('active');
     loginTab.classList.add('active');
   }
-}
+};
 
 // Register user by sending data to backend API
 async function handleRegister(event) {
@@ -32,26 +33,36 @@ async function handleRegister(event) {
     return;
   }
 
+  let role = '';
+  if (/^L\d{8}$/.test(id)) {
+    role = 'advisor';
+  } else if (/^2\d{7}$/.test(id)) {
+    role = 'student';
+  } else {
+    alert('Invalid ID format. Use 2XXXXXXX for students or LXXXXXXXX for advisors.');
+    return;
+  }
+
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const country = await fetch('https://ipapi.co/json/')
-  .then(res => res.json())
-  .then(data => data.country_name)
-  .catch(() => '-');
+    .then(res => res.json())
+    .then(data => data.country_name)
+    .catch(() => '-');
 
   try {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, id, email, password, country, timezone }),
+      body: JSON.stringify({ name, id, email, password, country, timezone, role }),
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      alert(`Registered successfully as ${name}`);
+      alert(`Registered successfully. Please check your email to verify your account.`);
       event.target.reset();
-      toggleForm('login'); // Switch to login form after successful registration
+      toggleForm('login');
     } else {
       alert(`Registration failed: ${data.message}`);
     }
@@ -61,18 +72,16 @@ async function handleRegister(event) {
   }
 }
 
-// Login user by sending data to backend API
-async function handleLogin(event) {
-  event.preventDefault();
-
-  const id = document.getElementById('loginId').value.trim();
-  const password = document.getElementById('loginPassword').value;
+// Trigger forgot password flow
+async function handleForgotPassword() {
+  const email = prompt("Enter your registered email address:");
+  if (!email) return;
 
   try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, password }),
+    const response = await fetch("/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
     });
 
     const data = await response.json();
@@ -93,7 +102,7 @@ async function handleLogin(event) {
     else if (response.status === 403 && data.message === "Account is deactivated") {
       const recover = confirm("This account is deactivated. Do you want to recover it?");
       if (recover) {
-        const recoverRes = await fetch(`/api/auth/recover/${id}`, {
+        const recoverRes = await fetch(`/api/auth/recover/${user._id}`, {
           method: "PUT",
         });
 
@@ -112,36 +121,7 @@ async function handleLogin(event) {
       alert(`Login failed: ${data.message}`);
     }
   } catch (error) {
-    alert('An error occurred. Please try again.');
-    console.error('Login error:', error);
+    alert("An error occurred. Please try again.");
+    console.error("Forgot Password Error:", error);
   }
 }
-
-// Session timeout logic (logs out user after inactivity)
-let timeoutDuration = 5 * 60 * 1000; // 5 minutes
-let sessionTimer;
-
-function resetSessionTimer() {
-  clearTimeout(sessionTimer);
-  sessionTimer = setTimeout(logoutUser, timeoutDuration);
-}
-
-function startSessionTracking() {
-  document.addEventListener("mousemove", resetSessionTimer);
-  document.addEventListener("keydown", resetSessionTimer);
-  resetSessionTimer();
-}
-
-function logoutUser() {
-  alert("You have been logged out due to inactivity.");
-  localStorage.removeItem("userSession");
-  window.location.reload();
-}
-
-// Start session tracking if user session exists on page load
-window.onload = function () {
-  const user = localStorage.getItem("userSession");
-  if (user) {
-    startSessionTracking();
-  }
-};

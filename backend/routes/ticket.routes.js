@@ -43,14 +43,12 @@ router.get('/faqs', async (req, res) => {
 });
 
 // ─── FEEDBACK ROUTES ─────────────────────────────────────
-router.post('/feedback', async (req, res) => {
+router.post('/feedback', async (req, res) => { // ← Added async here
   try {
-    const { email, message, userId } = req.body;
+    const { email, message, userId} = req.body;
 
-    // Log the incoming data
     console.log("📥 POST /feedback body:", req.body);
 
-    // Validation
     if (!email || !message) {
       return res.status(400).json({ error: "Email and message are required" });
     }
@@ -58,15 +56,14 @@ router.post('/feedback', async (req, res) => {
     const feedback = new Feedback({
       email,
       message,
-      userId: userId || null // Optional
+      userId
     });
 
-    await feedback.save();
+    await feedback.save(); // ← Now properly awaited
     res.status(201).json(feedback);
 
   } catch (error) {
-    // ADD THIS LOG
-    console.error("❌ Error in POST /feedback:", error); 
+    console.error("❌ Error in POST /feedback:", error);
     res.status(500).json({ 
       error: "Failed to submit feedback",
       details: error.message 
@@ -96,34 +93,15 @@ router.get('/feedback/:id', async (req, res) => {
   }
 });
 
-router.put('/feedback/:id', async (req, res) => {
-  try {
-    const { userId } = req.body;
-    const feedback = await Feedback.findById(req.params.id);
-    
-    if (!feedback) {
-      return res.status(404).json({ error: "Feedback not found" });
-    }
-    
-    // Verify ownership
-    if (feedback.userId.toString() !== userId) {
-      return res.status(403).json({ error: "Unauthorized to edit this feedback" });
-    }
-
-    const updated = await Feedback.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(updated);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update feedback" });
-  }
-});
-
+//delete
 router.delete('/feedback/:id', async (req, res) => {
   try {
     const { userId } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
     const feedback = await Feedback.findById(req.params.id);
     
     if (!feedback) {
@@ -138,7 +116,11 @@ router.delete('/feedback/:id', async (req, res) => {
     await Feedback.findByIdAndDelete(req.params.id);
     res.json({ message: 'Feedback deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete feedback" });
+    console.error("Delete error:", error);
+    res.status(500).json({ 
+      error: "Failed to delete feedback",
+      details: error.message 
+    });
   }
 });
 

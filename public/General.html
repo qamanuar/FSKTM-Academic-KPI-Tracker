@@ -21,8 +21,7 @@
       <input type="text" id="name" placeholder="Enter your name" required />
 
       <label for="id">Id <span>*</span></label>
-      <!-- Use type="text" instead of type="id" -->
-      <input type="text" id="id" placeholder="Enter your id" required />
+      <input type="text" id="id" placeholder="Enter your ID (e.g., 2XXXXXXX or LXXXXXXXX)" required />
 
       <label for="email">Email <span>*</span></label>
       <input type="email" id="email" placeholder="Enter your email" required />
@@ -35,18 +34,22 @@
     </form>
 
     <!-- Login Form -->
-    <form id="loginForm" class="form-content hidden" onsubmit="handleLogin(event)">
+    <form id="loginForm" class="form-content hidden">
       <label for="loginId">Id <span>*</span></label>
-      <!-- Use type="text" here as well -->
-      <input type="text" id="loginId" placeholder="Enter your id" required />
+      <input type="text" id="loginId" placeholder="Enter your ID" required />
 
       <label for="loginPassword">Password <span>*</span></label>
       <input type="password" id="loginPassword" placeholder="Enter your password" required />
 
       <button type="submit">Login</button>
+
+      <p style="text-align: center; margin-top: 10px;">
+        <a href="#" onclick="handleForgotPassword()">Forgot Password?</a>
+      </p>
     </form>
   </div>
 
   <script src="/js/gscript.js"></script>
+  <script src="/js/login.js"></script>
 </body>
 </html>

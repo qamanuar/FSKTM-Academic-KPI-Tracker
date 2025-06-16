@@ -21,6 +21,10 @@ export const uploadKPIEvidence = async (req, res) => {
       status: 'pending'
     }, { new: true });
 
+    if (!updatedKPI) {
+      return res.status(404).json({ error: "KPI not found" });
+    }
+
     res.json({
       message: 'Evidence uploaded successfully',
       kpi: updatedKPI

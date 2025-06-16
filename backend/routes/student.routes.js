@@ -4,6 +4,7 @@ import multer from "multer";
 import User from '../models/user.model.js'; // This represents both students and advisors
 import Task from "../models/task.model.js";
 import GPARecord from "../models/gpa.model.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -23,53 +24,56 @@ const upload = multer({ storage: storage });
  * GET student profile
  */
 // GET /api/students/:id
-router.get('/:id', async (req, res) => {
+// GET /api/students/:id
+router.get("/:id", async (req, res) => {
   try {
-    let user = await User.findById(req.params.id);
+    let user;
+
+    // If the provided ID is a valid MongoDB ObjectId, try finding by _id
+    if (mongoose.isValidObjectId(req.params.id)) {
+      user = await User.findById(req.params.id);
+    }
+
+    // If not found, or it's not a valid ObjectId, fall back to registration number (id)
     if (!user) {
-      // fallback to matrix ID if not a valid ObjectId
       user = await User.findOne({ id: req.params.id });
     }
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    res.json({ user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-
-
-// Update student profile
-router.put("/:id", async (req, res) => {
-  try {
-    
-    let user = await User.findById(req.params.id);
-if (!user) {
-  user = await User.findOneAndUpdate(
-    { id: req.params.id },
-    req.body,
-    { new: true }
-  );
-} else {
-  user = await User.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
-}
-
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json({ message: "Profile updated", user }); // ✅ Send back user
-  
+    res.json({ user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+// Update student profile
+router.put("/:id", async (req, res) => {
+  try {
+    let user;
+
+    // If the ID is a valid MongoDB ObjectId
+    if (mongoose.isValidObjectId(req.params.id)) {
+      user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    }
+
+    // If not found, or ID is not an ObjectId, fall back to registration number (id)
+    if (!user) {
+      user = await User.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
+    }
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ message: "Profile updated", user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 /**
  * POST GPA record (with PDF upload)

@@ -22,6 +22,10 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use(express.json()); // ← Must have for JSON handling
+app.post('/api/feedback', (req, res) => {
+  res.json({ success: true }); 
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
 
