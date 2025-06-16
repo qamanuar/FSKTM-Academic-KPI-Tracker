@@ -124,4 +124,45 @@ router.delete('/feedback/:id', async (req, res) => {
   }
 });
 
+// PUT /api/tickets/feedback/:id - Update feedback
+router.put('/feedback/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { email, message, userId } = req.body;
+
+    // Validate required fields
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    // Find and verify ownership before updating
+    const feedback = await Feedback.findOne({
+      _id: id,
+      userId: userId
+    });
+
+    if (!feedback) {
+      return res.status(404).json({ 
+        error: "Feedback not found or unauthorized" 
+      });
+    }
+
+    // Update the feedback
+    const updatedFeedback = await Feedback.findByIdAndUpdate(
+      id,
+      { email, message },
+      { new: true } // Return the updated document
+    );
+
+    res.json(updatedFeedback);
+
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ 
+      error: "Failed to update feedback",
+      details: error.message 
+    });
+  }
+});
+
 export default router;
