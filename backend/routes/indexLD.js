@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import multer from "multer";
 import KPIAssignment from "../models/KPI_Assignment.js";  // note the .js extension
+import User from "../models/user.model.js";
 
 const router = express.Router();
 
@@ -110,8 +111,21 @@ router.put("/student/:id/upload", upload.single("supportingFile"), async (req, r
 
 router.post("/student/uploadNew", upload.single("supportingFile"), async (req, res) => {
   try {
+    const { student, studentYear, kpiType, semester, session, assignerComment } = req.body;
+
+    const studentUser = await User.findOne({ id: student });
+    if (!studentUser) {
+      return res.status(404).send("Student user not found");
+    }
+
     const studentData = {
-      ...req.body,
+      student: studentUser._id,
+      studentName: studentUser.name,
+      studentYear, // Or however you determine year
+      semester,
+      session,
+      kpiType,
+      assignerComment,
       status: "Assigned",
       verificationStatus: "Not Verified",
       submitted: false,
@@ -124,9 +138,8 @@ router.post("/student/uploadNew", upload.single("supportingFile"), async (req, r
     const newStudent = new KPIAssignment(studentData);
     await newStudent.save();
 
-    console.log("New student created:", newStudent._id);
-
-    res.redirect("/lecturer-dashboard"); // redirect after creation, or to newStudent page
+    console.log("New KPI assignment created:", newStudent._id);
+    res.redirect("/lecturer-dashboard");
   } catch (err) {
     console.error("Error creating new student:", err);
     res.status(500).send("Error creating new student");
@@ -166,6 +179,7 @@ router.delete("/student/:id", async (req, res) => {
   }
 });
 
+
 // Submit verification
 router.put("/student/:id/verify", async (req, res) => {
   try {
@@ -192,4 +206,4 @@ router.put("/student/:id/verify", async (req, res) => {
   }
 });
 
-export default router;
+export default router;
