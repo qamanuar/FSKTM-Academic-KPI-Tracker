@@ -85,7 +85,7 @@ function deleteStudentInfo(studentId, studentName) {
   )
     return;
 
-  fetch(`/student/${studentId}?_method=DELETE`, {
+  fetch(`/lecturer-dashboard/student/${studentId}?_method=DELETE`, {
     method: "POST", // because method-override requires POST with `_method=DELETE`
   })
     .then((res) => {

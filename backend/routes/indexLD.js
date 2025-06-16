@@ -65,7 +65,6 @@ router.get('/student/new', (req, res) => {
   });
 });
 
-
 // Show a specific student's form
 router.get("/student/:id", async (req, res) => {
   try {
@@ -127,7 +126,7 @@ router.post("/student/uploadNew", upload.single("supportingFile"), async (req, r
 
     console.log("New student created:", newStudent._id);
 
-    res.redirect("/"); // redirect after creation, or to newStudent page
+    res.redirect("/lecturer-dashboard"); // redirect after creation, or to newStudent page
   } catch (err) {
     console.error("Error creating new student:", err);
     res.status(500).send("Error creating new student");
