@@ -1,10 +1,16 @@
 import KPI from '../models/kpi.model.js';
 import GPA from '../models/gpa.model.js';
 import Task from '../models/task.model.js';
+import KPIAssignment from '../models/KPI_Assignment.js';
+import User from "../models/user.model.js";
 
 export const getStudentKPIs = async (req, res) => {
   try {
-    const kpis = await KPI.find({ student: req.params.studentId });
+    const studentId = req.params.studentId;
+    const user = await User.findById(studentId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const kpis = await KPIAssignment.find({ studentName: user.name });
     res.json(kpis);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -13,13 +19,19 @@ export const getStudentKPIs = async (req, res) => {
 
 export const uploadKPIEvidence = async (req, res) => {
   try {
-    const { remarks } = req.body;
     const documentPath = req.file ? req.file.path : '';
+    const { remarks } = req.body;
 
-    const updatedKPI = await KPI.findByIdAndUpdate(req.params.kpiId, {
-      document: documentPath,
-      status: 'pending'
-    }, { new: true });
+    const updatedKPI = await KPIAssignment.findByIdAndUpdate(
+      req.params.kpiId,
+      {
+        supportingFile: documentPath,
+        assignerComment: remarks,
+        submitted: true,
+        verificationStatus: 'Not Verified'
+      },
+      { new: true }
+    );
 
     if (!updatedKPI) {
       return res.status(404).json({ error: "KPI not found" });
