@@ -50,25 +50,25 @@ try {
     tbody.innerHTML = "";
 
     kpis.forEach(kpi => {
-      let statusClass = "warning";
-      if (kpi.status === "approved" || kpi.status === "accepted") statusClass = "success";
-      else if (kpi.status === "rejected") statusClass = "danger";
+  let statusClass = "warning";
+  if (kpi.verificationStatus === "Passed") statusClass = "success";
+  else if (kpi.verificationStatus === "Rejected") statusClass = "danger";
 
-      tbody.innerHTML += `
-        <tr>
-          <td>${kpi.title || "-"}</td>
-          <td>${kpi.dueDate ? new Date(kpi.dueDate).toISOString().slice(0,10) : "-"}</td>
-          <td><span class="badge bg-${statusClass}">${kpi.status || "Pending"}</span></td>
-          <td>
-            ${kpi.document ? 
-              `<button class="btn btn-sm btn-outline-secondary" disabled>Uploaded</button>` :
-              `<button class="btn btn-sm btn-outline-primary upload-btn" data-kpi-id="${kpi._id}" data-bs-toggle="modal" data-bs-target="#submitModal">Upload</button>`
-            }
-          </td>
-                    <td>${kpi.assignerComment ? kpi.assignerComment : '<span class="text-muted">No comment</span>'}</td>
-        </tr>
-      `;
-    });
+  tbody.innerHTML += `
+    <tr>
+      <td>${kpi.kpiType || "-"}</td>
+      <td>${kpi.semester || "-"}</td>
+      <td><span class="badge bg-${statusClass}">${kpi.verificationStatus || "Pending"}</span></td>
+      <td>
+        ${kpi.submitted ? 
+          `<button class="btn btn-sm btn-outline-secondary" disabled>Uploaded</button>` :
+          `<button class="btn btn-sm btn-outline-primary upload-btn" data-kpi-id="${kpi._id}" data-bs-toggle="modal" data-bs-target="#submitModal">Upload</button>`
+        }
+      </td>
+      <td>${kpi.assignerComment ? kpi.assignerComment : '<span class="text-muted">No comment</span>'}</td>
+    </tr>
+  `;
+});
 
     // Attach click listeners for upload buttons
     document.querySelectorAll('.upload-btn').forEach(btn => {
