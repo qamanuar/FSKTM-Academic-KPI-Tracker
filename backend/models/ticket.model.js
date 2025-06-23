@@ -19,7 +19,7 @@ const feedbackSchema = new mongoose.Schema({
   },
   userId: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User'  // Links to User model if you have one
+    ref: 'User' 
   },
   
   } , { timestamps: true});

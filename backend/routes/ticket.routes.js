@@ -32,7 +32,7 @@ const insertPredefinedFaqs = async () => {
 insertPredefinedFaqs();
 
 
-// ─── FAQ ROUTES ─────────────────────────────────────
+// FAQ
 router.get('/faqs', async (req, res) => {
   try {
     const faqs = await FAQ.find();
@@ -42,8 +42,8 @@ router.get('/faqs', async (req, res) => {
   }
 });
 
-// ─── FEEDBACK ROUTES ─────────────────────────────────────
-router.post('/feedback', async (req, res) => { // ← Added async here
+// FEEDBACK
+router.post('/feedback', async (req, res) => {
   try {
     const { email, message, userId} = req.body;
 
@@ -59,7 +59,7 @@ router.post('/feedback', async (req, res) => { // ← Added async here
       userId
     });
 
-    await feedback.save(); // ← Now properly awaited
+    await feedback.save(); 
     res.status(201).json(feedback);
 
   } catch (error) {
@@ -71,10 +71,10 @@ router.post('/feedback', async (req, res) => { // ← Added async here
   }
 });
 
-// GET /api/tickets/feedback (Add this route)
+// GET /api/tickets/feedback 
 router.get('/feedback', async (req, res) => {
   try {
-    const feedbacks = await Feedback.find().sort({ createdAt: -1 }); // Newest first
+    const feedbacks = await Feedback.find().sort({ createdAt: -1 }); 
     res.json(feedbacks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch feedback" });
@@ -134,7 +134,7 @@ router.put('/feedback/:id', async (req, res) => {
     if (!userId) return res.status(400).json({ error: "User ID required" });
 
     const updated = await Feedback.findOneAndUpdate(
-      { _id: id, userId }, // Verify ownership
+      { _id: id, userId }, 
       { email, message },
       { new: true }
     );

@@ -13,7 +13,7 @@ import ticketRoutes from './routes/ticket.routes.js';
 
 dotenv.config();
 
-const app = express(); // ✅ Moved to the top after imports
+const app = express();
 const PORT = process.env.PORT || 3000;
 const connection = process.env.MONGO_URI;
 
