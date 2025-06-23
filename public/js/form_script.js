@@ -103,13 +103,12 @@ async function openEditForm(
       }
     }
 
-    // Set advisor Name for display (visible input: id="advisorNameDisplay")
     if (advisorNameToDisplay) {
       const displayAdvisorSpan = formContainer.querySelector(
         "#advisorNameDisplay"
       );
       if (displayAdvisorSpan) {
-        displayAdvisorSpan.textContent = advisorNameToDisplay; // Use textContent for spans/labels
+        displayAdvisorSpan.textContent = advisorNameToDisplay;
         console.log(
           "Displayed advisor name set to:",
           displayAdvisorSpan.textContent
@@ -121,7 +120,6 @@ async function openEditForm(
       }
     }
 
-    // Populate dropdown if exists (this logic is fine)
     const dropdown = modal.querySelector("#student");
     if (dropdown) {
       dropdown.innerHTML = '<option value="">-- Select Student --</option>';
@@ -161,9 +159,6 @@ function handleClose() {
   }
 }
 
-/**
- * Set up file input label to show selected file name.
- */
 function setupFileInputLabel() {
   const fileInput = modal.querySelector("#fileUpload");
   const fileLabel = modal.querySelector("#custom-file-label");
@@ -189,11 +184,10 @@ function setupFormSubmission() {
     console.error("Form not found inside modal");
     return;
   }
-  
+
   let isSubmitting = false;
 
   form.onsubmit = async function (e) {
-
     if (isSubmitting) return;
 
     e.preventDefault();
@@ -201,37 +195,44 @@ function setupFormSubmission() {
     const confirmed = confirm("Submit the form?");
     if (!confirmed) return;
 
+    const studentIdInput = form.querySelector("input[name='studentId']");
+    const isEditting = !!studentIdInput?.value;
+    console.log("Editting?: ", isEditting);
+
     const sessionSelect = form.querySelector("#session");
     const advisorIdInput = form.querySelector("#advisorIdHidden");
-
-    if (!sessionSelect || !advisorIdInput) {
-      alert("Missing session or advisor info.");
-      return;
-    }
-
-    const selectedSession = sessionSelect.value;
-    const advisorId = advisorIdInput.value;
+    const selectedSession = sessionSelect?.value;
+    const advisorId = advisorIdInput?.value;
 
     try {
-      const tableRows = document.querySelectorAll(".KPITable tbody tr");
-      let studentsInSession = 0;
+      if (!isEditting) {
+        if (!sessionSelect || !advisorIdInput) {
+          alert("Missing session or advisor info.");
+          return;
+        }
 
-      tableRows.forEach((row) => {
-        const sessionCell = row.querySelector(".session");
-        if (
-          sessionCell && sessionCell.textContent.trim() === selectedSession
-        )
-        studentsInSession++;
-      })
+        const tableRows = document.querySelectorAll(".KPITable tbody tr");
+        let studentsInSession = 0;
 
-      if (studentsInSession >= 5) {
-        alert(
-          `You can only add up to 5 students for session ${selectedSession}.`
+        tableRows.forEach((row) => {
+          const sessionCell = row.querySelector(".session");
+          if (sessionCell && sessionCell.textContent.trim() === selectedSession)
+            studentsInSession++;
+        });
+
+        if (studentsInSession >= 5) {
+          alert(
+            `You can only add up to 5 students for session ${selectedSession}.`
+          );
+          return;
+        }
+
+        console.log(
+          `Filtered students for session ${selectedSession}:`,
+          studentsInSession
         );
-        return;
       }
 
-      console.log(`Filtered students for session ${selectedSession}:`, studentsInSession);
       console.log("Selected Session:", selectedSession);
       console.log("Advisor ID:", advisorId);
 
@@ -244,6 +245,7 @@ function setupFormSubmission() {
     }
   };
 }
+
 
 function closeEditForm() {
   if (modal) modal.style.display = "none";

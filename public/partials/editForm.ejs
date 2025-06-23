@@ -1,15 +1,19 @@
-<form action="/lecturer-dashboard/student/<%= student._id %>/upload?_method=PUT" method="POST" enctype="multipart/form-data">
-  <label class="studentName" for="studentName"><%= student.studentName %></label>
+<form action="/lecturer-dashboard/student/<%= student._id %>/upload?_method=PUT" method="POST"
+  enctype="multipart/form-data">
+  <label class="studentName" for="studentName">
+    <%= student.studentName %>
+  </label>
+  <input type="hidden" name="studentId" value="<%= student._id %>" />
   <label for="kpiType">KPI Type</label>
   <select id="kpiType" name="kpiType" required>
-    <option value="GPA" <%= student.kpiType === 'GPA' ? 'selected' : '' %>>GPA</option>
-    <option value="Attendance Percentage" <%= student.kpiType === 'Attendance Percentage' ? 'selected' : '' %>>Attendance Percentage</option>
-    <option value="Event Engagement" <%= student.kpiType === 'Event Engagement' ? 'selected' : '' %>>Event Engagement</option>
+    <option value="GPA" <%=student.kpiType==='GPA' ? 'selected' : '' %>>GPA</option>
+    <option value="Attendance Percentage" <%=student.kpiType==='Attendance Percentage' ? 'selected' : '' %>>Attendance
+      Percentage</option>
+    <option value="Event Engagement" <%=student.kpiType==='Event Engagement' ? 'selected' : '' %>>Event Engagement
+    </option>
   </select>
-  <label for="fileUpload" 
-       id="custom-file-label" 
-       class="file-label" 
-       data-filename="<%= student.supportingFile ? student.supportingFile.split('/').pop() : '' %>">
+  <label for="fileUpload" id="custom-file-label" class="file-label"
+    data-filename="<%= student.supportingFile ? student.supportingFile.split('/').pop() : '' %>">
     Add Supporting File (PDF/DOC)
   </label>
   <input type="file" class="form-control" id="fileUpload" name="supportingFile" />
@@ -17,7 +21,7 @@
   <label for="assignerComment">Comment</label>
   <textarea name="assignerComment" rows="5" placeholder="Comment..."><%= student.assignerComment || '' %></textarea>
 
-  <button type="submit" id="submit">Submit</button>
+  <button type="submit" id="submitBtn">Submit</button>
 </form>
 
 <link rel="stylesheet" href="/css/formStyles.css">
