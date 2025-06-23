@@ -183,7 +183,7 @@ async function submitVerificationForm(studentId) {
   const comment = commentInput ? commentInput.value : "";
 
   try {
-    const res = await fetch(`/student/${studentId}/verify`, {
+    const res = await fetch(`/lecturer-dashboard/student/${studentId}/verify`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ verificationStatus, comment }),
@@ -227,10 +227,11 @@ function filterTable() {
         const name = (row.dataset.name || "").toLowerCase();
         const year = (row.dataset.studentyear || "").toLowerCase();
         const kpiType = (row.dataset.kpitype || "").toLowerCase();
+        const session = (row.dataset.session || "").toLowerCase();
 
         const matchesStatus = !statusFilter || status === statusFilter;
-        const matchesDropdown = !dropdownValue || kpiType === dropdownValue || year === dropdownValue;
-        const matchesSearch = !currentSearchQuery || name.includes(currentSearchQuery) || year.includes(currentSearchQuery) || kpiType.includes(currentSearchQuery);
+        const matchesDropdown = !dropdownValue || kpiType === dropdownValue || year === dropdownValue || session === dropdownValue;
+        const matchesSearch = !currentSearchQuery || name.includes(currentSearchQuery) || year.includes(currentSearchQuery) || kpiType.includes(currentSearchQuery) || session.includes(currentSearchQuery);
 
         // A row should be displayed if it matches all active filters (status, dropdown, AND search)
         // OR if there's no search query and it matches status and dropdown.

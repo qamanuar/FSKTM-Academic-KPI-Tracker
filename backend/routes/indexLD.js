@@ -2,8 +2,9 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import multer from "multer";
-import KPIAssignment from "../models/KPI_Assignment.js";  // note the .js extension
+import KPIAssignment from "../models/KPI_Assignment.js";
 import User from "../models/user.model.js";
+// import { notifyUser } from "../utils/notify.js";
 
 const router = express.Router();
 
@@ -28,8 +29,7 @@ const upload = multer({
 // Show all students and those pending verification
 router.get("/", async (req, res) => {
   try {
-
-    console.log("Succesfully fetch data...")
+    console.log("Succesfully fetch data...");
     const students = await KPIAssignment.find();
 
     const studentsPendingVerification = await KPIAssignment.find({
@@ -50,28 +50,37 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get('/student/new', (req, res) => {
-  res.render('partials/newStudent', {
-    student: {
-      _id: "", // leave blank so the form action can be replaced
-      studentName: "",
-      studentYear: "",
-      semester: "",
-      session: "",
-      kpiType: "KPI Type",
-      assignerComment: "",
-      verificationStatus: "Not Verified",
-      evidenceUrl: null
-    }
-  });
+// render the form for new student entry
+router.get("/student/uploadNew", async (req, res) => {
+  try {
+    const students = await User.find({ role: "student", isActive: true });
+
+    res.render("partials/newStudent", {
+      students, // ← THIS was missing
+      student: {
+        _id: "",
+        studentName: "",
+        studentYear: "",
+        semester: "",
+        session: "",
+        kpiType: "KPI Type",
+        assignerComment: "",
+        verificationStatus: "Not Verified",
+        evidenceUrl: null,
+      },
+    });
+  } catch (err) {
+    console.error("Error loading new student form:", err);
+    res.status(500).send("Error loading form");
+  }
 });
 
 // Show a specific student's form
 router.get("/student/:id", async (req, res) => {
   try {
-    console.log("Succesfully fetch specific data...")
+    console.log("Succesfully fetch specific data...");
     const { id } = req.params;
-    const student = await KPIAssignment.findById(id);
+    const student = await KPIAssignment.findById(id).populate("student");
     if (!student) return res.status(404).send("Student not found");
 
     res.render("partials/editForm", { student });
@@ -81,77 +90,121 @@ router.get("/student/:id", async (req, res) => {
   }
 });
 
-// Upload supporting file and update student data
-router.put("/student/:id/upload", upload.single("supportingFile"), async (req, res) => {
+// GET /lecturer-dashboard/students
+router.get("/students", async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const updateData = {
-      ...req.body,
-      status: "Assigned",
-    };
-
-    if (req.file) {
-      updateData.supportingFile = "/uploads/" + req.file.filename;
-      console.log("File uploaded successfully!");
-    }
-
-    await KPIAssignment.findByIdAndUpdate(id, updateData, {
-      runValidators: true,
-      new: true,
-    });
-
-    console.log("Form updated successfully!");
-    res.redirect("/lecturer-dashboard");
-  } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).send("Error uploading file");
-  }
-});
-
-router.post("/student/uploadNew", upload.single("supportingFile"), async (req, res) => {
-  try {
-    const { student, studentYear, kpiType, semester, session, assignerComment } = req.body;
-
-    const studentUser = await User.findOne({ id: student });
-    if (!studentUser) {
-      return res.status(404).send("Student user not found");
-    }
-
-    const studentData = {
-      student: studentUser._id,
-      studentName: studentUser.name,
-      studentYear, // Or however you determine year
-      semester,
-      session,
-      kpiType,
-      assignerComment,
-      status: "Assigned",
-      verificationStatus: "Not Verified",
-      submitted: false,
-    };
-
-    if (req.file) {
-      studentData.supportingFile = "/uploads/" + req.file.filename;
-    }
-
-    const newStudent = new KPIAssignment(studentData);
-    await newStudent.save();
-
-    console.log("New KPI assignment created:", newStudent._id);
-    res.redirect("/lecturer-dashboard");
+    const students = await User.find({
+      role: "student",
+      isActive: true,
+    }).select("_id id name");
+    res.json(students);
   } catch (err) {
-    console.error("Error creating new student:", err);
-    res.status(500).send("Error creating new student");
+    console.error("Error fetching students:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
+// Upload supporting file and update student data
+router.put(
+  "/student/:id/upload",
+  upload.single("supportingFile"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const updateData = {
+        ...req.body,
+        status: "Assigned",
+      };
+
+      if (req.file) {
+        updateData.supportingFile = "/uploads/" + req.file.filename;
+        console.log("File uploaded successfully!");
+      }
+
+      const updatedKPI = await KPIAssignment.findByIdAndUpdate(id, updateData, {
+        runValidators: true,
+        new: true,
+      }).populate("student");
+
+      // Send notification for KPI assigned
+      // if (updatedKPI && updatedKPI.student) {
+      //   await notifyUser({
+      //     userId: updatedKPI.student._id,
+      //     title: "New KPI Assigned",
+      //     message: "A new KPI has been assigned to you. Please check your dashboard.",
+      //     isAlert: true,
+      //   });
+      // }
+
+      console.log("Form updated successfully!");
+      res.redirect("/lecturer-dashboard");
+    } catch (error) {
+      console.error("Upload error:", error);
+      res.status(500).send("Error uploading file");
+    }
+  }
+);
+
+// create new student kpi
+router.post(
+  "/student/uploadNew",
+  upload.single("supportingFile"),
+  async (req, res) => {
+    try {
+      const { student } = req.body;
+      const advisorId = req.body.advisor;
+
+      if (!student || student === "") {
+        return res.status(400).send("Student is required.");
+      }
+
+      const selectedStudent = await User.findById(student);
+      if (!selectedStudent) {
+        return res.status(404).send("Student not found.");
+      }
+
+      const studentData = {
+        ...req.body,
+        student: selectedStudent._id,
+        studentName: selectedStudent.name,
+        advisor: advisorId,
+        verificationStatus: "Not Verified",
+        status: "Assigned",
+        submitted: false,
+      };
+
+      if (req.file) {
+        studentData.supportingFile = "/uploads/" + req.file.filename;
+      }
+
+      const newStudent = new KPIAssignment(studentData);
+      await newStudent.save();
+
+      // Send notification for KPI assigned
+      // await notifyUser({
+      //   userId: selectedStudent._id,
+      //   title: "New KPI Assigned",
+      //   message: "A new KPI has been assigned to you. Please check your dashboard.",
+      //   isAlert: true,
+      // });
+
+      console.log("New student created:", newStudent._id);
+
+      res.redirect("/lecturer-dashboard");
+    } catch (err) {
+      console.error("Full error creating new student:", err.stack || err);
+      res.status(500).send("Error creating new student");
+    }
+  }
+);
 
 // Delete student KPI data and file
 router.delete("/student/:id", async (req, res) => {
   try {
-    console.log("Succesfully delete data...")
+    console.log("Succesfully delete data...");
     const { id } = req.params;
-    const student = await KPIAssignment.findById(id);
+    const student = await KPIAssignment.findById(id).populate("student");
 
     if (student.supportingFile) {
       const filePath = path.join(process.cwd(), student.supportingFile);
@@ -179,7 +232,6 @@ router.delete("/student/:id", async (req, res) => {
   }
 });
 
-
 // Submit verification
 router.put("/student/:id/verify", async (req, res) => {
   try {
@@ -198,6 +250,27 @@ router.put("/student/:id/verify", async (req, res) => {
       new: true,
     });
 
+    // Send notification depending on verification status
+  //   if (updatedKPI) {
+  //     const userId = updatedKPI.student.toString(); // or the user ID to notify
+
+  //     if (verificationStatus === "Rejected") {
+  //       await notifyUser({
+  //         userId,
+  //         title: "KPI Verification Rejected",
+  //         message: "Your KPI verification was rejected. Please review the comments.",
+  //         isAlert: true,
+  //       });
+  //     } else if (verificationStatus === "Passed") {
+  //       await notifyUser({
+  //         userId,
+  //         title: "KPI Verification Approved",
+  //         message: "Congratulations! Your KPI verification has been approved.",
+  //         isAchievement: true,
+  //       });
+  //   }
+  // }
+
     console.log("Verification submitted!");
     res.json({ message: "Verification submitted successfully" });
   } catch (error) {
@@ -206,4 +279,4 @@ router.put("/student/:id/verify", async (req, res) => {
   }
 });
 
-export default router;
+export default router;

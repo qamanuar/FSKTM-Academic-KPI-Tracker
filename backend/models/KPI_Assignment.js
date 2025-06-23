@@ -1,7 +1,16 @@
 import mongoose from 'mongoose';
 
-
 const KPIAssignmentSchema = new mongoose.Schema({
+  student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  advisor: {
+    type: String,
+    ref: 'User',
+    required: true
+  },
   studentName: {
     type: String,
     required: true
