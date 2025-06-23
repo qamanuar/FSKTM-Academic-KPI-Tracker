@@ -12,13 +12,13 @@ document.querySelectorAll(".edit-btn").forEach((btn) => {
 document.querySelector(".newBtn").addEventListener("click", async () => {
   console.log("New student button clicked.");
 
-  const tableRows = document.querySelectorAll(".KPITable tbody tr");
-  const rowCount = tableRows.length;
+  // const tableRows = document.querySelectorAll(".KPITable tbody tr");
+  // const rowCount = tableRows.length;
 
-  if (rowCount >= 5) {
-    alert("You can only add up to 5 students.");
-    return;
-  }
+  // if (rowCount >= 5) {
+  //   alert("You can only add up to 5 students.");
+  //   return;
+  // }
 
   // --- Retrieve advisor info ---
   const userSessionString = localStorage.getItem("userSession");
@@ -183,29 +183,68 @@ function setupFileInputLabel() {
   });
 }
 
-/**
- * Setup form submission confirmation and modal close.
- */
 function setupFormSubmission() {
   const form = modal.querySelector("form");
   if (!form) {
     console.error("Form not found inside modal");
     return;
   }
+  
+  let isSubmitting = false;
 
-  form.onsubmit = function (e) {
+  form.onsubmit = async function (e) {
+
+    if (isSubmitting) return;
+
+    e.preventDefault();
+
     const confirmed = confirm("Submit the form?");
-    if (!confirmed) {
-      e.preventDefault();
+    if (!confirmed) return;
+
+    const sessionSelect = form.querySelector("#session");
+    const advisorIdInput = form.querySelector("#advisorIdHidden");
+
+    if (!sessionSelect || !advisorIdInput) {
+      alert("Missing session or advisor info.");
       return;
     }
-    closeEditForm();
+
+    const selectedSession = sessionSelect.value;
+    const advisorId = advisorIdInput.value;
+
+    try {
+      const tableRows = document.querySelectorAll(".KPITable tbody tr");
+      let studentsInSession = 0;
+
+      tableRows.forEach((row) => {
+        const sessionCell = row.querySelector(".session");
+        if (
+          sessionCell && sessionCell.textContent.trim() === selectedSession
+        )
+        studentsInSession++;
+      })
+
+      if (studentsInSession >= 5) {
+        alert(
+          `You can only add up to 5 students for session ${selectedSession}.`
+        );
+        return;
+      }
+
+      console.log(`Filtered students for session ${selectedSession}:`, studentsInSession);
+      console.log("Selected Session:", selectedSession);
+      console.log("Advisor ID:", advisorId);
+
+      isSubmitting = true;
+      form.submit();
+      closeEditForm();
+    } catch (err) {
+      console.error("Failed to validate session limit", err.message);
+      alert("Something went wrong while checking session limit.");
+    }
   };
 }
 
-/**
- * Close the modal form.
- */
 function closeEditForm() {
   if (modal) modal.style.display = "none";
 }
