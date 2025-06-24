@@ -8,7 +8,7 @@ import User from "../models/user.model.js";
 
 const router = express.Router();
 
-// Multer storage config
+// Multer config for uploading file
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -26,7 +26,7 @@ const upload = multer({
   },
 });
 
-// Show all students and those pending verification
+// Show all students and the pending verifications
 router.get("/", async (req, res) => {
   try {
     console.log("Succesfully fetch data...");
@@ -75,7 +75,7 @@ router.get("/student/uploadNew", async (req, res) => {
   }
 });
 
-// Show a specific student's form
+// render the form for editting pre-existing student entry
 router.get("/student/:id", async (req, res) => {
   try {
     console.log("Succesfully fetch specific data...");
@@ -122,7 +122,7 @@ router.put(
         console.log("File uploaded successfully!");
       }
 
-      const updatedKPI = await KPIAssignment.findByIdAndUpdate(id, updateData, {
+      await KPIAssignment.findByIdAndUpdate(id, updateData, {
         runValidators: true,
         new: true,
       }).populate("student");
@@ -199,10 +199,9 @@ router.post(
   }
 );
 
-// Delete student KPI data and file
+// Reset student KPI data and file
 router.delete("/student/:id", async (req, res) => {
   try {
-    console.log("Succesfully delete data...");
     const { id } = req.params;
     const student = await KPIAssignment.findById(id).populate("student");
 
@@ -213,16 +212,11 @@ router.delete("/student/:id", async (req, res) => {
         else console.log("File deleted:", filePath);
       });
     }
-
     // Reset fields
-    student.kpiType = "KPI Type";
-    student.status = "Not Assigned";
-    student.supportingFile = null;
-    student.assignerComment = null;
+    student.kpiType = "KPI Type"; student.status = "Not Assigned";
+    student.supportingFile = null; student.assignerComment = null;
     student.verificationStatus = "Not Verified";
-    student.evidenceUrl = null;
-    student.verifierComment = null;
-    student.submitted = false;
+    student.evidenceUrl = null;  student.verifierComment = null; ent.submitted = false;
 
     await student.save();
     res.redirect("/lecturer-dashboard");
@@ -239,10 +233,7 @@ router.put("/student/:id/verify", async (req, res) => {
     const { verificationStatus, comment } = req.body;
 
     const updateData = {
-      ...req.body,
-      verificationStatus,
-      verifierComment: comment,
-      submitted: true,
+      ...req.body,verificationStatus, verifierComment: comment,submitted: true,
     };
 
     await KPIAssignment.findByIdAndUpdate(id, updateData, {
@@ -250,7 +241,7 @@ router.put("/student/:id/verify", async (req, res) => {
       new: true,
     });
 
-    // Send notification depending on verification status
+        // Send notification depending on verification status
   //   if (updatedKPI) {
   //     const userId = updatedKPI.student.toString(); // or the user ID to notify
 
@@ -271,6 +262,7 @@ router.put("/student/:id/verify", async (req, res) => {
   //   }
   // }
 
+
     console.log("Verification submitted!");
     res.json({ message: "Verification submitted successfully" });
   } catch (error) {
@@ -278,5 +270,6 @@ router.put("/student/:id/verify", async (req, res) => {
     res.status(500).send("Error submitting verification");
   }
 });
+
 
 export default router;
