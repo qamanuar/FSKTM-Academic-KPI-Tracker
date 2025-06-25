@@ -30,9 +30,14 @@ const upload = multer({
 router.get("/", async (req, res) => {
   try {
     console.log("Succesfully fetch data...");
-    const students = await KPIAssignment.find();
+    const advisorId = req.query.advisorId;
+    if (!advisorId) return res.status(403).send("Advisor ID missing");
+    const students = await KPIAssignment.find({
+      advisor: advisorId,
+    });
 
     const studentsPendingVerification = await KPIAssignment.find({
+      advisor: advisorId,
       status: "Assigned",
       verificationStatus: "Not Verified",
       kpiType: { $ne: "KPI Type" },
@@ -56,7 +61,7 @@ router.get("/student/uploadNew", async (req, res) => {
     const students = await User.find({ role: "student", isActive: true });
 
     res.render("partials/newStudent", {
-      students, // ← THIS was missing
+      students,
       student: {
         _id: "",
         studentName: "",

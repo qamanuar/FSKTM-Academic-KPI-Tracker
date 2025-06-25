@@ -208,7 +208,6 @@ async function submitVerificationForm(studentId) {
 }
 
 // Filtering by status, reset button and search
-
 const assignedBtn = document.querySelector(".assignedBtn");
 const notAssignedBtn = document.querySelector(".notAssignedBtn");
 const rows = document.querySelectorAll(".KPITable tbody tr");

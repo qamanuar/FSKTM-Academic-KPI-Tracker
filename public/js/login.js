@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Redirect based on role
         if (data.user.role === "advisor") {
-          window.location.href = "lecturer-dashboard";
+          window.location.href =  `/lecturer-dashboard?advisorId=${data.user._id}`;
         } else if (data.user.role === "student") {
           window.location.href = "Student_Dash.html";
         } else {
