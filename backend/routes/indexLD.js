@@ -114,7 +114,9 @@ router.put(
   "/student/:id/upload",
   upload.single("supportingFile"),
   async (req, res) => {
+    
     try {
+      const advisorId = req.body.advisor;
       const { id } = req.params;
 
       const updateData = {
@@ -143,7 +145,7 @@ router.put(
       // }
 
       console.log("Form updated successfully!");
-      res.redirect("/lecturer-dashboard");
+      res.redirect(`/lecturer-dashboard?advisorId=${advisorId}`);
     } catch (error) {
       console.error("Upload error:", error);
       res.status(500).send("Error uploading file");
@@ -196,7 +198,7 @@ router.post(
 
       console.log("New student created:", newStudent._id);
 
-      res.redirect("/lecturer-dashboard");
+      res.redirect(`/lecturer-dashboard?advisorId=${advisorId}`);
     } catch (err) {
       console.error("Full error creating new student:", err.stack || err);
       res.status(500).send("Error creating new student");
@@ -207,6 +209,7 @@ router.post(
 // Reset student KPI data and file
 router.delete("/student/:id", async (req, res) => {
   try {
+    const advisorId = req.query.advisor;
     const { id } = req.params;
     const student = await KPIAssignment.findById(id).populate("student");
 
@@ -221,10 +224,10 @@ router.delete("/student/:id", async (req, res) => {
     student.kpiType = "KPI Type"; student.status = "Not Assigned";
     student.supportingFile = null; student.assignerComment = null;
     student.verificationStatus = "Not Verified";
-    student.evidenceUrl = null;  student.verifierComment = null; ent.submitted = false;
+    student.evidenceUrl = null;  student.verifierComment = null; student.submitted = false;
 
     await student.save();
-    res.redirect("/lecturer-dashboard");
+    res.redirect(`/lecturer-dashboard?advisorId=${advisorId}`);
   } catch (error) {
     console.error("Error resetting student:", error);
     res.status(500).send("Error resetting student data");

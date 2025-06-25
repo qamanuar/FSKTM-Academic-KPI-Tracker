@@ -21,6 +21,7 @@
   <label for="assignerComment">Comment</label>
   <textarea name="assignerComment" rows="5" placeholder="Comment..."><%= student.assignerComment || '' %></textarea>
 
+  <input type="hidden" name="advisor" value="<%= student.advisor %>" />
   <button type="submit" id="submitBtn">Submit</button>
 </form>
 
